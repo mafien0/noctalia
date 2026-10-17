@@ -2,11 +2,9 @@
   config,
   lib,
   ...
-}:
-let
+}: let
   cfg = config.services.noctalia-shell;
-in
-{
+in {
   options.services.noctalia-shell = {
     enable = lib.mkEnableOption "Noctalia shell systemd service";
 
@@ -32,11 +30,11 @@ in
     ];
     systemd.user.services.noctalia-shell = {
       description = "Noctalia Shell - Wayland desktop shell";
-      documentation = [ "https://docs.noctalia.dev" ];
-      after = [ cfg.target ];
-      partOf = [ cfg.target ];
-      wantedBy = [ cfg.target ];
-      restartTriggers = [ cfg.package ];
+      documentation = ["https://docs.noctalia.dev"];
+      after = [cfg.target];
+      partOf = [cfg.target];
+      wantedBy = [cfg.target];
+      restartTriggers = [cfg.package];
 
       environment = {
         PATH = lib.mkForce null;
@@ -48,6 +46,6 @@ in
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
   };
 }

@@ -3,22 +3,18 @@
   lib,
   pkgs,
   ...
-}:
-let
+}: let
   cfg = config.programs.noctalia-shell;
-  jsonFormat = pkgs.formats.json { };
-  tomlFormat = pkgs.formats.toml { };
+  jsonFormat = pkgs.formats.json {};
+  tomlFormat = pkgs.formats.toml {};
 
-  generateJson =
-    name: value:
-    if lib.isString value then
-      pkgs.writeText "noctalia-${name}.json" value
-    else if builtins.isPath value || lib.isStorePath value then
-      value
-    else
-      jsonFormat.generate "noctalia-${name}.json" value;
-in
-{
+  generateJson = name: value:
+    if lib.isString value
+    then pkgs.writeText "noctalia-${name}.json" value
+    else if builtins.isPath value || lib.isStorePath value
+    then value
+    else jsonFormat.generate "noctalia-${name}.json" value;
+in {
   options.programs.noctalia-shell = {
     enable = lib.mkEnableOption "Noctalia shell configuration";
 
@@ -30,14 +26,13 @@ in
     };
 
     settings = lib.mkOption {
-      type =
-        with lib.types;
+      type = with lib.types;
         oneOf [
           jsonFormat.type
           str
           path
         ];
-      default = { };
+      default = {};
       example = lib.literalExpression ''
         {
           bar = {
@@ -62,14 +57,13 @@ in
     };
 
     colors = lib.mkOption {
-      type =
-        with lib.types;
+      type = with lib.types;
         oneOf [
           jsonFormat.type
           str
           path
         ];
-      default = { };
+      default = {};
       example = lib.literalExpression ''
          {
            mError = "#dddddd";
@@ -95,9 +89,8 @@ in
     };
 
     user-templates = lib.mkOption {
-      default = { };
-      type =
-        with lib.types;
+      default = {};
+      type = with lib.types;
         oneOf [
           tomlFormat.type
           str
@@ -125,14 +118,13 @@ in
     };
 
     plugins = lib.mkOption {
-      type =
-        with lib.types;
+      type = with lib.types;
         oneOf [
           jsonFormat.type
           str
           path
         ];
-      default = { };
+      default = {};
       example = lib.literalExpression ''
         {
           sources = [
@@ -158,14 +150,13 @@ in
     };
 
     pluginSettings = lib.mkOption {
-      type =
-        with lib.types;
+      type = with lib.types;
         attrsOf (oneOf [
           jsonFormat.type
           str
           path
         ]);
-      default = { };
+      default = {};
       example = lib.literalExpression ''
         {
           catwalk = {
@@ -193,18 +184,19 @@ in
       Unit = {
         Description = "Noctalia Shell - Wayland desktop shell";
         Documentation = "https://docs.noctalia.dev";
-        PartOf = [ config.wayland.systemd.target ];
-        After = [ config.wayland.systemd.target ];
+        PartOf = [config.wayland.systemd.target];
+        After = [config.wayland.systemd.target];
         X-Restart-Triggers =
-          lib.optional (cfg.settings != { }) "${config.xdg.configFile."noctalia/settings.json".source}"
-          ++ lib.optional (cfg.colors != { }) "${config.xdg.configFile."noctalia/colors.json".source}"
-          ++ lib.optional (cfg.plugins != { }) "${config.xdg.configFile."noctalia/plugins.json".source}"
+          lib.optional (cfg.settings != {}) "${config.xdg.configFile."noctalia/settings.json".source}"
+          ++ lib.optional (cfg.colors != {}) "${config.xdg.configFile."noctalia/colors.json".source}"
+          ++ lib.optional (cfg.plugins != {}) "${config.xdg.configFile."noctalia/plugins.json".source}"
           ++ lib.optional (
-            cfg.user-templates != { }
+            cfg.user-templates != {}
           ) "${config.xdg.configFile."noctalia/user-templates.toml".source}"
           ++ lib.mapAttrsToList (
             name: _: "${config.xdg.configFile."noctalia/plugins/${name}/settings.json".source}"
-          ) cfg.pluginSettings;
+          )
+          cfg.pluginSettings;
       };
 
       Service = {
@@ -212,37 +204,38 @@ in
         Restart = "on-failure";
       };
 
-      Install.WantedBy = [ config.wayland.systemd.target ];
+      Install.WantedBy = [config.wayland.systemd.target];
     };
 
     home.packages = lib.optional (cfg.package != null) cfg.package;
 
-    xdg.configFile = {
-      "noctalia/settings.json" = lib.mkIf (cfg.settings != { }) {
-        source = generateJson "settings" cfg.settings;
-      };
-      "noctalia/colors.json" = lib.mkIf (cfg.colors != { }) {
-        source = generateJson "colors" cfg.colors;
-      };
-      "noctalia/plugins.json" = lib.mkIf (cfg.plugins != { }) {
-        source = generateJson "plugins" cfg.plugins;
-      };
-      "noctalia/user-templates.toml" = lib.mkIf (cfg.user-templates != { }) {
-        source =
-          if lib.isString cfg.user-templates then
-            pkgs.writeText "noctalia-user-templates.toml" cfg.user-templates
-          else if builtins.isPath cfg.user-templates || lib.isStorePath cfg.user-templates then
-            cfg.user-templates
-          else
-            tomlFormat.generate "noctalia-user-templates.toml" cfg.user-templates;
-      };
-    }
-    // lib.mapAttrs' (
-      name: value:
-      lib.nameValuePair "noctalia/plugins/${name}/settings.json" {
-        source = generateJson "${name}-settings" value;
+    xdg.configFile =
+      {
+        "noctalia/settings.json" = lib.mkIf (cfg.settings != {}) {
+          source = generateJson "settings" cfg.settings;
+        };
+        "noctalia/colors.json" = lib.mkIf (cfg.colors != {}) {
+          source = generateJson "colors" cfg.colors;
+        };
+        "noctalia/plugins.json" = lib.mkIf (cfg.plugins != {}) {
+          source = generateJson "plugins" cfg.plugins;
+        };
+        "noctalia/user-templates.toml" = lib.mkIf (cfg.user-templates != {}) {
+          source =
+            if lib.isString cfg.user-templates
+            then pkgs.writeText "noctalia-user-templates.toml" cfg.user-templates
+            else if builtins.isPath cfg.user-templates || lib.isStorePath cfg.user-templates
+            then cfg.user-templates
+            else tomlFormat.generate "noctalia-user-templates.toml" cfg.user-templates;
+        };
       }
-    ) cfg.pluginSettings;
+      // lib.mapAttrs' (
+        name: value:
+          lib.nameValuePair "noctalia/plugins/${name}/settings.json" {
+            source = generateJson "${name}-settings" value;
+          }
+      )
+      cfg.pluginSettings;
 
     assertions = [
       {
