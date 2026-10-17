@@ -41,6 +41,7 @@
     src = ../.;
     filter = path: type:
       !(builtins.any (prefix: lib.path.hasPrefix (../. + prefix) (/. + path)) [
+        /result
         /.github
         /.gitignore
         /Assets/Screenshots
