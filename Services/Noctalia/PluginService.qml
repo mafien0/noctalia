@@ -417,7 +417,7 @@ Singleton {
 
       // Check Noctalia version compatibility (skip when updating - that's handled in performUpdateCheck)
       if (pluginMetadata.minNoctaliaVersion) {
-        var noctaliaVersion = UpdateService.baseVersion;
+        var noctaliaVersion = BuildInfo.baseVersion;
         if (compareVersions(pluginMetadata.minNoctaliaVersion, noctaliaVersion) > 0) {
           var incompatibleMsg = I18n.tr("panels.plugins.install-incompatible", {
                                           "plugin": pluginMetadata.name,
@@ -1419,7 +1419,7 @@ Singleton {
         if (compareVersions(availableVersion, currentVersion) > 0) {
           // Check if the available version requires a higher Noctalia version
           if (availablePlugin.minNoctaliaVersion) {
-            var noctaliaVersion = UpdateService.baseVersion;
+            var noctaliaVersion = BuildInfo.baseVersion;
             if (compareVersions(availablePlugin.minNoctaliaVersion, noctaliaVersion) > 0) {
               Logger.d("PluginService", "Pending update for", pluginId + ": requires Noctalia v" + availablePlugin.minNoctaliaVersion + " (current: v" + noctaliaVersion + ")");
               pendingUpdates[pluginId] = {
@@ -1552,7 +1552,7 @@ Singleton {
 
     // Check Noctalia compatibility
     if (availablePlugin.minNoctaliaVersion) {
-      // Simple check: just warn, don't block (UpdateService would have more sophisticated logic)
+      // Informational only; plugin installation is not blocked here.
       Logger.d("PluginService", "Plugin requires Noctalia v" + availablePlugin.minNoctaliaVersion);
     }
 

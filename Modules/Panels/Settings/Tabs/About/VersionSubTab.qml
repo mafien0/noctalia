@@ -5,7 +5,6 @@ import Quickshell
 import Quickshell.Io
 import qs.Commons
 import qs.Services.Compositor
-import qs.Services.Noctalia
 import qs.Services.System
 import qs.Services.UI
 import qs.Widgets
@@ -28,38 +27,13 @@ ColumnLayout {
     running: false
   }
 
-  property string latestVersion: GitHubService.latestVersion
-  property string currentVersion: UpdateService.currentVersion
+  property string currentVersion: BuildInfo.currentVersion
   property string commitInfo: ""
   property string qsVersion: ""
 
   readonly property bool isGitVersion: root.currentVersion.endsWith("-git")
   readonly property int gigaB: (1024 * 1024 * 1024)
   readonly property int gigaD: (1000 * 1000 * 1000)
-
-  // Update status: compare versions
-  readonly property bool updateAvailable: {
-    if (!root.latestVersion || !root.currentVersion || root.latestVersion === I18n.tr("common.unknown"))
-      return false;
-    return UpdateService.compareVersions(root.latestVersion, root.currentVersion) > 0 && !root.isGitVersion;
-  }
-  readonly property bool isUpToDate: {
-    if (!root.latestVersion || !root.currentVersion || root.latestVersion === I18n.tr("common.unknown"))
-      return false;
-    return UpdateService.compareVersions(root.latestVersion, root.currentVersion) <= 0;
-  }
-
-  readonly property bool qsUpdateAvailable: {
-    if (!GitHubService.latestQSVersion || !root.qsVersion || GitHubService.latestQSVersion === I18n.tr("common.unknown"))
-      return false;
-    return UpdateService.compareVersions(GitHubService.latestQSVersion, root.qsVersion) > 0;
-  }
-
-  readonly property bool qsIsUpToDate: {
-    if (!GitHubService.latestQSVersion || !root.qsVersion || GitHubService.latestQSVersion === I18n.tr("common.unknown"))
-      return false;
-    return UpdateService.compareVersions(GitHubService.latestQSVersion, root.qsVersion) <= 0;
-  }
 
   // System info properties
   property var systemInfo: null
@@ -87,43 +61,6 @@ ColumnLayout {
       lines.push(name + ": " + screen.width + "x" + screen.height + " @ " + scaleValue + "x");
     }
     return lines.join(sep);
-  }
-
-  function getTelemetryPayload() {
-    const screens = Quickshell.screens || [];
-    const scales = CompositorService.displayScales || {};
-    const monitors = [];
-    for (let i = 0; i < screens.length; i++) {
-      const screen = screens[i];
-      const name = screen.name || "Unknown";
-      const scaleData = scales[name];
-      const scaleValue = (typeof scaleData === "object" && scaleData !== null) ? (scaleData.scale || 1.0) : (scaleData || 1.0);
-      monitors.push({
-                      width: screen.width || 0,
-                      height: screen.height || 0,
-                      scale: scaleValue
-                    });
-    }
-    return {
-      instanceId: TelemetryService.getInstanceId(),
-      version: UpdateService.currentVersion,
-      compositor: TelemetryService.getCompositorType(),
-      os: HostService.osPretty || "Unknown",
-      ramGb: Math.round((root.getModule("Memory")?.result?.total || 0) / root.gigaB),
-      monitors: monitors,
-      ui: {
-        scaleRatio: Settings.data.general.scaleRatio,
-        fontDefaultScale: Settings.data.ui.fontDefaultScale,
-        fontFixedScale: Settings.data.ui.fontFixedScale
-      }
-    };
-  }
-
-  function copyTelemetryData() {
-    const payload = getTelemetryPayload();
-    const json = JSON.stringify(payload, null, 2);
-    Quickshell.execDetached(["wl-copy", json]);
-    ToastService.showNotice(I18n.tr("panels.about.telemetry-title"), I18n.tr("panels.about.telemetry-data-copied"));
   }
 
   function copyInfoToClipboard() {
@@ -419,59 +356,6 @@ ColumnLayout {
               }
             }
           }
-
-          // Update status indicator
-          NIcon {
-            id: upToDateIcon
-            visible: root.isUpToDate
-            icon: "circle-check"
-            pointSize: Style.fontSizeM
-            color: Color.mPrimary
-
-            MouseArea {
-              anchors.fill: parent
-              hoverEnabled: true
-              onEntered: TooltipService.show(upToDateIcon, I18n.tr("panels.about.up-to-date"))
-              onExited: TooltipService.hide()
-            }
-          }
-
-          NIcon {
-            id: updateAvailableIcon
-            visible: root.updateAvailable
-            icon: "arrow-up-circle"
-            pointSize: Style.fontSizeS
-            color: Color.mPrimary
-
-            MouseArea {
-              anchors.fill: parent
-              hoverEnabled: true
-              onEntered: TooltipService.show(updateAvailableIcon, I18n.tr("panels.about.update-available"))
-              onExited: TooltipService.hide()
-            }
-          }
-        }
-
-        // Latest Version (Shell)
-        NText {
-          visible: root.updateAvailable
-          text: I18n.tr("panels.about.noctalia-available")
-          color: Color.mOnSurfaceVariant
-          Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-        }
-
-        NText {
-          visible: root.updateAvailable
-          text: root.latestVersion
-          color: Color.mOnSurface
-          font.weight: Style.fontWeightBold
-        }
-
-        // Divider-like spacing
-        Item {
-          visible: root.qsUpdateAvailable || root.updateAvailable
-          Layout.columnSpan: 2
-          Layout.preferredHeight: Style.marginXS
         }
 
         // Quickshell Version
@@ -491,52 +375,6 @@ ColumnLayout {
             color: Color.mOnSurface
             font.weight: Style.fontWeightBold
           }
-
-          // Update status indicator
-          NIcon {
-            id: qsUpToDateIcon
-            visible: root.qsIsUpToDate
-            icon: "circle-check"
-            pointSize: Style.fontSizeM
-            color: Color.mPrimary
-
-            MouseArea {
-              anchors.fill: parent
-              hoverEnabled: true
-              onEntered: TooltipService.show(qsUpToDateIcon, I18n.tr("panels.about.up-to-date"))
-              onExited: TooltipService.hide()
-            }
-          }
-
-          NIcon {
-            id: qsUpdateAvailableIcon
-            visible: root.qsUpdateAvailable
-            icon: "arrow-up-circle"
-            pointSize: Style.fontSizeS
-            color: Color.mPrimary
-
-            MouseArea {
-              anchors.fill: parent
-              hoverEnabled: true
-              onEntered: TooltipService.show(qsUpdateAvailableIcon, I18n.tr("panels.about.update-available"))
-              onExited: TooltipService.hide()
-            }
-          }
-        }
-
-        // Latest Quickshell Version
-        NText {
-          visible: root.qsUpdateAvailable
-          text: I18n.tr("panels.about.noctalia-available")
-          color: Color.mOnSurfaceVariant
-          Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-        }
-
-        NText {
-          visible: root.qsUpdateAvailable
-          text: GitHubService.latestQSVersion
-          color: Color.mOnSurface
-          font.weight: Style.fontWeightBold
         }
       }
     }
@@ -550,20 +388,7 @@ ColumnLayout {
     rowSpacing: Style.marginM
     columnSpacing: Style.marginM
 
-    columns: (changelogBtn.implicitWidth + copyBtn.implicitWidth + supportBtn.implicitWidth + 2 * columnSpacing) < root.width ? 3 : 1
-
-    NButton {
-      id: changelogBtn
-      icon: "sparkles"
-      text: I18n.tr("panels.about.changelog")
-      outlined: true
-      Layout.alignment: Qt.AlignHCenter
-      onClicked: {
-        var screen = PanelService.openedPanel?.screen || SettingsPanelService.settingsWindow?.screen || PanelService.findScreenForPanels();
-        SettingsPanelService.close(screen);
-        UpdateService.viewChangelog(screen);
-      }
-    }
+    columns: (copyBtn.implicitWidth + supportBtn.implicitWidth + columnSpacing) < root.width ? 2 : 1
 
     NButton {
       id: copyBtn
@@ -585,14 +410,6 @@ ColumnLayout {
         ToastService.showNotice(I18n.tr("panels.about.support"), I18n.tr("toast.donation-opened"));
       }
     }
-  }
-
-  NToggle {
-    Layout.fillWidth: true
-    label: I18n.tr("panels.about.changelog-on-startup")
-    description: I18n.tr("panels.about.changelog-on-startup-desc")
-    checked: Settings.data.general.showChangelogOnStartup
-    onToggled: checked => Settings.data.general.showChangelogOnStartup = checked
   }
 
   // System Information Section
@@ -914,42 +731,6 @@ ColumnLayout {
         Layout.fillWidth: !isLabel
         wrapMode: Text.Wrap
       }
-    }
-  }
-
-  // Telemetry Section
-  NDivider {
-    Layout.fillWidth: true
-    Layout.topMargin: Style.marginL
-  }
-
-  NHeader {
-    label: I18n.tr("panels.about.telemetry-title")
-  }
-
-  NToggle {
-    Layout.fillWidth: true
-    label: I18n.tr("panels.about.telemetry-enabled")
-    description: I18n.tr("panels.about.telemetry-desc")
-    checked: Settings.data.general.telemetryEnabled
-    onToggled: checked => Settings.data.general.telemetryEnabled = checked
-  }
-
-  RowLayout {
-    spacing: Style.marginM
-
-    NButton {
-      icon: "eye"
-      text: I18n.tr("panels.about.telemetry-show-data")
-      outlined: true
-      onClicked: root.copyTelemetryData()
-    }
-
-    NButton {
-      icon: "shield-lock"
-      text: I18n.tr("panels.about.privacy-policy")
-      outlined: true
-      onClicked: Quickshell.execDetached(["xdg-open", "https://noctalia.dev/privacy"])
     }
   }
 }

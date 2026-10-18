@@ -14,7 +14,6 @@ import qs.Modules.Panels.Audio
 import qs.Modules.Panels.Battery
 import qs.Modules.Panels.Bluetooth
 import qs.Modules.Panels.Brightness
-import qs.Modules.Panels.Changelog
 import qs.Modules.Panels.Clock
 import qs.Modules.Panels.ControlCenter
 import qs.Modules.Panels.Dock
@@ -331,12 +330,6 @@ PanelWindow {
     ControlCenterPanel {
       id: controlCenterPanel
       objectName: "controlCenterPanel-" + (root.screen?.name || "unknown")
-      screen: root.screen
-    }
-
-    ChangelogPanel {
-      id: changelogPanel
-      objectName: "changelogPanel-" + (root.screen?.name || "unknown")
       screen: root.screen
     }
 

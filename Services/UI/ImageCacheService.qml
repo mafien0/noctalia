@@ -21,7 +21,6 @@ Singleton {
   readonly property string wpThumbDir: baseDir + "wallpapers/thumbnails/"
   readonly property string wpLargeDir: baseDir + "wallpapers/large/"
   readonly property string notificationsDir: baseDir + "notifications/"
-  readonly property string contributorsDir: baseDir + "contributors/"
 
   // Supported image formats - extended list when ImageMagick is available
   readonly property var basicImageFilters: ["*.jpg", "*.jpeg", "*.png", "*.gif", "*.bmp"]
@@ -73,11 +72,10 @@ Singleton {
     Quickshell.execDetached(["mkdir", "-p", wpThumbDir]);
     Quickshell.execDetached(["mkdir", "-p", wpLargeDir]);
     Quickshell.execDetached(["mkdir", "-p", notificationsDir]);
-    Quickshell.execDetached(["mkdir", "-p", contributorsDir]);
   }
 
   function cleanupOldCache() {
-    const dirs = [wpThumbDir, wpLargeDir, notificationsDir, contributorsDir];
+    const dirs = [wpThumbDir, wpLargeDir, notificationsDir];
     dirs.forEach(function (dir) {
       Quickshell.execDetached(["find", dir, "-type", "f", "-mtime", "+15", "-delete"]);
     });
@@ -231,29 +229,6 @@ Singleton {
   }
 
   // -------------------------------------------------
-  // Public API: Get Circular Avatar (256x256)
-  // -------------------------------------------------
-  function getCircularAvatar(url, username, callback) {
-    if (!url || !username) {
-      callback("", false);
-      return;
-    }
-
-    const cacheKey = username;
-    const cachedPath = contributorsDir + username + "_circular.png";
-
-    processRequest(cacheKey, cachedPath, url, callback, function () {
-      if (imageMagickAvailable) {
-        downloadAndProcessAvatar(url, username, cachedPath, cacheKey);
-      } else {
-        // No fallback for circular avatars without ImageMagick
-        Logger.w("ImageCache", "Circular avatars require ImageMagick");
-        notifyCallbacks(cacheKey, "", false);
-      }
-    });
-  }
-
-  // -------------------------------------------------
   // Cache Key Generation
   // -------------------------------------------------
   function generateThumbnailKey(sourcePath, mtime) {
@@ -351,74 +326,6 @@ Singleton {
     const command = `magick '${srcEsc}' -auto-orient -filter Lanczos -resize '${width}x${height}^' '${dstEsc}'`;
 
     runProcess(command, cacheKey, outputPath, sourcePath);
-  }
-
-  // -------------------------------------------------
-  // ImageMagick Processing: Circular Avatar
-  // -------------------------------------------------
-  function downloadAndProcessAvatar(url, username, outputPath, cacheKey) {
-    const tempPath = contributorsDir + username + "_temp.png";
-    const tempEsc = tempPath.replace(/'/g, "'\\''");
-    const urlEsc = url.replace(/'/g, "'\\''");
-
-    // Download first (uses utility queue since curl/wget are lightweight)
-    const downloadCmd = `curl -L -s -o '${tempEsc}' '${urlEsc}' || wget -q -O '${tempEsc}' '${urlEsc}'`;
-
-    const processString = `
-      import QtQuick
-      import Quickshell.Io
-      Process {
-        command: ["sh", "-c", "${downloadCmd.replace(/"/g, '\\"')}"]
-        stdout: StdioCollector {}
-        stderr: StdioCollector {}
-      }
-    `;
-
-    queueUtilityProcess({
-                          name: "DownloadProcess_" + cacheKey,
-                          processString: processString,
-                          onComplete: function (exitCode) {
-                            if (exitCode !== 0) {
-                              Logger.e("ImageCache", "Failed to download avatar for", username);
-                              notifyCallbacks(cacheKey, "", false);
-                              return;
-                            }
-                            // Now process with ImageMagick
-                            processCircularAvatar(tempPath, outputPath, cacheKey);
-                          },
-                          onError: function () {
-                            notifyCallbacks(cacheKey, "", false);
-                          }
-                        });
-  }
-
-  function processCircularAvatar(inputPath, outputPath, cacheKey) {
-    const srcEsc = inputPath.replace(/'/g, "'\\''");
-    const dstEsc = outputPath.replace(/'/g, "'\\''");
-
-    // ImageMagick command for circular crop with alpha
-    const command = `magick '${srcEsc}' -resize 256x256^ -gravity center -extent 256x256 -alpha set \\( +clone -channel A -evaluate set 0 +channel -fill white -draw 'circle 128,128 128,0' \\) -compose DstIn -composite '${dstEsc}'`;
-
-    queueImageMagickProcess({
-                              command: command,
-                              cacheKey: cacheKey,
-                              onComplete: function (exitCode) {
-                                // Clean up temp file
-                                Quickshell.execDetached(["rm", "-f", inputPath]);
-
-                                if (exitCode !== 0) {
-                                  Logger.e("ImageCache", "Failed to create circular avatar");
-                                  notifyCallbacks(cacheKey, "", false);
-                                } else {
-                                  Logger.d("ImageCache", "Circular avatar created:", outputPath);
-                                  notifyCallbacks(cacheKey, outputPath, true);
-                                }
-                              },
-                              onError: function () {
-                                Quickshell.execDetached(["rm", "-f", inputPath]);
-                                notifyCallbacks(cacheKey, "", false);
-                              }
-                            });
   }
 
   // -------------------------------------------------
@@ -720,11 +627,6 @@ Singleton {
     Quickshell.execDetached(["rm", "-f", path]);
   }
 
-  function invalidateAvatar(username) {
-    const path = contributorsDir + username + "_circular.png";
-    Quickshell.execDetached(["rm", "-f", path]);
-  }
-
   // -------------------------------------------------
   // Clear Cache Functions
   // -------------------------------------------------
@@ -733,7 +635,6 @@ Singleton {
     clearThumbnails();
     clearLarge();
     clearNotifications();
-    clearContributors();
   }
 
   function clearThumbnails() {
@@ -752,12 +653,6 @@ Singleton {
     Logger.i("ImageCache", "Clearing notifications cache");
     Quickshell.execDetached(["rm", "-rf", notificationsDir]);
     Quickshell.execDetached(["mkdir", "-p", notificationsDir]);
-  }
-
-  function clearContributors() {
-    Logger.i("ImageCache", "Clearing contributors cache");
-    Quickshell.execDetached(["rm", "-rf", contributorsDir]);
-    Quickshell.execDetached(["mkdir", "-p", contributorsDir]);
   }
 
   // -------------------------------------------------
