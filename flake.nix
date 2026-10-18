@@ -3,16 +3,11 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    noctalia-qs = {
-      url = "github:mafien0/noctalia-qs";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = {
     self,
     nixpkgs,
-    noctalia-qs,
     ...
   }: let
     eachSystem = nixpkgs.lib.genAttrs nixpkgs.lib.platforms.linux;
@@ -39,19 +34,16 @@
     });
 
     overlays = {
-      default = nixpkgs.lib.composeManyExtensions [
-        noctalia-qs.overlays.default
-        (final: prev: {
-          noctalia-shell = final.callPackage ./nix/package.nix {
-            inherit version;
-          };
-        })
-      ];
+      default = final: prev: {
+        noctalia-shell = final.callPackage ./nix/package.nix {
+          inherit version;
+        };
+      };
     };
 
     devShells = eachSystem (system: {
       default = pkgsFor.${system}.callPackage ./nix/shell.nix {
-        quickshell = noctalia-qs.packages.${system}.default;
+        quickshell = pkgsFor.${system}.quickshell;
       };
     });
 
