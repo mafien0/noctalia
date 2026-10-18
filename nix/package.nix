@@ -11,6 +11,7 @@
     wlr-randr
     imagemagick
     wget
+    fastfetch
     (python3.withPackages (pp: lib.optional calendarSupport pp.pygobject3))
   ],
   lib,
@@ -28,6 +29,7 @@
   wlr-randr,
   imagemagick,
   wget,
+  fastfetch,
   python3,
   wayland-scanner,
   # calendar support
