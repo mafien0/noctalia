@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell
-import Quickshell.Niri
+import Quickshell.Io
 import qs.Commons
 import qs.Services.Keyboard
 
@@ -25,178 +25,342 @@ Item {
   property var outputCache: ({})
   property var workspaceCache: ({})
 
+  property var _rawWorkspaces: ({})
+  property var _rawWindows: ({})
+  property int _keyboardLayoutIndex: 0
+  property bool _initialized: false
+
   function initialize() {
-    Niri.refreshOutputs();
-    Niri.refreshWorkspaces();
-    Niri.refreshWindows();
+    if (_initialized)
+      return;
 
-    Qt.callLater(() => {
-                   safeUpdateOutputs();
-                   safeUpdateWorkspaces();
-                   safeUpdateWindows();
-                   queryDisplayScales();
-                 });
-
+    _initialized = true;
+    eventStream.running = true;
     Logger.i("NiriService", "Service started");
   }
 
-  // Connections to the C++ Niri IPC module
-  Connections {
-    target: Niri
-    function onWorkspacesUpdated() {
-      safeUpdateWorkspaces();
-      workspaceChanged();
+  Process {
+    id: eventStream
+    command: ["niri", "msg", "--json", "event-stream"]
+
+    stdout: SplitParser {
+      onRead: line => root.handleEvent(line)
     }
-    function onWindowsUpdated() {
-      safeUpdateWindows();
-      windowListChanged();
-      activeWindowChanged();
+
+    stderr: SplitParser {
+      onRead: line => {
+                if (line.trim().length > 0)
+                  Logger.w("NiriService", line);
+              }
     }
-    function onOutputsUpdated() {
-      safeUpdateOutputs();
-      queryDisplayScales();
-    }
-    function onOverviewActiveChanged() {
-      overviewActive = Niri.overviewActive;
-    }
-    function onKeyboardLayoutsChanged() {
-      keyboardLayouts = Niri.keyboardLayoutNames;
-      const layoutName = Niri.currentKeyboardLayoutName;
-      if (layoutName) {
-        KeyboardLayoutService.setCurrentLayout(layoutName);
-      }
-      Logger.d("NiriService", "Keyboard layouts changed:", keyboardLayouts.toString());
-    }
-    function onKeyboardLayoutSwitched() {
-      const layoutName = Niri.currentKeyboardLayoutName;
-      if (layoutName) {
-        KeyboardLayoutService.setCurrentLayout(layoutName);
-      }
-      Logger.d("NiriService", "Keyboard layout switched:", layoutName);
+
+    onExited: (code, status) => {
+                if (!root._initialized)
+                  return;
+                Logger.w("NiriService", "Event stream exited with code", code);
+                restartTimer.restart();
+              }
+  }
+
+  Timer {
+    id: restartTimer
+    interval: 1000
+    repeat: false
+    onTriggered: {
+      if (root._initialized)
+        eventStream.running = true;
     }
   }
 
-  function safeUpdateOutputs() {
-    const niriOutputs = Niri.outputs.values;
-    outputCache = {};
+  Process {
+    id: outputsQuery
+    command: ["niri", "msg", "--json", "outputs"]
 
-    for (var i = 0; i < niriOutputs.length; i++) {
-      const output = niriOutputs[i];
-      outputCache[output.name] = {
-        "name": output.name,
-        "connected": output.connected,
-        "scale": output.scale,
-        "width": output.width,
-        "height": output.height,
-        "x": output.x,
-        "y": output.y,
-        "physical_width": output.physicalWidth,
-        "physical_height": output.physicalHeight,
-        "refresh_rate": output.refreshRate,
-        "vrr_supported": output.vrrSupported,
-        "vrr_enabled": output.vrrEnabled,
-        "transform": output.transform
-      };
+    stdout: StdioCollector {
+      onStreamFinished: {
+        try {
+          root.updateOutputs(JSON.parse(text));
+        } catch (e) {
+          Logger.e("NiriService", "Failed to parse outputs:", e);
+        }
+      }
     }
   }
 
-  function safeUpdateWorkspaces() {
-    const niriWorkspaces = Niri.workspaces.values;
+  function handleEvent(line) {
+    if (!line || line.trim().length === 0)
+      return;
+
+    var event;
+    try {
+      event = JSON.parse(line);
+    } catch (e) {
+      Logger.w("NiriService", "Invalid event:", line);
+      return;
+    }
+
+    if (event.WorkspacesChanged) {
+      setWorkspaces(event.WorkspacesChanged.workspaces || []);
+    } else if (event.WindowsChanged) {
+      setWindows(event.WindowsChanged.windows || []);
+    } else if (event.WindowOpenedOrChanged) {
+      upsertWindow(event.WindowOpenedOrChanged.window);
+    } else if (event.WindowClosed) {
+      removeWindow(event.WindowClosed.id);
+    } else if (event.WindowFocusChanged) {
+      setFocusedWindow(event.WindowFocusChanged.id);
+    } else if (event.WindowLayoutsChanged) {
+      updateLayouts(event.WindowLayoutsChanged.changes || []);
+    } else if (event.WorkspaceActivated) {
+      activateWorkspace(event.WorkspaceActivated.id, event.WorkspaceActivated.focused);
+    } else if (event.WorkspaceActiveWindowChanged) {
+      updateWorkspaceActiveWindow(event.WorkspaceActiveWindowChanged);
+    } else if (event.OverviewOpenedOrClosed) {
+      overviewActive = !!event.OverviewOpenedOrClosed.is_open;
+    } else if (event.OutputsChanged) {
+      outputsQuery.running = false;
+      outputsQuery.running = true;
+    } else if (event.ConfigLoaded) {
+      outputsQuery.running = false;
+      outputsQuery.running = true;
+    } else if (event.KeyboardLayoutsChanged) {
+      updateKeyboardLayouts(event.KeyboardLayoutsChanged.keyboard_layouts || {});
+    } else if (event.KeyboardLayoutSwitched) {
+      switchKeyboardLayout(event.KeyboardLayoutSwitched.idx);
+    }
+  }
+
+  function setWorkspaces(rawWorkspaces) {
+    _rawWorkspaces = {};
+    var list = [];
+
+    for (var i = 0; i < rawWorkspaces.length; i++) {
+      var raw = rawWorkspaces[i];
+      _rawWorkspaces[raw.id] = raw;
+    }
+
+    rebuildWorkspaces();
+  }
+
+  function rebuildWorkspaces() {
+    var list = [];
     workspaceCache = {};
 
-    const workspacesList = [];
-    for (var i = 0; i < niriWorkspaces.length; i++) {
-      const ws = niriWorkspaces[i];
-      const wsData = {
-        "id": ws.id,
-        "idx": ws.idx,
-        "name": ws.name,
-        "output": ws.output,
-        "isFocused": ws.focused,
-        "isActive": ws.active,
-        "isUrgent": ws.urgent,
-        "isOccupied": ws.occupied
+    for (var key in _rawWorkspaces) {
+      var raw = _rawWorkspaces[key];
+      var ws = {
+        "id": raw.id,
+        "idx": raw.idx,
+        "name": raw.name || "",
+        "output": raw.output || "",
+        "isFocused": !!raw.is_focused,
+        "isActive": !!raw.is_active,
+        "isUrgent": !!raw.is_urgent,
+        "isOccupied": raw.active_window_id !== null && raw.active_window_id !== undefined
       };
-      workspacesList.push(wsData);
-      workspaceCache[ws.id] = wsData;
+      workspaceCache[raw.id] = ws;
+      list.push(ws);
     }
 
-    // Workspaces come pre-sorted from C++ (by output then idx)
+    list.sort((a, b) => {
+                if (a.output !== b.output)
+                  return a.output < b.output ? -1 : 1;
+                return a.idx - b.idx;
+              });
+
     workspaces.clear();
-    for (var j = 0; j < workspacesList.length; j++) {
-      workspaces.append(workspacesList[j]);
+    for (var i = 0; i < list.length; i++) {
+      workspaces.append(list[i]);
     }
+
+    workspaceChanged();
+  }
+
+  function setWindows(rawWindows) {
+    _rawWindows = {};
+    for (var i = 0; i < rawWindows.length; i++) {
+      _rawWindows[rawWindows[i].id] = rawWindows[i];
+    }
+    rebuildWindows();
+  }
+
+  function upsertWindow(raw) {
+    if (!raw || raw.id === undefined)
+      return;
+    _rawWindows[raw.id] = raw;
+    rebuildWindows();
+  }
+
+  function removeWindow(id) {
+    delete _rawWindows[id];
+    rebuildWindows();
+  }
+
+  function setFocusedWindow(id) {
+    for (var key in _rawWindows) {
+      _rawWindows[key].is_focused = (Number(key) === Number(id));
+    }
+    rebuildWindows();
+  }
+
+  function updateLayouts(changes) {
+    for (var i = 0; i < changes.length; i++) {
+      var change = changes[i];
+      if (!change || change.length < 2)
+        continue;
+      var raw = _rawWindows[change[0]];
+      if (raw)
+        raw.layout = change[1];
+    }
+    rebuildWindows();
+  }
+
+  function activateWorkspace(id, focused) {
+    var target = _rawWorkspaces[id];
+    if (!target)
+      return;
+
+    var output = target.output;
+    for (var key in _rawWorkspaces) {
+      var ws = _rawWorkspaces[key];
+      if (ws.output === output && ws.id !== id)
+        ws.is_active = false;
+      if (focused && ws.id !== id)
+        ws.is_focused = false;
+    }
+    target.is_active = true;
+    if (focused)
+      target.is_focused = true;
+
+    rebuildWorkspaces();
+  }
+
+  function updateWorkspaceActiveWindow(data) {
+    var ws = _rawWorkspaces[data.workspace_id];
+    if (!ws)
+      return;
+    ws.active_window_id = data.active_window_id;
+    rebuildWorkspaces();
+  }
+
+  function updateKeyboardLayouts(layouts) {
+    keyboardLayouts = layouts.names || [];
+    _keyboardLayoutIndex = layouts.current_idx || 0;
+    applyKeyboardLayout();
+  }
+
+  function switchKeyboardLayout(idx) {
+    _keyboardLayoutIndex = idx;
+    applyKeyboardLayout();
+  }
+
+  function applyKeyboardLayout() {
+    if (keyboardLayouts.length === 0)
+      return;
+    var name = keyboardLayouts[_keyboardLayoutIndex];
+    if (name) {
+      KeyboardLayoutService.setCurrentLayout(name);
+      Logger.d("NiriService", "Keyboard layout:", name);
+    }
+  }
+
+  function updateOutputs(outputs) {
+    outputCache = {};
+
+    for (var name in outputs) {
+      var output = outputs[name];
+      var logical = output.logical || {};
+      var physical = output.physical_size || [];
+      var modes = output.modes || [];
+      var modeIdx = output.current_mode;
+      var refreshRate = 0;
+
+      if (modeIdx !== null && modeIdx !== undefined && modes[modeIdx])
+        refreshRate = modes[modeIdx].refresh_rate || 0;
+
+      outputCache[name] = {
+        "name": output.name || name,
+        "connected": Object.keys(logical).length > 0 && modeIdx !== null && modeIdx !== undefined,
+        "scale": logical.scale || 1,
+        "width": logical.width || 0,
+        "height": logical.height || 0,
+        "x": logical.x || 0,
+        "y": logical.y || 0,
+        "physical_width": physical[0] || 0,
+        "physical_height": physical[1] || 0,
+        "refresh_rate": refreshRate,
+        "vrr_supported": !!output.vrr_supported,
+        "vrr_enabled": !!output.vrr_enabled,
+        "transform": logical.transform || "Normal"
+      };
+    }
+
+    queryDisplayScales();
   }
 
   function getWindowOutput(win) {
-    for (var i = 0; i < workspaces.count; i++) {
-      if (workspaces.get(i).id === win.workspaceId) {
-        return workspaces.get(i).output;
-      }
-    }
-    return null;
+    var ws = workspaceCache[win.workspace_id];
+    return ws ? ws.output : "";
   }
 
   function toSortedWindowList(windowList) {
     return windowList.map(win => {
-                            const workspace = workspaceCache[win.workspaceId];
-                            const output = (workspace && workspace.output) ? outputCache[workspace.output] : null;
+                            var ws = workspaceCache[win.workspaceId];
+                            var output = (ws && ws.output) ? outputCache[ws.output] : null;
 
                             return {
                               window: win,
-                              workspaceIdx: workspace ? workspace.idx : 0,
+                              workspaceIdx: ws ? ws.idx : 0,
                               outputX: output ? output.x : 0,
                               outputY: output ? output.y : 0
                             };
                           }).sort((a, b) => {
-                                    // Sort by output position first
-                                    if (a.outputX !== b.outputX) {
+                                    if (a.outputX !== b.outputX)
                                       return a.outputX - b.outputX;
-                                    }
-                                    if (a.outputY !== b.outputY) {
+                                    if (a.outputY !== b.outputY)
                                       return a.outputY - b.outputY;
-                                    }
-                                    // Then by workspace index
-                                    if (a.workspaceIdx !== b.workspaceIdx) {
+                                    if (a.workspaceIdx !== b.workspaceIdx)
                                       return a.workspaceIdx - b.workspaceIdx;
-                                    }
-                                    // Then by window position
-                                    if (a.window.position.x !== b.window.position.x) {
+                                    if (a.window.position.x !== b.window.position.x)
                                       return a.window.position.x - b.window.position.x;
-                                    }
-                                    if (a.window.position.y !== b.window.position.y) {
+                                    if (a.window.position.y !== b.window.position.y)
                                       return a.window.position.y - b.window.position.y;
-                                    }
-                                    // Finally by window ID to ensure consistent ordering
                                     return a.window.id - b.window.id;
                                   }).map(info => info.window);
   }
 
-  function safeUpdateWindows() {
-    const niriWindows = Niri.windows.values;
-    const windowsList = [];
+  function rebuildWindows() {
+    var list = [];
 
-    for (var i = 0; i < niriWindows.length; i++) {
-      const win = niriWindows[i];
-      windowsList.push({
-                         "id": win.id,
-                         "title": win.title || "",
-                         "appId": win.appId || "",
-                         "workspaceId": win.workspaceId || -1,
-                         "isFocused": win.focused,
-                         "output": win.output || getWindowOutput(win) || "",
-                         "position": {
-                           "x": win.isFloating ? floatingWindowPosition : win.positionX,
-                           "y": win.isFloating ? floatingWindowPosition : win.positionY
-                         }
-                       });
+    for (var key in _rawWindows) {
+      var raw = _rawWindows[key];
+      var layout = raw.layout || {};
+      var pos = layout.pos_in_scrolling_layout;
+      var isFloating = !Array.isArray(pos);
+      var x = isFloating ? floatingWindowPosition : pos[0];
+      var y = isFloating ? floatingWindowPosition : pos[1];
+
+      list.push({
+                  "id": raw.id,
+                  "title": raw.title || "",
+                  "appId": raw.app_id || "",
+                  "workspaceId": raw.workspace_id === undefined ? -1 : raw.workspace_id,
+                  "isFocused": !!raw.is_focused,
+                  "output": getWindowOutput(raw),
+                  "position": {
+                    "x": x,
+                    "y": y
+                  }
+                });
     }
 
-    windows = toSortedWindowList(windowsList);
-    safeUpdateFocusedWindow();
+    windows = toSortedWindowList(list);
+    updateFocusedWindow();
+    windowListChanged();
+    activeWindowChanged();
   }
 
-  function safeUpdateFocusedWindow() {
+  function updateFocusedWindow() {
     focusedWindowIndex = -1;
     for (var i = 0; i < windows.length; i++) {
       if (windows[i].isFocused) {
@@ -210,85 +374,54 @@ Item {
     if (CompositorService && CompositorService.onDisplayScalesUpdated) {
       CompositorService.onDisplayScalesUpdated(outputCache);
     }
+    displayScalesChanged();
+  }
+
+  function dispatch(args) {
+    try {
+      Quickshell.execDetached(["niri", "msg", "action"].concat(args));
+    } catch (e) {
+      Logger.e("NiriService", "Failed to dispatch:", args, e);
+    }
   }
 
   function switchToWorkspace(workspace) {
-    try {
-      Niri.dispatch(["focus-workspace", workspace.idx.toString()]);
-    } catch (e) {
-      Logger.e("NiriService", "Failed to switch workspace:", e);
-    }
+    dispatch(["focus-workspace", workspace.idx.toString()]);
   }
 
   function scrollWorkspaceContent(direction) {
-    try {
-      var action = direction < 0 ? "focus-column-left" : "focus-column-right";
-      Niri.dispatch([action]);
-    } catch (e) {
-      Logger.e("NiriService", "Failed to scroll workspace content:", e);
-    }
+    dispatch([direction < 0 ? "focus-column-left" : "focus-column-right"]);
   }
 
   function focusWindow(window) {
-    try {
-      Niri.dispatch(["focus-window", "--id", window.id.toString()]);
-    } catch (e) {
-      Logger.e("NiriService", "Failed to switch window:", e);
-    }
+    dispatch(["focus-window", "--id", window.id.toString()]);
   }
 
   function closeWindow(window) {
-    try {
-      Niri.dispatch(["close-window", "--id", window.id.toString()]);
-    } catch (e) {
-      Logger.e("NiriService", "Failed to close window:", e);
-    }
+    dispatch(["close-window", "--id", window.id.toString()]);
   }
 
   function turnOffMonitors() {
-    try {
-      Niri.dispatch(["power-off-monitors"]);
-    } catch (e) {
-      Logger.e("NiriService", "Failed to turn off monitors:", e);
-    }
+    dispatch(["power-off-monitors"]);
   }
 
   function turnOnMonitors() {
-    try {
-      Niri.dispatch(["power-on-monitors"]);
-    } catch (e) {
-      Logger.e("NiriService", "Failed to turn on monitors:", e);
-    }
+    dispatch(["power-on-monitors"]);
   }
 
   function logout() {
-    try {
-      Niri.dispatch(["quit", "--skip-confirmation"]);
-    } catch (e) {
-      Logger.e("NiriService", "Failed to logout:", e);
-    }
+    dispatch(["quit", "--skip-confirmation"]);
   }
 
   function cycleKeyboardLayout() {
-    try {
-      Niri.dispatch(["switch-layout", "next"]);
-    } catch (e) {
-      Logger.e("NiriService", "Failed to cycle keyboard layout:", e);
-    }
+    dispatch(["switch-layout", "next"]);
   }
 
   function getFocusedScreen() {
-    // On niri the code below only works when you have an actual app selected on that screen.
     return null;
   }
 
   function spawn(command) {
-    try {
-      const niriArgs = ["spawn", "--"].concat(command);
-      Logger.d("NiriService", "Calling niri spawn: niri msg action " + niriArgs.join(" "));
-      Niri.dispatch(niriArgs);
-    } catch (e) {
-      Logger.e("NiriService", "Failed to spawn command:", e);
-    }
+    dispatch(["spawn", "--"].concat(command));
   }
 }

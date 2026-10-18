@@ -44,16 +44,16 @@ Variants {
       Region {
         id: launcherBlurRegion
 
-        Region {
+        CornerMask {
           x: Math.round(launcherPanel.x)
           y: Math.round(launcherPanel.y)
           width: Math.round(launcherPanel.width)
           height: Math.round(launcherPanel.height)
-          radius: Style.radiusL
-          topLeftCorner: launcherPanel.topLeftCornerState
-          topRightCorner: launcherPanel.topRightCornerState
-          bottomLeftCorner: launcherPanel.bottomLeftCornerState
-          bottomRightCorner: launcherPanel.bottomRightCornerState
+          cornerRadius: Style.radiusL
+          topLeftState: launcherPanel.topLeftCornerState
+          topRightState: launcherPanel.topRightCornerState
+          bottomLeftState: launcherPanel.bottomLeftCornerState
+          bottomRightState: launcherPanel.bottomRightCornerState
         }
 
         Region {

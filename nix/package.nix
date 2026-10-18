@@ -2,6 +2,7 @@
   version ? "dirty",
   extraPackages ? [],
   runtimeDeps ? [
+    cava
     brightnessctl
     cliphist
     ddcutil
@@ -18,6 +19,7 @@
   qt6,
   quickshell,
   # runtime deps
+  cava,
   brightnessctl,
   cliphist,
   ddcutil,

@@ -136,7 +136,7 @@ ColumnLayout {
 
     if (root.qsVersion) {
       let qsV = root.qsVersion.startsWith("v") ? root.qsVersion : "v" + root.qsVersion;
-      info += "Noctalia QS: " + qsV;
+      info += "Quickshell: " + qsV;
       if (root.qsRevision) {
         info += " (" + root.qsRevision + ")";
       }
@@ -252,19 +252,17 @@ ColumnLayout {
 
   Process {
     id: qsVersionProcess
-    command: ["qs", "--version"]
+    command: ["noctalia-shell", "--version"]
     running: false
 
     onExited: function (exitCode) {
       if (exitCode === 0) {
         var output = stdout.text.trim();
-        // Format (old): "noctalia-qs 0.3.0, revision abc12345, distributed by: ..."
-        // Format (new): "noctalia-qs 0.0.9 (revision b602b69c81d96a1d7c645328feb7b1e1d4b7b7a4, distributed by Unset)"
-        // Only set if this is actually noctalia-qs; leave empty for upstream quickshell
-        var match = output.match(/noctalia-qs\s+(\S+?)[\s,(]+revision\s*([0-9a-f]*)/i);
+        // Format: "Quickshell 0.3.0 (revision tag-v0.3.0, distributed by Nixpkgs)"
+        var match = output.match(/Quickshell\s+v?(\d+\.\d+\.\d+\S*)/i);
         if (match) {
           root.qsVersion = match[1];
-          root.qsRevision = match[2] ? match[2].substring(0, 9) : "";
+          root.qsRevision = "";
         }
       }
     }
@@ -485,7 +483,7 @@ ColumnLayout {
         // Quickshell Version
         NText {
           visible: root.qsVersion !== ""
-          text: "Noctalia QS:"
+          text: "Quickshell:"
           color: Color.mOnSurfaceVariant
           Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
         }
@@ -517,7 +515,7 @@ ColumnLayout {
               onEntered: TooltipService.show(qsRevisionText, I18n.tr("panels.about.view-commit"))
               onExited: TooltipService.hide()
               onClicked: {
-                Quickshell.execDetached(["xdg-open", "https://github.com/noctalia-dev/noctalia-qs/commit/" + root.qsRevision]);
+                Quickshell.execDetached(["xdg-open", "https://github.com/quickshell-mirror/quickshell/releases"]);
               }
             }
           }

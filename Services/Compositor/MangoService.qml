@@ -1,8 +1,6 @@
 import QtQuick
 import Quickshell
-import Quickshell.DWL
 import Quickshell.Io
-import Quickshell.Wayland
 import qs.Commons
 import qs.Services.Keyboard
 
@@ -31,446 +29,336 @@ Item {
   QtObject {
     id: internal
 
-    // Window-to-tag persistence: Map<UniqueID, TagID>
-    property var windowTagMap: ({})
+    property var monitors: ({})
+    property var tags: ({})
+    property var clients: ({})
+    property bool monitorsReady: false
+    property bool clientsReady: false
 
-    // Window-to-output persistence: Map<UniqueID, OutputName>
-    property var windowOutputMap: ({})
-
-    // Toplevel-to-ID mapping: Map<ToplevelObject, UniqueID>
-    property var toplevelIdMap: new Map()
-    property int windowIdCounter: 0
-
-    // Output name to index mapping for unique workspace IDs
     property var outputIndices: ({})
     property int outputCounter: 0
 
-    // Monitor scales: Map<OutputName, scale>
-    property var monitorScales: ({})
-
-    // Window signature for change detection
     property string lastWindowSignature: ""
+    property bool warned: false
 
-    // Scale regex
-    readonly property var scalePattern: /^(\S+)\s+scale_factor\s+(\d+(?:\.\d+)?)$/
+    function outputIndex(name) {
+      if (outputIndices[name] === undefined)
+        outputIndices[name] = outputCounter++;
+      return outputIndices[name];
+    }
 
-                                        // Get all screen names mapped to their DwlIpcOutput
-                                        function getOutputMap() {
-                                          const map = {};
-                                          const screens = Quickshell.screens;
-                                          for (let i = 0; i < screens.length; i++) {
-                                            const name = screens[i].name;
-                                            const dwlOutput = DwlIpc.outputForName(name);
-                                            if (dwlOutput) {
-                                              map[name] = dwlOutput;
-                                            }
-                                          }
-                                          return map;
-                                        }
+    function updateMonitors(payload) {
+      const list = payload.monitors || [];
+      monitors = {};
+      for (let i = 0; i < list.length; i++) {
+        const monitor = list[i];
+        monitors[monitor.name] = monitor;
+        outputIndex(monitor.name);
+        if (monitor.active) {
+          root.selectedMonitor = monitor.name;
+          root.currentLayoutSymbol = monitor.layout_symbol || "";
+        }
+      }
+      monitorsReady = true;
+      rebuildWorkspaces();
+      updateWindows();
+      queryDisplayScales();
+    }
 
-    // ===== REBUILD WORKSPACES FROM DWL =====
+    function updateTags(payload) {
+      const list = payload.all_tags || [];
+      tags = {};
+      for (let i = 0; i < list.length; i++) {
+        const entry = list[i];
+        tags[entry.monitor] = entry.tags || [];
+        outputIndex(entry.monitor);
+      }
+      rebuildWorkspaces();
+    }
+
+    function updateClients(payload) {
+      const list = payload.clients || [];
+      clients = {};
+      for (let i = 0; i < list.length; i++) {
+        clients[list[i].id] = list[i];
+      }
+      clientsReady = true;
+      updateWindows();
+    }
 
     function rebuildWorkspaces() {
-      if (!DwlIpc.available) {
+      if (!monitorsReady)
         return;
-      }
 
-      const outputMap = getOutputMap();
-      const workspaceList = [];
+      const list = [];
+      for (const name in monitors) {
+        const monitor = monitors[name];
+        const monitorTags = tags[name] || monitor.tags || [];
+        const outputIdx = outputIndex(name);
 
-      for (const outputName in outputMap) {
-        const output = outputMap[outputName];
-
-        // Assign stable index to output
-        if (internal.outputIndices[outputName] === undefined) {
-          internal.outputIndices[outputName] = internal.outputCounter++;
-        }
-        const outputIdx = internal.outputIndices[outputName];
-
-        // Track selected monitor and layout
-        if (output.active) {
-          root.selectedMonitor = outputName;
-          root.currentLayoutSymbol = output.layoutSymbol;
-        }
-
-        const tags = output.tags;
-        for (let ti = 0; ti < tags.length; ti++) {
-          const tag = tags[ti];
-          const tagId = tag.index + 1; // DwlTag.index is zero-based, our IDs are 1-based
-          const uniqueId = outputIdx * 100 + tagId;
-
-          workspaceList.push({
-                               id: uniqueId,
-                               idx: tagId,
-                               name: tagId.toString(),
-                               output: outputName,
-                               isActive: tag.active,
-                               isFocused: tag.active && output.active,
-                               isUrgent: tag.urgent,
-                               isOccupied: tag.clientCount > 0
-                             });
+        for (let i = 0; i < monitorTags.length; i++) {
+          const tag = monitorTags[i];
+          const tagId = tag.index;
+          const isActive = !!tag.is_active;
+          list.push({
+                      id: outputIdx * 100 + tagId,
+                      idx: tagId,
+                      name: tagId.toString(),
+                      output: name,
+                      isActive: isActive,
+                      isFocused: isActive && !!monitor.active,
+                      isUrgent: !!tag.is_urgent,
+                      isOccupied: (tag.client_count || 0) > 0
+                    });
         }
       }
 
-      // Sort by unique ID
-      workspaceList.sort((a, b) => a.id - b.id);
+      list.sort((a, b) => a.id - b.id);
 
       root.workspaces.clear();
-      for (let k = 0; k < workspaceList.length; k++) {
-        root.workspaces.append(workspaceList[k]);
-      }
+      for (let i = 0; i < list.length; i++)
+        root.workspaces.append(list[i]);
 
       root.workspaceChanged();
     }
 
-    // ===== UPDATE WINDOWS =====
-
     function updateWindows() {
-      if (!ToplevelManager.toplevels || !DwlIpc.available) {
+      if (!clientsReady)
         return;
-      }
 
-      const outputMap = getOutputMap();
-      const toplevels = ToplevelManager.toplevels.values;
-      const windowList = [];
-      let newFocusedIdx = -1;
-      const currentWindows = new Set();
+      const list = [];
+      let focusedIdx = -1;
 
-      // Build per-output state from DWL
-      // Map<outputName, { title, appId, activeTagId }>
-      // Always populated (activeTagId needed for visible-window inference),
-      // title/appId may be empty if no window is focused.
-      const outputState = {};
-      for (const outputName in outputMap) {
-        const output = outputMap[outputName];
-
-        // Find active tag for this output
-        let activeTagId = 1;
-        const tags = output.tags;
-        for (let ti = 0; ti < tags.length; ti++) {
-          if (tags[ti].active) {
-            activeTagId = tags[ti].index + 1;
-            break;
-          }
-        }
-
-        outputState[outputName] = {
-          title: output.title || "",
-          appId: output.appId || "",
-          activeTagId: activeTagId
-        };
-
-        // Ensure output index exists
-        if (internal.outputIndices[outputName] === undefined) {
-          internal.outputIndices[outputName] = internal.outputCounter++;
-        }
-      }
-
-      for (let i = 0; i < toplevels.length; i++) {
-        const toplevel = toplevels[i];
-        if (!toplevel || toplevel.outliers) {
-          continue;
-        }
-
-        const appId = toplevel.appId || toplevel.wayland?.appId || "";
-        const title = toplevel.title || toplevel.wayland?.title || "";
-        const isFocused = toplevel.activated;
-
-        // Get or assign a stable ID
-        let windowId;
-        if (internal.toplevelIdMap.has(toplevel)) {
-          windowId = internal.toplevelIdMap.get(toplevel);
-        } else {
-          windowId = `win-${internal.windowIdCounter++}`;
-          internal.toplevelIdMap.set(toplevel, windowId);
-        }
-
-        currentWindows.add(windowId);
-
-        // Determine output
-        let outputName;
-
-        // Priority 1: Focused window matched to DWL output metadata
-        if (isFocused && (title || appId)) {
-          for (const oName in outputState) {
-            const os = outputState[oName];
-            if ((os.title || os.appId) && title === os.title && appId === os.appId) {
-              outputName = oName;
-              internal.windowOutputMap[windowId] = oName;
-              break;
-            }
-          }
-        }
-
-        // Priority 2: Remembered output
-        if (!outputName && internal.windowOutputMap[windowId]) {
-          outputName = internal.windowOutputMap[windowId];
-        }
-
-        // Priority 3: toplevel.screens (wlr-foreign-toplevel visible screens)
-        if (!outputName && toplevel.screens && toplevel.screens.length > 0) {
-          outputName = toplevel.screens[0].name;
-        }
-
-        // Fallback: selected monitor
-        if (!outputName) {
-          outputName = root.selectedMonitor || "DP-1";
-        }
-
-        // Determine tag
-        let tagId = null;
-
-        const os = outputState[outputName];
-        if (isFocused && os && !os.consumed && (os.title || os.appId) && title === os.title && appId === os.appId) {
-          // Focused window: assign to the active tag from DWL metadata
-          tagId = os.activeTagId;
-          internal.windowTagMap[windowId] = tagId;
-          // Consume so a second toplevel with identical title+appId cannot also claim focus
-          os.consumed = true;
-        } else if (internal.windowTagMap[windowId] !== undefined) {
-          // Previously seen window: use remembered tag
-          tagId = internal.windowTagMap[windowId];
-        }
-
-        if (tagId === null) {
-          // DWL only reports the focused window per output, so we can't
-          // determine the tag for unfocused windows until they gain focus.
-          continue;
-        }
-
-        // Convert to unique workspace ID
-        const outputIdx = internal.outputIndices[outputName];
-        if (outputIdx === undefined) {
-          Logger.e("MangoService", "No output index for", outputName);
-          continue;
-        }
+      for (const key in clients) {
+        const client = clients[key];
+        const tagId = (client.tags && client.tags.length > 0) ? client.tags[0] : 1;
+        const outputName = client.monitor || root.selectedMonitor || "";
+        const outputIdx = outputIndex(outputName);
         const workspaceId = outputIdx * 100 + tagId;
 
-        windowList.push({
-                          id: `${outputName}:${appId}:${title}:${i}`,
-                          title: title,
-                          appId: appId,
-                          class: appId,
-                          workspaceId: workspaceId,
-                          isFocused: isFocused,
-                          output: outputName,
-                          handle: toplevel,
-                          fullscreen: toplevel.fullscreen || false,
-                          floating: toplevel.maximized === false && toplevel.fullscreen === false
-                        });
+        list.push({
+                    id: client.id,
+                    title: client.title || "",
+                    appId: client.appid || "",
+                    class: client.appid || "",
+                    workspaceId: workspaceId,
+                    isFocused: !!client.is_focused,
+                    output: outputName,
+                    fullscreen: !!client.is_fullscreen,
+                    floating: !!client.is_floating,
+                    position: {
+                      x: client.x || 0,
+                      y: client.y || 0
+                    }
+                  });
+      }
 
-        if (isFocused) {
-          newFocusedIdx = windowList.length - 1;
+      list.sort((a, b) => {
+                  if (a.workspaceId !== b.workspaceId)
+                    return a.workspaceId - b.workspaceId;
+                  if (a.position.y !== b.position.y)
+                    return a.position.y - b.position.y;
+                  if (a.position.x !== b.position.x)
+                    return a.position.x - b.position.x;
+                  return a.id - b.id;
+                });
+
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].isFocused) {
+          focusedIdx = i;
+          break;
         }
       }
 
-      // Clean up stale window tracking
-      if (Object.keys(internal.windowTagMap).length > toplevels.length + 20) {
-        const newTagMap = {};
-        const newOutputMap = {};
-        for (const windowId of currentWindows) {
-          if (internal.windowTagMap[windowId] !== undefined) {
-            newTagMap[windowId] = internal.windowTagMap[windowId];
-          }
-          if (internal.windowOutputMap[windowId] !== undefined) {
-            newOutputMap[windowId] = internal.windowOutputMap[windowId];
-          }
-        }
-        internal.windowTagMap = newTagMap;
-        internal.windowOutputMap = newOutputMap;
-      }
-
-      // Check if window list changed
-      const signature = JSON.stringify(windowList.map(w => w.id + w.workspaceId + w.isFocused));
+      const signature = JSON.stringify(list.map(w => w.id + ":" + w.workspaceId + ":" + w.isFocused));
       if (signature !== internal.lastWindowSignature) {
         internal.lastWindowSignature = signature;
-        root.windows = windowList;
+        root.windows = list;
         root.windowListChanged();
       }
 
-      if (newFocusedIdx !== root.focusedWindowIndex) {
-        root.focusedWindowIndex = newFocusedIdx;
+      if (focusedIdx !== root.focusedWindowIndex) {
+        root.focusedWindowIndex = focusedIdx;
         root.activeWindowChanged();
       }
     }
 
-    // ===== PROCESS SCALES =====
-
-    function processScales(output) {
-      const lines = output.trim().split('\n');
-
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
-        const match = line.match(scalePattern);
-
-        if (match) {
-          const outputName = match[1];
-          const scale = parseFloat(match[2]);
-          internal.monitorScales[outputName] = scale;
-        }
-      }
-
+    function queryDisplayScales() {
       const scalesMap = {};
-      for (const name in internal.monitorScales) {
+      for (const name in monitors) {
+        const monitor = monitors[name];
         scalesMap[name] = {
           name: name,
-          scale: internal.monitorScales[name] || 1.0,
-          width: 0,
-          height: 0,
-          x: 0,
-          y: 0
+          scale: monitor.scale || 1,
+          width: monitor.width || 0,
+          height: monitor.height || 0,
+          x: monitor.x || 0,
+          y: monitor.y || 0
         };
       }
 
-      if (CompositorService && CompositorService.onDisplayScalesUpdated) {
+      if (CompositorService && CompositorService.onDisplayScalesUpdated)
         CompositorService.onDisplayScalesUpdated(scalesMap);
-      }
 
       root.displayScalesChanged();
     }
   }
 
-  // ===== DWL CONNECTIONS =====
+  // ===== WATCH PROCESSES =====
 
-  // React to DWL frame events on each output (atomic state updates)
-  Instantiator {
-    model: DwlIpc.outputs
-    delegate: Connections {
-      required property DwlIpcOutput modelData
-      target: modelData
-
-      function onFrame() {
-        internal.rebuildWorkspaces();
-        internal.updateWindows();
-      }
-
-      function onKbLayoutChanged() {
-        if (KeyboardLayoutService) {
-          KeyboardLayoutService.setCurrentLayout(modelData.kbLayout);
-        }
-      }
+  Process {
+    id: monitorsWatch
+    command: ["mmsg", "watch", "all-monitors"]
+    stdout: SplitParser {
+      onRead: line => root.parseLine(line, internal.updateMonitors)
     }
+    stderr: SplitParser {
+      onRead: line => root.logError(line)
+    }
+    onExited: (code, status) => root.watchExited("monitors", code)
   }
 
-  // ===== PROCESSES =====
+  Process {
+    id: tagsWatch
+    command: ["mmsg", "watch", "all-tags"]
+    stdout: SplitParser {
+      onRead: line => root.parseLine(line, internal.updateTags)
+    }
+    stderr: SplitParser {
+      onRead: line => root.logError(line)
+    }
+    onExited: (code, status) => root.watchExited("tags", code)
+  }
 
-  // Scale query (mmsg -g -A) - DWL doesn't provide scale info
-  property QtObject _scaleQuery: Process {
-    id: scaleQuery
-    command: ["mmsg", "-g", "-A"]
+  Process {
+    id: clientsWatch
+    command: ["mmsg", "watch", "all-clients"]
+    stdout: SplitParser {
+      onRead: line => root.parseLine(line, internal.updateClients)
+    }
+    stderr: SplitParser {
+      onRead: line => root.logError(line)
+    }
+    onExited: (code, status) => root.watchExited("clients", code)
+  }
 
-    property string buffer: ""
-
+  Process {
+    id: keyboardWatch
+    command: ["mmsg", "watch", "keyboardlayout"]
     stdout: SplitParser {
       onRead: line => {
-                scaleQuery.buffer += line + "\n";
-              }
-    }
-
-    onExited: code => {
-                if (code === 0) {
-                  internal.processScales(scaleQuery.buffer);
-                  scaleQuery.buffer = "";
+                try {
+                  const data = JSON.parse(line);
+                  if (data.layout && KeyboardLayoutService)
+                    KeyboardLayoutService.setCurrentLayout(data.layout);
+                } catch (e) {
+                  // Ignore malformed events.
                 }
               }
+    }
+    stderr: SplitParser {
+      onRead: line => root.logError(line)
+    }
+    onExited: (code, status) => root.watchExited("keyboard", code)
   }
 
-  // ===== TOPLEVEL MANAGER CONNECTION =====
-
-  property QtObject _toplevelConnection: Connections {
-    target: ToplevelManager.toplevels
-
-    function onValuesChanged() {
-      internal.updateWindows();
+  Timer {
+    id: restartTimer
+    interval: 3000
+    repeat: false
+    onTriggered: {
+      if (root.initialized)
+        root.startWatchers();
     }
+  }
+
+  function parseLine(line, handler) {
+    if (!line || line.trim().length === 0)
+      return;
+    try {
+      handler(JSON.parse(line));
+    } catch (e) {
+      Logger.w("MangoService", "Invalid JSON from mmsg:", line);
+    }
+  }
+
+  function logError(line) {
+    if (!internal.warned && line.trim().length > 0) {
+      internal.warned = true;
+      Logger.w("MangoService", line);
+    }
+  }
+
+  function watchExited(name, code) {
+    if (!initialized)
+      return;
+    Logger.w("MangoService", "mmsg " + name + " watch exited with code", code);
+    restartTimer.restart();
+  }
+
+  function startWatchers() {
+    monitorsWatch.running = true;
+    tagsWatch.running = true;
+    clientsWatch.running = true;
+    keyboardWatch.running = true;
   }
 
   // ===== PUBLIC FUNCTIONS =====
 
   function initialize() {
-    if (initialized) {
+    if (initialized)
       return;
-    }
 
-    Logger.i("MangoService", "Initializing MangoWC/DWL compositor integration (DWL protocol)");
-
-    // Query display scales (only thing still needing mmsg)
-    scaleQuery.running = true;
-
-    // Initial build from DWL state
-    if (DwlIpc.available && DwlIpc.outputs.length > 0) {
-      internal.rebuildWorkspaces();
-      internal.updateWindows();
-    }
-
+    Logger.i("MangoService", "Initializing MangoWC integration (mmsg IPC)");
     initialized = true;
+    startWatchers();
   }
 
   function queryDisplayScales() {
-    scaleQuery.running = true;
+    internal.queryDisplayScales();
   }
 
   function switchToWorkspace(workspace) {
-    const tagId = workspace.idx || workspace.id || 1;
-    const outputName = workspace.output || root.selectedMonitor || "";
-
-    // Use DWL protocol to switch tags
-    const dwlOutput = DwlIpc.outputForName(outputName);
-    if (dwlOutput) {
-      dwlOutput.setTags(1 << (tagId - 1)); // tagId is 1-based, bitmask is 0-based
-    } else {
-      // Fallback to mmsg
-      const cmd = ["mmsg", "-s", "-t", tagId.toString()];
-      if (outputName && Object.keys(internal.monitorScales).length > 1) {
-        cmd.push("-o", outputName);
-      }
-      Quickshell.execDetached(cmd);
-    }
+    const tagId = workspace.idx || 1;
+    const outputName = workspace.output || root.selectedMonitor;
+    if (outputName)
+      Quickshell.execDetached(["mmsg", "dispatch", "viewcrossmon," + tagId + "," + outputName]);
+    else
+      Quickshell.execDetached(["mmsg", "dispatch", "view," + tagId]);
   }
 
   function focusWindow(window) {
-    if (window && window.handle) {
-      window.handle.activate();
-    } else if (window.workspaceId) {
-      switchToWorkspace({
-                          id: window.workspaceId,
-                          output: window.output
-                        });
-    }
+    if (window && window.id !== undefined)
+      Quickshell.execDetached(["mmsg", "dispatch", "focusid", "client," + window.id]);
   }
 
   function closeWindow(window) {
-    if (window && window.handle) {
-      window.handle.close();
-    } else {
-      Quickshell.execDetached(["mmsg", "-s", "-d", "killclient"]);
-    }
+    if (window && window.id !== undefined)
+      Quickshell.execDetached(["mmsg", "dispatch", "killclient", "client," + window.id]);
+    else
+      Quickshell.execDetached(["mmsg", "dispatch", "killclient"]);
   }
 
   function turnOffMonitors() {
     const screens = Quickshell.screens;
-    const cmds = [];
-    for (let i = 0; i < screens.length; i++) {
-      cmds.push("mmsg -s -d disable_monitor," + screens[i].name);
-    }
-    if (cmds.length > 0) {
-      Quickshell.execDetached(["sh", "-c", cmds.join(" && ")]);
-    }
+    const commands = [];
+    for (let i = 0; i < screens.length; i++)
+      commands.push("mmsg dispatch disable_monitor," + screens[i].name);
+    if (commands.length > 0)
+      Quickshell.execDetached(["sh", "-c", commands.join(" && ")]);
   }
 
   function turnOnMonitors() {
     const screens = Quickshell.screens;
-    const cmds = [];
-    for (let i = 0; i < screens.length; i++) {
-      cmds.push("mmsg -s -d enable_monitor," + screens[i].name);
-    }
-    if (cmds.length > 0) {
-      Quickshell.execDetached(["sh", "-c", cmds.join(" && ")]);
-    }
+    const commands = [];
+    for (let i = 0; i < screens.length; i++)
+      commands.push("mmsg dispatch enable_monitor," + screens[i].name);
+    if (commands.length > 0)
+      Quickshell.execDetached(["sh", "-c", commands.join(" && ")]);
   }
 
   function logout() {
-    Quickshell.execDetached(["mmsg", "-s", "-q"]);
+    Quickshell.execDetached(["mmsg", "dispatch", "quit"]);
   }
 
   function cycleKeyboardLayout() {
@@ -482,10 +370,6 @@ Item {
   }
 
   function spawn(command) {
-    try {
-      Quickshell.execDetached(["mmsg", "-s", "-d", "spawn_shell," + command.join(" ")]);
-    } catch (e) {
-      Logger.e("MangoService", "Failed to spawn command:", e);
-    }
+    Quickshell.execDetached(["mmsg", "dispatch", "spawn_shell," + command.join(" ")]);
   }
 }
