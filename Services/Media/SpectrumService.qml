@@ -2,17 +2,12 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
-import Quickshell.Services.Pipewire
+import Quickshell.Io
 import qs.Commons
 import qs.Services.UI
 
 Singleton {
   id: root
-
-  // TODO Remove in may 2026
-  Component.onCompleted: {
-    _setBandsCount();
-  }
 
   // Register a component that needs audio data, call this when a visualizer becomes active.
   // Pass a unique identifier (e.g., "lockscreen", "controlcenter:screen1", "plugin:fancy-audiovisualizer")
@@ -20,6 +15,7 @@ Singleton {
     root._registeredComponents[componentId] = true;
     root._registeredComponents = Object.assign({}, root._registeredComponents);
     Logger.d("Spectrum", "Component registered:", componentId, "- total:", root._registeredCount);
+    root.syncProcess();
   }
 
   // Unregister a component when it no longer needs audio data.
@@ -27,6 +23,7 @@ Singleton {
     delete root._registeredComponents[componentId];
     root._registeredComponents = Object.assign({}, root._registeredComponents);
     Logger.d("Spectrum", "Component unregistered:", componentId, "- total:", root._registeredCount);
+    root.syncProcess();
   }
 
   // Check if a component is registered
@@ -42,40 +39,125 @@ Singleton {
   property var values: []
   property bool isIdle: true
 
-  PwAudioSpectrum {
-    id: spectrum
-    node: Pipewire.defaultAudioSink
-    enabled: root._shouldRun
-    // TODO Uncomment this in may 2026
-    // bandCount: Settings.data.audio.spectrumMirrored ? 32 : 64
-    frameRate: Settings.data.audio.spectrumFrameRate
-    lowerCutoff: 50
-    upperCutoff: 12000
-    noiseReduction: 0.77
-    smoothing: true
+  readonly property int bandCount: Settings.data.audio.spectrumMirrored ? 32 : 64
+  readonly property int frameRate: Settings.data.audio.spectrumFrameRate || 30
 
-    onValuesChanged: {
-      root.values = spectrum.values;
-    }
-
-    onIdleChanged: {
-      root.isIdle = spectrum.idle;
-    }
+  readonly property string cavaConfig: {
+    return [
+      "[general]",
+      "framerate = " + frameRate,
+      "bars = " + bandCount,
+      "lower_cutoff_freq = 50",
+      "higher_cutoff_freq = 12000",
+      "sleep_timer = 0",
+      "[input]",
+      "method = pipewire",
+      "source = auto",
+      "[output]",
+      "method = raw",
+      "raw_target = /dev/stdout",
+      "data_format = ascii",
+      "ascii_max_range = 100",
+      "bar_delimiter = 59",
+      "frame_delimiter = 10",
+      "channels = mono",
+      ""
+    ].join("\n");
   }
 
-  // TODO Remove in may 2026 - temporary until noctalia-qs is fully propagated
+  Component.onCompleted: syncProcess()
+
+  on_ShouldRunChanged: syncProcess()
+
   Connections {
     target: Settings.data.audio
     function onSpectrumMirroredChanged() {
-      _setBandsCount();
+      root.restartProcess();
+    }
+    function onSpectrumFrameRateChanged() {
+      root.restartProcess();
     }
   }
-  function _setBandsCount() {
-    const bandCount = Settings.data.audio.spectrumMirrored ? 32 : 64;
-    if (spectrum.bandCount !== undefined) {
-      spectrum.bandCount = bandCount;
-    } else if (spectrum.barCount !== undefined) {
-      spectrum.barCount = bandCount;
+
+  Process {
+    id: cava
+    command: ["sh", "-c", "printf '%s' \"$CAVA_CONFIG\" | cava -p /dev/stdin"]
+    environment: ({
+                    "CAVA_CONFIG": root.cavaConfig
+                  })
+
+    stdout: SplitParser {
+      splitMarker: "\n"
+      onRead: line => root.handleFrame(line)
     }
+
+    stderr: SplitParser {
+      onRead: line => {
+                if (line.trim().length > 0)
+                  Logger.w("Spectrum", line);
+              }
+    }
+
+    onExited: (code, status) => {
+                if (root._shouldRun)
+                  restartTimer.restart();
+              }
+  }
+
+  Timer {
+    id: restartTimer
+    interval: 1000
+    repeat: false
+    onTriggered: {
+      if (root._shouldRun)
+        cava.running = true;
+    }
+  }
+
+  function syncProcess() {
+    if (_shouldRun) {
+      if (!cava.running)
+        cava.running = true;
+    } else {
+      restartTimer.stop();
+      if (cava.running)
+        cava.running = false;
+      values = [];
+      isIdle = true;
+    }
+  }
+
+  function restartProcess() {
+    restartTimer.stop();
+    if (cava.running)
+      cava.running = false;
+    if (_shouldRun)
+      restartTimer.restart();
+  }
+
+  function handleFrame(line) {
+    if (!line || line.length === 0)
+      return;
+
+    const parts = line.trim().split(";");
+    const parsed = [];
+    let peak = 0;
+
+    for (let i = 0; i < parts.length; i++) {
+      const raw = parts[i].trim();
+      if (raw.length === 0)
+        continue;
+      const value = parseFloat(raw);
+      const normalized = isFinite(value) ? Math.max(0, Math.min(1, value / 100)) : 0;
+      parsed.push(normalized);
+      if (normalized > peak)
+        peak = normalized;
+    }
+
+    if (parsed.length === 0)
+      return;
+
+    values = parsed;
+    isIdle = peak < 0.005;
   }
 }
