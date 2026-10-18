@@ -69,7 +69,7 @@ DraggableDesktopWidget {
       return false;
     if (root.visualizerType === "" || root.visualizerType === "none")
       return false;
-    return true;
+    return SpectrumService.available;
   }
 
   // Visualizer overlay (visibility controlled by visualizerVisibility setting)

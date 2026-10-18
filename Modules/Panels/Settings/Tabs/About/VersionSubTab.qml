@@ -32,7 +32,6 @@ ColumnLayout {
   property string currentVersion: UpdateService.currentVersion
   property string commitInfo: ""
   property string qsVersion: ""
-  property string qsRevision: ""
 
   readonly property bool isGitVersion: root.currentVersion.endsWith("-git")
   readonly property int gigaB: (1024 * 1024 * 1024)
@@ -137,9 +136,6 @@ ColumnLayout {
     if (root.qsVersion) {
       let qsV = root.qsVersion.startsWith("v") ? root.qsVersion : "v" + root.qsVersion;
       info += "Quickshell: " + qsV;
-      if (root.qsRevision) {
-        info += " (" + root.qsRevision + ")";
-      }
       info += "\n";
     }
 
@@ -252,18 +248,16 @@ ColumnLayout {
 
   Process {
     id: qsVersionProcess
-    command: ["noctalia-shell", "--version"]
+    command: ["sh", "-c", "noctalia-shell --version 2>/dev/null || qs --version"]
     running: false
 
     onExited: function (exitCode) {
       if (exitCode === 0) {
         var output = stdout.text.trim();
-        // Format: "Quickshell 0.3.0 (revision tag-v0.3.0, distributed by Nixpkgs)"
+        // Format: "Quickshell 0.3.2 (revision tag-v0.3.2, distributed by Nixpkgs)"
         var match = output.match(/Quickshell\s+v?(\d+\.\d+\.\d+\S*)/i);
-        if (match) {
+        if (match)
           root.qsVersion = match[1];
-          root.qsRevision = "";
-        }
       }
     }
 
@@ -496,28 +490,6 @@ ColumnLayout {
             text: root.qsVersion.startsWith("v") ? root.qsVersion : "v" + root.qsVersion
             color: Color.mOnSurface
             font.weight: Style.fontWeightBold
-          }
-
-          // Git revision in parentheses
-          NText {
-            id: qsRevisionText
-            visible: root.qsRevision !== ""
-            text: "(" + root.qsRevision + ")"
-            color: qsRevisionMouseArea.containsMouse ? Color.mPrimary : Color.mOnSurfaceVariant
-            pointSize: Style.fontSizeXS
-            font.underline: qsRevisionMouseArea.containsMouse
-
-            MouseArea {
-              id: qsRevisionMouseArea
-              anchors.fill: parent
-              hoverEnabled: true
-              cursorShape: Qt.PointingHandCursor
-              onEntered: TooltipService.show(qsRevisionText, I18n.tr("panels.about.view-commit"))
-              onExited: TooltipService.hide()
-              onClicked: {
-                Quickshell.execDetached(["xdg-open", "https://github.com/quickshell-mirror/quickshell/releases"]);
-              }
-            }
           }
 
           // Update status indicator

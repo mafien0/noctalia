@@ -38,6 +38,8 @@ Singleton {
 
   property var values: []
   property bool isIdle: true
+  property bool available: false
+  property bool _missingNoticeShown: false
 
   readonly property int bandCount: Settings.data.audio.spectrumMirrored ? 32 : 64
   readonly property int frameRate: Settings.data.audio.spectrumFrameRate || 30
@@ -65,9 +67,24 @@ Singleton {
     ].join("\n");
   }
 
-  Component.onCompleted: syncProcess()
+  Component.onCompleted: cavaCheck.running = true
 
   on_ShouldRunChanged: syncProcess()
+  onAvailableChanged: syncProcess()
+
+  Process {
+    id: cavaCheck
+    command: ["sh", "-c", "command -v cava"]
+
+    onExited: (code, status) => {
+                root.available = code === 0;
+                if (root.available) {
+                  root.syncProcess();
+                } else {
+                  root.markMissing();
+                }
+              }
+  }
 
   Connections {
     target: Settings.data.audio
@@ -92,14 +109,15 @@ Singleton {
     }
 
     stderr: SplitParser {
-      onRead: line => {
-                if (line.trim().length > 0)
-                  Logger.w("Spectrum", line);
-              }
+      onRead: line => root.handleCavaStderr(line)
     }
 
     onExited: (code, status) => {
-                if (root._shouldRun)
+                if (code === 127) {
+                  root.markMissing();
+                  return;
+                }
+                if (root._shouldRun && root.available)
                   restartTimer.restart();
               }
   }
@@ -109,13 +127,13 @@ Singleton {
     interval: 1000
     repeat: false
     onTriggered: {
-      if (root._shouldRun)
+      if (root._shouldRun && root.available)
         cava.running = true;
     }
   }
 
   function syncProcess() {
-    if (_shouldRun) {
+    if (_shouldRun && available) {
       if (!cava.running)
         cava.running = true;
     } else {
@@ -131,8 +149,34 @@ Singleton {
     restartTimer.stop();
     if (cava.running)
       cava.running = false;
-    if (_shouldRun)
+    if (_shouldRun && available)
       restartTimer.restart();
+  }
+
+  function handleCavaStderr(line) {
+    if (!line || line.trim().length === 0 || !available)
+      return;
+
+    Logger.w("Spectrum", line);
+
+    if (line.indexOf("cava: command not found") !== -1 || line.indexOf("cava: not found") !== -1)
+      markMissing();
+  }
+
+  function markMissing() {
+    available = false;
+    restartTimer.stop();
+    if (cava.running)
+      cava.running = false;
+    values = [];
+    isIdle = true;
+
+    if (_missingNoticeShown)
+      return;
+
+    _missingNoticeShown = true;
+    Logger.e("Spectrum", "cava not found - audio visualizers disabled");
+    Qt.callLater(() => ToastService.showError(I18n.tr("common.visualizer"), I18n.tr("toast.cava-not-found")));
   }
 
   function handleFrame(line) {

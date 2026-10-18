@@ -1946,6 +1946,7 @@
       "unavailable": "Clipboard history unavailable",
       "unavailable-desc": "The 'cliphist' application is not installed. Please install it to use clipboard history features"
     },
+    "cava-not-found": "cava not found",
     "custom-command-failed": {
       "description": "Command failed: {command}\nExit code: {code}",
       "title": "Custom command failed"

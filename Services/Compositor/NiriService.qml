@@ -187,6 +187,12 @@ Item {
   function upsertWindow(raw) {
     if (!raw || raw.id === undefined)
       return;
+    if (raw.is_focused) {
+      for (var key in _rawWindows) {
+        if (Number(key) !== Number(raw.id))
+          _rawWindows[key].is_focused = false;
+      }
+    }
     _rawWindows[raw.id] = raw;
     rebuildWindows();
   }

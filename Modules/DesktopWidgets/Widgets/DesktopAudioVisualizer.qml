@@ -23,7 +23,7 @@ DraggableDesktopWidget {
 
   readonly property color fillColor: Color.resolveColorKey(colorName)
 
-  readonly property bool shouldShow: visualizerType !== "" && visualizerType !== "none" && (!hideWhenIdle || MediaService.isPlaying)
+  readonly property bool shouldShow: visualizerType !== "" && visualizerType !== "none" && (!hideWhenIdle || MediaService.isPlaying) && SpectrumService.available
   readonly property bool isHidden: !shouldShow
   readonly property bool shouldRegisterSpectrum: shouldShow
 

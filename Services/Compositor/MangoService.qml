@@ -131,8 +131,31 @@ Item {
 
       for (const key in clients) {
         const client = clients[key];
-        const tagId = (client.tags && client.tags.length > 0) ? client.tags[0] : 1;
         const outputName = client.monitor || root.selectedMonitor || "";
+        const monitor = internal.monitors[outputName];
+        const activeTags = (monitor && monitor.active_tags) ? monitor.active_tags : [];
+        let tagId = (client.tags && client.tags.length > 0) ? client.tags[0] : 1;
+
+        if (client.tags) {
+          for (let t = 0; t < client.tags.length; t++) {
+            const candidate = client.tags[t];
+            if (candidate !== 0 && activeTags.indexOf(candidate) !== -1) {
+              tagId = candidate;
+              break;
+            }
+          }
+        }
+
+        if (tagId === 0) {
+          tagId = 1;
+          for (let t = 0; t < activeTags.length; t++) {
+            if (activeTags[t] !== 0) {
+              tagId = activeTags[t];
+              break;
+            }
+          }
+        }
+
         const outputIdx = outputIndex(outputName);
         const workspaceId = outputIdx * 100 + tagId;
 
@@ -170,7 +193,7 @@ Item {
         }
       }
 
-      const signature = JSON.stringify(list.map(w => w.id + ":" + w.workspaceId + ":" + w.isFocused));
+      const signature = JSON.stringify(list.map(w => [w.id, w.workspaceId, w.isFocused, w.title, w.appId]));
       if (signature !== internal.lastWindowSignature) {
         internal.lastWindowSignature = signature;
         root.windows = list;
