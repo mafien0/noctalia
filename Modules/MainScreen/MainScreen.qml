@@ -206,16 +206,16 @@ PanelWindow {
   Region {
     id: blurRegion
     // ── Non-framed bar (simple/floating): single rectangle with bar corner states ──
-    Region {
+    Backgrounds.CornerMask {
       x: (!barPlaceholder.isFramed && root.barShouldShow && !barPlaceholder.isHidden) ? barPlaceholder.x : 0
       y: (!barPlaceholder.isFramed && root.barShouldShow && !barPlaceholder.isHidden) ? barPlaceholder.y : 0
       width: (!barPlaceholder.isFramed && root.barShouldShow && !barPlaceholder.isHidden) ? barPlaceholder.width : 0
       height: (!barPlaceholder.isFramed && root.barShouldShow && !barPlaceholder.isHidden) ? barPlaceholder.height : 0
-      radius: Style.radiusL
-      topLeftCorner: barPlaceholder.topLeftCornerState
-      topRightCorner: barPlaceholder.topRightCornerState
-      bottomLeftCorner: barPlaceholder.bottomLeftCornerState
-      bottomRightCorner: barPlaceholder.bottomRightCornerState
+      cornerRadius: Style.radiusL
+      topLeftState: barPlaceholder.topLeftCornerState
+      topRightState: barPlaceholder.topRightCornerState
+      bottomLeftState: barPlaceholder.bottomLeftCornerState
+      bottomRightState: barPlaceholder.bottomRightCornerState
     }
 
     // ── Framed bar: full screen minus rounded hole ──
@@ -237,29 +237,29 @@ PanelWindow {
 
     // ── Panel blur regions ──
     // Opening panel
-    Region {
+    Backgrounds.CornerMask {
       x: backgroundBlur.panelBg ? Math.round(backgroundBlur.panelBg.x) : 0
       y: backgroundBlur.panelBg ? Math.round(backgroundBlur.panelBg.y) : 0
       width: backgroundBlur.panelBg ? Math.round(backgroundBlur.panelBg.width) : 0
       height: backgroundBlur.panelBg ? Math.round(backgroundBlur.panelBg.height) : 0
-      radius: Style.radiusL
-      topLeftCorner: backgroundBlur.panelBg ? backgroundBlur.panelBg.topLeftCornerState : CornerState.Normal
-      topRightCorner: backgroundBlur.panelBg ? backgroundBlur.panelBg.topRightCornerState : CornerState.Normal
-      bottomLeftCorner: backgroundBlur.panelBg ? backgroundBlur.panelBg.bottomLeftCornerState : CornerState.Normal
-      bottomRightCorner: backgroundBlur.panelBg ? backgroundBlur.panelBg.bottomRightCornerState : CornerState.Normal
+      cornerRadius: Style.radiusL
+      topLeftState: backgroundBlur.panelBg ? backgroundBlur.panelBg.topLeftCornerState : 0
+      topRightState: backgroundBlur.panelBg ? backgroundBlur.panelBg.topRightCornerState : 0
+      bottomLeftState: backgroundBlur.panelBg ? backgroundBlur.panelBg.bottomLeftCornerState : 0
+      bottomRightState: backgroundBlur.panelBg ? backgroundBlur.panelBg.bottomRightCornerState : 0
     }
 
     // Closing panel (coexists with opening panel during transition)
-    Region {
+    Backgrounds.CornerMask {
       x: backgroundBlur.closingPanelBg ? Math.round(backgroundBlur.closingPanelBg.x) : 0
       y: backgroundBlur.closingPanelBg ? Math.round(backgroundBlur.closingPanelBg.y) : 0
       width: backgroundBlur.closingPanelBg ? Math.round(backgroundBlur.closingPanelBg.width) : 0
       height: backgroundBlur.closingPanelBg ? Math.round(backgroundBlur.closingPanelBg.height) : 0
-      radius: Style.radiusL
-      topLeftCorner: backgroundBlur.closingPanelBg ? backgroundBlur.closingPanelBg.topLeftCornerState : CornerState.Normal
-      topRightCorner: backgroundBlur.closingPanelBg ? backgroundBlur.closingPanelBg.topRightCornerState : CornerState.Normal
-      bottomLeftCorner: backgroundBlur.closingPanelBg ? backgroundBlur.closingPanelBg.bottomLeftCornerState : CornerState.Normal
-      bottomRightCorner: backgroundBlur.closingPanelBg ? backgroundBlur.closingPanelBg.bottomRightCornerState : CornerState.Normal
+      cornerRadius: Style.radiusL
+      topLeftState: backgroundBlur.closingPanelBg ? backgroundBlur.closingPanelBg.topLeftCornerState : 0
+      topRightState: backgroundBlur.closingPanelBg ? backgroundBlur.closingPanelBg.topRightCornerState : 0
+      bottomLeftState: backgroundBlur.closingPanelBg ? backgroundBlur.closingPanelBg.bottomLeftCornerState : 0
+      bottomRightState: backgroundBlur.closingPanelBg ? backgroundBlur.closingPanelBg.bottomRightCornerState : 0
     }
   }
 
