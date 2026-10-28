@@ -1,9 +1,9 @@
 # Noctalia Shell
 
 > [!WARNING]
-> This branch contains Noctalia v4, a legacy and unmaintained version. It is no longer developed, supported, or receiving fixes. **Do not use v4 for new installations.**
->
-> **[Noctalia v5](https://docs.noctalia.dev/noctalia/getting-started/installation/)** is the stable, finished, and actively supported version. Use v5 instead. Its installation instructions, documentation, and plugins are not compatible with this v4 branch.
+> This fork contains Noctalia v4, a deprecaed quickshell version. Its not an official fork
+> 
+> I will try to maintain it. Be aware: It is heavily ai-slopped, because i don't want to read 100k of qml
 
 **_quiet by design_**
 
@@ -26,10 +26,6 @@
 </p>
 
 ---
-
-## About this legacy branch
-
-This repository contains the archived Noctalia v4 desktop shell for Wayland. The feature list below describes the historical v4 implementation and is retained for existing users and reference only.
 
 **✨ Key Features:**
 - 🪟 Native support for Niri, Hyprland, Sway, Scroll, Labwc and MangoWC
