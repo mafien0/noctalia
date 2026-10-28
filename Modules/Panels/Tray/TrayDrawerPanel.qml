@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Services.SystemTray
 import Quickshell.Widgets
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.MainScreen
 import qs.Services.UI
 import qs.Widgets
@@ -205,7 +206,7 @@ SmartPanel {
 
             layer.enabled: panelContent.widgetSettings.colorizeIcons !== false
             layer.effect: ShaderEffect {
-              property color targetColor: Settings.data.colorSchemes.darkMode ? Color.mOnSurface : Color.mSurfaceVariant
+              property color targetColor: Settings.data.colorSchemes.darkMode ? Commons.Color.mOnSurface : Commons.Color.mSurfaceVariant
               property real colorizeMode: 1.0
               fragmentShader: Qt.resolvedUrl(Quickshell.shellDir + "/Shaders/qsb/appicon_colorize.frag.qsb")
             }

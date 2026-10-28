@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 Popup {
@@ -30,9 +31,9 @@ Popup {
   property var _savedSlot: null
 
   background: Rectangle {
-    color: Color.mSurface
+    color: Commons.Color.mSurface
     radius: Style.radiusL
-    border.color: Color.mOutline
+    border.color: Commons.Color.mOutline
     border.width: Style.borderS
   }
 
@@ -126,8 +127,8 @@ Popup {
       NButton {
         text: I18n.tr("common.save")
         icon: "check"
-        backgroundColor: Color.mPrimary
-        textColor: Color.mOnPrimary
+        backgroundColor: Commons.Color.mPrimary
+        textColor: Commons.Color.mOnPrimary
         onClicked: {
           root.saved(timeoutSpinBox.value, commandInput.text, resumeCommandInput.text, nameInput.text);
           root.close();

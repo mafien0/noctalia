@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.System
 import qs.Widgets
 
@@ -204,9 +205,9 @@ ColumnLayout {
       Rectangle {
         Layout.preferredWidth: 320
         Layout.preferredHeight: 160
-        color: Color.mSurfaceVariant
+        color: Commons.Color.mSurfaceVariant
         radius: Style.radiusM
-        border.color: Color.mSecondary
+        border.color: Commons.Color.mSecondary
         border.width: Style.borderS
 
         Behavior on border.color {
@@ -232,7 +233,7 @@ ColumnLayout {
                 family: valueUseCustomFont && valueCustomFont ? valueCustomFont : Settings.data.ui.fontDefault
                 pointSize: Style.fontSizeM
                 font.weight: Style.fontWeightBold
-                color: Color.resolveColorKey(valueClockColor)
+                color: Commons.Color.resolveColorKey(valueClockColor)
                 wrapMode: Text.WordWrap
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 

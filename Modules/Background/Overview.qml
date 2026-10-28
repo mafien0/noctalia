@@ -3,6 +3,7 @@ import QtQuick.Effects
 import Quickshell
 import Quickshell.Wayland
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Compositor
 import qs.Services.Power
 import qs.Services.UI
@@ -21,7 +22,7 @@ Loader {
       property string preprocessedWallpaper: "" // Pre-resized wallpaper from Background.qml
       property bool isSolidColor: Settings.data.wallpaper.useSolidColor
       property color solidColor: Settings.data.wallpaper.solidColor
-      property color tintColor: Settings.data.colorSchemes.darkMode ? Color.mSurface : Color.mOnSurface
+      property color tintColor: Settings.data.colorSchemes.darkMode ? Commons.Color.mSurface : Commons.Color.mOnSurface
 
       visible: wallpaper !== "" || isSolidColor
 

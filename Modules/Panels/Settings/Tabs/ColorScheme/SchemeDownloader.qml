@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Theming
 import qs.Services.UI
 import qs.Widgets
@@ -61,14 +62,14 @@ Popup {
 
     // Return visible defaults while loading
     var defaults = {
-      "mSurface": Color.mSurfaceVariant,
-      "mPrimary": Color.mPrimary,
-      "mSecondary": Color.mSecondary,
-      "mTertiary": Color.mTertiary,
-      "mError": Color.mError,
-      "mOnSurface": Color.mOnSurfaceVariant
+      "mSurface": Commons.Color.mSurfaceVariant,
+      "mPrimary": Commons.Color.mPrimary,
+      "mSecondary": Commons.Color.mSecondary,
+      "mTertiary": Commons.Color.mTertiary,
+      "mError": Commons.Color.mError,
+      "mOnSurface": Commons.Color.mOnSurfaceVariant
     };
-    return defaults[colorKey] || Color.mOnSurfaceVariant;
+    return defaults[colorKey] || Commons.Color.mOnSurfaceVariant;
   }
 
   // Colors are now provided directly in the registry, no need to fetch individual files
@@ -77,9 +78,9 @@ Popup {
   }
 
   background: Rectangle {
-    color: Color.mSurface
+    color: Commons.Color.mSurface
     radius: Style.radiusL
-    border.color: Color.mPrimary
+    border.color: Commons.Color.mPrimary
     border.width: Style.borderM
   }
 
@@ -758,7 +759,7 @@ Popup {
         text: I18n.tr("panels.color-scheme.download-title")
         pointSize: Style.fontSizeL
         font.weight: Style.fontWeightBold
-        color: Color.mPrimary
+        color: Commons.Color.mPrimary
         Layout.fillWidth: true
       }
 
@@ -790,7 +791,7 @@ Popup {
     Rectangle {
       Layout.fillWidth: true
       Layout.preferredHeight: 1
-      color: Color.mOutline
+      color: Commons.Color.mOutline
     }
 
     // Error message
@@ -798,7 +799,7 @@ Popup {
       Layout.fillWidth: true
       Layout.preferredHeight: errorText.implicitHeight + Style.marginM
       visible: downloadError !== ""
-      color: Color.mError
+      color: Commons.Color.mError
       radius: Style.radiusS
 
       NText {
@@ -807,7 +808,7 @@ Popup {
         anchors.margins: Style.marginM
         text: downloadError
         pointSize: Style.fontSizeS
-        color: Color.mOnError
+        color: Commons.Color.mOnError
         wrapMode: Text.WordWrap
       }
     }
@@ -826,7 +827,7 @@ Popup {
       NText {
         text: I18n.tr("panels.color-scheme.download-fetching")
         pointSize: Style.fontSizeM
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
       }
     }
 
@@ -838,7 +839,7 @@ Popup {
       visible: hasInitialData && availableSchemes.length > 0
       verticalPolicy: ScrollBar.AsNeeded
       horizontalPolicy: ScrollBar.AlwaysOff
-      gradientColor: Color.mSurface
+      gradientColor: Commons.Color.mSurface
 
       ColumnLayout {
         width: schemesScrollView.availableWidth
@@ -855,7 +856,7 @@ Popup {
             property string schemeName: modelData.name
             color: root.getSchemeColor(schemeName, "mSurface")
             border.width: Style.borderL
-            border.color: hoverHandler.hovered ? root.getSchemeColor(schemeName, "mPrimary") : Color.mOutline
+            border.color: hoverHandler.hovered ? root.getSchemeColor(schemeName, "mPrimary") : Commons.Color.mOutline
 
             HoverHandler {
               id: hoverHandler
@@ -897,7 +898,7 @@ Popup {
               NText {
                 text: schemeRow.schemeName
                 pointSize: Style.fontSizeS
-                color: Color.mOnSurface
+                color: Commons.Color.mOnSurface
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 Layout.alignment: Qt.AlignVCenter
@@ -958,14 +959,14 @@ Popup {
       NIcon {
         icon: "package"
         pointSize: 48
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
         Layout.alignment: Qt.AlignHCenter
       }
 
       NText {
         text: I18n.tr("panels.color-scheme.download-empty")
         pointSize: Style.fontSizeM
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
         Layout.alignment: Qt.AlignHCenter
       }
     }

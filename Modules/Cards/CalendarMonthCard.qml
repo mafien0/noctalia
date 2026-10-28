@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Location
 import qs.Services.System
 import qs.Services.UI
@@ -102,7 +103,7 @@ NBox {
         text: I18n.locale.monthName(root.calendarMonth, Locale.LongFormat).toUpperCase() + " " + root.calendarYear
         pointSize: Style.fontSizeM
         font.weight: Style.fontWeightBold
-        color: Color.mOnSurface
+        color: Commons.Color.mOnSurface
       }
 
       NDivider {
@@ -159,7 +160,7 @@ NBox {
                 const dayName = I18n.locale.dayName(dayIndex, Locale.ShortFormat);
                 return dayName.substring(0, 2).toUpperCase();
               }
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
               pointSize: Style.fontSizeS
               font.weight: Style.fontWeightBold
               horizontalAlignment: Text.AlignHCenter
@@ -210,11 +211,11 @@ NBox {
 
       function getEventColor(event, isToday) {
         if (isMultiDayEvent(event)) {
-          return isToday ? Color.mOnSecondary : Color.mTertiary;
+          return isToday ? Commons.Color.mOnSecondary : Commons.Color.mTertiary;
         } else if (root.isAllDayEvent(event)) {
-          return isToday ? Color.mOnSecondary : Color.mSecondary;
+          return isToday ? Commons.Color.mOnSecondary : Commons.Color.mSecondary;
         } else {
-          return isToday ? Color.mOnSecondary : Color.mPrimary;
+          return isToday ? Commons.Color.mOnSecondary : Commons.Color.mPrimary;
         }
       }
 
@@ -258,7 +259,7 @@ NBox {
 
             NText {
               anchors.centerIn: parent
-              color: Qt.alpha(Color.mPrimary, 0.7)
+              color: Qt.alpha(Commons.Color.mPrimary, 0.7)
               pointSize: Style.fontSizeXXS
               text: modelData
             }
@@ -342,17 +343,17 @@ NBox {
               height: Style.baseWidgetSize * 0.9
               anchors.centerIn: parent
               radius: Style.radiusM
-              color: modelData.today ? Color.mSecondary : "transparent"
+              color: modelData.today ? Commons.Color.mSecondary : "transparent"
 
               NText {
                 anchors.centerIn: parent
                 text: modelData.day
                 color: {
                   if (modelData.today)
-                    return Color.mOnSecondary;
+                    return Commons.Color.mOnSecondary;
                   if (modelData.currentMonth)
-                    return Color.mOnSurface;
-                  return Color.mOnSurfaceVariant;
+                    return Commons.Color.mOnSurface;
+                  return Commons.Color.mOnSurfaceVariant;
                 }
                 opacity: modelData.currentMonth ? 1.0 : 0.4
                 pointSize: Style.fontSizeM

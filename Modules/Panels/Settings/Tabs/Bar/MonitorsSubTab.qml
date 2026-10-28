@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import "../../Bar" as BarSettings
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Compositor
 import qs.Services.UI
 import qs.Widgets
@@ -29,7 +30,7 @@ ColumnLayout {
       id: monitorCard
       Layout.fillWidth: true
       implicitHeight: cardContent.implicitHeight + Style.margin2L
-      color: Color.mSurface
+      color: Commons.Color.mSurface
 
       required property var modelData
       readonly property string screenName: modelData.name || "Unknown"
@@ -66,7 +67,7 @@ ColumnLayout {
               text: monitorCard.screenName
               pointSize: Style.fontSizeM
               font.weight: Style.fontWeightBold
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
             }
 
             NText {
@@ -79,7 +80,7 @@ ColumnLayout {
                                });
               }
               pointSize: Style.fontSizeS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
             }
           }
 

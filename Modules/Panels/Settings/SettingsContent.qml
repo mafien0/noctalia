@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.Panels.Settings.Tabs
 import qs.Modules.Panels.Settings.Tabs.About
 import qs.Modules.Panels.Settings.Tabs.Audio
@@ -764,7 +765,7 @@ Item {
         Layout.alignment: Qt.AlignTop
 
         radius: root.sidebarCardStyle ? Style.radiusM : 0
-        color: root.sidebarCardStyle ? Color.mSurfaceVariant : "transparent"
+        color: root.sidebarCardStyle ? Commons.Color.mSurfaceVariant : "transparent"
         border.color: root.sidebarCardStyle ? Style.boxBorderColor : "transparent"
 
         Behavior on Layout.preferredWidth {
@@ -792,10 +793,10 @@ Item {
               height: parent.height
               anchors.left: parent.left
               radius: Style.radiusS
-              color: toggleMouseArea.containsMouse ? Color.mHover : "transparent"
+              color: toggleMouseArea.containsMouse ? Commons.Color.mHover : "transparent"
 
               Behavior on color {
-                enabled: !Color.isTransitioning
+                enabled: !Commons.Color.isTransitioning
                 ColorAnimation {
                   duration: Style.animationFast
                   easing.type: Easing.InOutQuad
@@ -811,7 +812,7 @@ Item {
 
                 NIcon {
                   icon: root.sidebarExpanded ? "layout-sidebar-right-expand" : "layout-sidebar-left-expand"
-                  color: toggleMouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+                  color: toggleMouseArea.containsMouse ? Commons.Color.mOnHover : Commons.Color.mOnSurface
                   pointSize: Style.fontSizeXL
                 }
               }
@@ -889,10 +890,10 @@ Item {
                 height: parent.height
                 anchors.left: parent.left
                 radius: Style.radiusS
-                color: searchCollapsedMouseArea.containsMouse ? Color.mHover : "transparent"
+                color: searchCollapsedMouseArea.containsMouse ? Commons.Color.mHover : "transparent"
 
                 Behavior on color {
-                  enabled: !Color.isTransitioning
+                  enabled: !Commons.Color.isTransitioning
                   ColorAnimation {
                     duration: Style.animationFast
                     easing.type: Easing.InOutQuad
@@ -908,7 +909,7 @@ Item {
 
                   NIcon {
                     icon: "search"
-                    color: searchCollapsedMouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+                    color: searchCollapsedMouseArea.containsMouse ? Commons.Color.mOnHover : Commons.Color.mOnSurface
                     pointSize: Style.fontSizeXL
                   }
                 }
@@ -976,10 +977,10 @@ Item {
                 radius: Style.iRadiusS
                 readonly property bool selected: index === root.searchSelectedIndex
                 readonly property bool effectiveHover: !root.ignoreMouseHover && resultMouseArea.containsMouse
-                color: (effectiveHover || selected) ? Color.mHover : "transparent"
+                color: (effectiveHover || selected) ? Commons.Color.mHover : "transparent"
 
                 Behavior on color {
-                  enabled: !Color.isTransitioning
+                  enabled: !Commons.Color.isTransitioning
                   ColorAnimation {
                     duration: Style.animationFast
                     easing.type: Easing.InOutQuad
@@ -999,7 +1000,7 @@ Item {
                     text: I18n.tr(modelData.labelKey)
                     pointSize: Style.fontSizeM
                     font.weight: Style.fontWeightSemiBold
-                    color: (resultItem.effectiveHover || resultItem.selected) ? Color.mOnHover : Color.mOnSurface
+                    color: (resultItem.effectiveHover || resultItem.selected) ? Commons.Color.mOnHover : Commons.Color.mOnSurface
                     Layout.fillWidth: true
                     elide: Text.ElideRight
                     maximumLineCount: 1
@@ -1013,7 +1014,7 @@ Item {
                       return t;
                     }
                     pointSize: Style.fontSizeXS
-                    color: (resultItem.effectiveHover || resultItem.selected) ? Color.mOnHover : Color.mOnSurfaceVariant
+                    color: (resultItem.effectiveHover || resultItem.selected) ? Commons.Color.mOnHover : Commons.Color.mOnSurfaceVariant
                     Layout.fillWidth: true
                     elide: Text.ElideRight
                     maximumLineCount: 1
@@ -1056,13 +1057,13 @@ Item {
                 width: sidebarList.width
                 height: tabEntryRow.implicitHeight + Style.margin2XS
                 radius: Style.iRadiusS
-                color: selected ? Color.mPrimary : (tabItem.hovering ? Color.mHover : "transparent")
+                color: selected ? Commons.Color.mPrimary : (tabItem.hovering ? Commons.Color.mHover : "transparent")
                 readonly property bool selected: index === root.currentTabIndex
                 property bool hovering: false
-                property color tabTextColor: selected ? Color.mOnPrimary : (tabItem.hovering ? Color.mOnHover : Color.mOnSurface)
+                property color tabTextColor: selected ? Commons.Color.mOnPrimary : (tabItem.hovering ? Commons.Color.mOnHover : Commons.Color.mOnSurface)
 
                 Behavior on color {
-                  enabled: !Color.isTransitioning
+                  enabled: !Commons.Color.isTransitioning
                   ColorAnimation {
                     duration: Style.animationFast
                     easing.type: Easing.InOutQuad
@@ -1070,7 +1071,7 @@ Item {
                 }
 
                 Behavior on tabTextColor {
-                  enabled: !Color.isTransitioning
+                  enabled: !Commons.Color.isTransitioning
                   ColorAnimation {
                     duration: Style.animationFast
                     easing.type: Easing.InOutQuad
@@ -1172,7 +1173,7 @@ Item {
         Layout.fillHeight: true
         Layout.alignment: Qt.AlignTop
         radius: Style.radiusM
-        color: Color.mSurfaceVariant
+        color: Commons.Color.mSurfaceVariant
 
         ColumnLayout {
           id: contentLayout
@@ -1191,7 +1192,7 @@ Item {
 
             NIcon {
               icon: root.tabsModel[currentTabIndex]?.icon ?? ""
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
               pointSize: Style.fontSizeXXL
             }
 
@@ -1199,7 +1200,7 @@ Item {
               text: root.tabsModel[root.currentTabIndex]?.label ? I18n.tr(root.tabsModel[root.currentTabIndex].label) : ""
               pointSize: Style.fontSizeXL
               font.weight: Style.fontWeightBold
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
               Layout.fillWidth: true
               Layout.alignment: Qt.AlignVCenter
             }
@@ -1293,8 +1294,8 @@ Item {
               id: highlightOverlay
               visible: opacity > 0
               opacity: 0
-              color: Qt.alpha(Color.mSecondary, 0.2)
-              border.color: Qt.alpha(Color.mSecondary, 0.6)
+              color: Qt.alpha(Commons.Color.mSecondary, 0.2)
+              border.color: Qt.alpha(Commons.Color.mSecondary, 0.6)
               border.width: Style.borderM
               radius: Style.radiusS
               z: 100

@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import "../../../../Helpers/QtObj2JS.js" as QtObj2JS
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Noctalia
 import qs.Services.UI
 import qs.Widgets
@@ -18,7 +19,7 @@ NBox {
   readonly property string barPosition: Settings.getBarPositionForScreen(screenName)
   readonly property bool barIsVertical: barPosition === "left" || barPosition === "right"
 
-  color: Color.mSurfaceVariant
+  color: Commons.Color.mSurfaceVariant
   Layout.fillWidth: true
   implicitHeight: content.implicitHeight + Style.margin2L
 
@@ -128,13 +129,13 @@ NBox {
         }
         badges.push({
                       "icon": "plugin",
-                      "color": Color.mSecondary
+                      "color": Commons.Color.mSecondary
                     });
       }
       if (BarWidgetRegistry.isCpuIntensive(id)) {
         badges.push({
                       "icon": "cpu-intensive",
-                      "color": Color.mSecondary
+                      "color": Commons.Color.mSecondary
                     });
       }
       availableWidgetsModel.append({

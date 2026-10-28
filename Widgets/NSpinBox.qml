@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 RowLayout {
@@ -95,8 +96,8 @@ RowLayout {
     implicitWidth: 120
     implicitHeight: Math.round((root.baseSize - 4) / 2) * 2
     radius: Style.iRadiusS
-    color: Color.mSurfaceVariant
-    border.color: (root.hovering || decreaseArea.containsMouse || increaseArea.containsMouse) ? Color.mHover : Color.mOutline
+    color: Commons.Color.mSurfaceVariant
+    border.color: (root.hovering || decreaseArea.containsMouse || increaseArea.containsMouse) ? Commons.Color.mHover : Commons.Color.mOutline
     border.width: Style.borderS
 
     Behavior on border.color {
@@ -146,7 +147,7 @@ RowLayout {
         width: parent.height
         height: width
         radius: spinBoxContainer.radius
-        color: Color.mHover
+        color: Commons.Color.mHover
         opacity: decreaseArea.containsMouse ? 1.0 : 0.0
         Behavior on opacity {
           NumberAnimation {
@@ -159,7 +160,7 @@ RowLayout {
         anchors.centerIn: parent
         icon: "chevron-left"
         pointSize: Style.fontSizeS
-        color: decreaseArea.containsMouse ? Color.mOnHover : Color.mPrimary
+        color: decreaseArea.containsMouse ? Commons.Color.mOnHover : Commons.Color.mPrimary
       }
 
       MouseArea {
@@ -193,7 +194,7 @@ RowLayout {
         width: parent.height
         height: width
         radius: spinBoxContainer.radius
-        color: Color.mHover
+        color: Commons.Color.mHover
         opacity: increaseArea.containsMouse ? 1.0 : 0.0
         Behavior on opacity {
           NumberAnimation {
@@ -206,7 +207,7 @@ RowLayout {
         anchors.centerIn: parent
         icon: "chevron-right"
         pointSize: Style.fontSizeS
-        color: increaseArea.containsMouse ? Color.mOnHover : Color.mPrimary
+        color: increaseArea.containsMouse ? Commons.Color.mOnHover : Commons.Color.mPrimary
       }
 
       MouseArea {
@@ -244,7 +245,7 @@ RowLayout {
           family: Settings.data.ui.fontFixed
           pointSize: Style.fontSizeM
           font.weight: Style.fontWeightMedium
-          color: Qt.alpha(Color.mOnSurface, root.enabled ? 1.0 : 0.6)
+          color: Qt.alpha(Commons.Color.mOnSurface, root.enabled ? 1.0 : 0.6)
           verticalAlignment: Text.AlignVCenter
           Layout.alignment: Qt.AlignVCenter
           visible: root.prefix !== ""
@@ -257,7 +258,7 @@ RowLayout {
           font.family: Settings.data.ui.fontFixed
           font.pointSize: Style.fontSizeM
           font.weight: Style.fontWeightMedium
-          color: Qt.alpha(Color.mOnSurface, root.enabled ? 1.0 : 0.6)
+          color: Qt.alpha(Commons.Color.mOnSurface, root.enabled ? 1.0 : 0.6)
           verticalAlignment: Text.AlignVCenter
           Layout.alignment: Qt.AlignVCenter
           selectByMouse: true
@@ -303,7 +304,7 @@ RowLayout {
           family: Settings.data.ui.fontFixed
           pointSize: Style.fontSizeM
           font.weight: Style.fontWeightMedium
-          color: Qt.alpha(Color.mOnSurface, root.enabled ? 1.0 : 0.6)
+          color: Qt.alpha(Commons.Color.mOnSurface, root.enabled ? 1.0 : 0.6)
           verticalAlignment: Text.AlignVCenter
           Layout.alignment: Qt.AlignVCenter
           visible: root.suffix !== ""

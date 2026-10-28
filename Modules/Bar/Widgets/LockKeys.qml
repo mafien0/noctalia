@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.Bar.Extras
 import qs.Modules.Panels.Settings
 import qs.Services.Keyboard
@@ -106,19 +107,19 @@ Item {
         visible: !root.isVertical
 
         NIcon {
-          color: LockKeysService.capsLockOn ? Color.mTertiary : Qt.alpha(Color.mOnSurfaceVariant, 0.3)
+          color: LockKeysService.capsLockOn ? Commons.Color.mTertiary : Qt.alpha(Commons.Color.mOnSurfaceVariant, 0.3)
           icon: root.capsIcon
           visible: root.showCaps && (!root.hideWhenOff || LockKeysService.capsLockOn)
         }
 
         NIcon {
-          color: LockKeysService.numLockOn ? Color.mTertiary : Qt.alpha(Color.mOnSurfaceVariant, 0.3)
+          color: LockKeysService.numLockOn ? Commons.Color.mTertiary : Qt.alpha(Commons.Color.mOnSurfaceVariant, 0.3)
           icon: root.numIcon
           visible: root.showNum && (!root.hideWhenOff || LockKeysService.numLockOn)
         }
 
         NIcon {
-          color: LockKeysService.scrollLockOn ? Color.mTertiary : Qt.alpha(Color.mOnSurfaceVariant, 0.3)
+          color: LockKeysService.scrollLockOn ? Commons.Color.mTertiary : Qt.alpha(Commons.Color.mOnSurfaceVariant, 0.3)
           icon: root.scrollIcon
           visible: root.showScroll && (!root.hideWhenOff || LockKeysService.scrollLockOn)
         }
@@ -131,19 +132,19 @@ Item {
         visible: root.isVertical
 
         NIcon {
-          color: LockKeysService.capsLockOn ? Color.mTertiary : Qt.alpha(Color.mOnSurfaceVariant, 0.3)
+          color: LockKeysService.capsLockOn ? Commons.Color.mTertiary : Qt.alpha(Commons.Color.mOnSurfaceVariant, 0.3)
           icon: root.capsIcon
           visible: root.showCaps && (!root.hideWhenOff || LockKeysService.capsLockOn)
         }
 
         NIcon {
-          color: LockKeysService.numLockOn ? Color.mTertiary : Qt.alpha(Color.mOnSurfaceVariant, 0.3)
+          color: LockKeysService.numLockOn ? Commons.Color.mTertiary : Qt.alpha(Commons.Color.mOnSurfaceVariant, 0.3)
           icon: root.numIcon
           visible: root.showNum && (!root.hideWhenOff || LockKeysService.numLockOn)
         }
 
         NIcon {
-          color: LockKeysService.scrollLockOn ? Color.mTertiary : Qt.alpha(Color.mOnSurfaceVariant, 0.3)
+          color: LockKeysService.scrollLockOn ? Commons.Color.mTertiary : Qt.alpha(Commons.Color.mOnSurfaceVariant, 0.3)
           icon: root.scrollIcon
           visible: root.showScroll && (!root.hideWhenOff || LockKeysService.scrollLockOn)
         }

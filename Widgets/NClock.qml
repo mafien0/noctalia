@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import "../Helpers/ColorsConvert.js" as ColorsConvert
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 Item {
@@ -17,14 +18,14 @@ Item {
   property bool showProgress: true
 
   // Color properties
-  property color backgroundColor: Color.mPrimary
-  property color clockColor: Color.mOnPrimary
+  property color backgroundColor: Commons.Color.mPrimary
+  property color clockColor: Commons.Color.mOnPrimary
 
   property color secondHandColor: {
-    var defaultColor = Color.mError;
+    var defaultColor = Commons.Color.mError;
     var bestContrast = 1.0; // 1.0 is "no contrast"
     var bestColor = defaultColor;
-    var candidates = [Color.mSecondary, Color.mTertiary, Color.mError];
+    var candidates = [Commons.Color.mSecondary, Commons.Color.mTertiary, Commons.Color.mError];
 
     const minContrast = 1.149;
 
@@ -132,9 +133,9 @@ Item {
   // Analog Clock Component
   component NClockAnalog: Item {
     property var now
-    property color backgroundColor: Color.mPrimary
-    property color clockColor: Color.mOnPrimary
-    property color secondHandColor: Color.mError
+    property color backgroundColor: Commons.Color.mPrimary
+    property color clockColor: Commons.Color.mOnPrimary
+    property color secondHandColor: Commons.Color.mError
     property real scaleRatio: Style.uiScaleRatio
     anchors.fill: parent
 
@@ -233,9 +234,9 @@ Item {
   // Digital Clock Component
   component NClockDigital: Item {
     property var now
-    property color backgroundColor: Color.mPrimary
-    property color clockColor: Color.mOnPrimary
-    property color progressColor: Color.mError
+    property color backgroundColor: Commons.Color.mPrimary
+    property color clockColor: Commons.Color.mOnPrimary
+    property color progressColor: Commons.Color.mError
     property real hoursFontSize: Style.fontSizeXS
     property real minutesFontSize: Style.fontSizeXXS
     property int hoursFontWeight: Style.fontWeightBold
@@ -316,7 +317,7 @@ Item {
   component NClockBinary: Item {
     property var now
     property color backgroundColor
-    property color clockColor: Color.mOnPrimary
+    property color clockColor: Commons.Color.mOnPrimary
 
     anchors.fill: parent
 

@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Noctalia
 import qs.Services.UI
 import qs.Widgets
@@ -71,8 +72,8 @@ ColumnLayout {
     icon: "download"
     visible: (updateCount > 0)
     enabled: !isUpdating
-    backgroundColor: Color.mPrimary
-    textColor: Color.mOnPrimary
+    backgroundColor: Commons.Color.mPrimary
+    textColor: Commons.Color.mOnPrimary
     Layout.fillWidth: true
     onClicked: {
       isUpdating = true;
@@ -156,7 +157,7 @@ ColumnLayout {
         Layout.leftMargin: Style.borderS
         Layout.rightMargin: Style.borderS
         implicitHeight: Math.round(contentColumn.implicitHeight + Style.margin2L)
-        color: Color.mSurface
+        color: Commons.Color.mSurface
 
         ColumnLayout {
           id: contentColumn
@@ -172,19 +173,19 @@ ColumnLayout {
             NIcon {
               icon: "plugin"
               pointSize: Style.fontSizeL
-              color: PluginService.hasPluginError(modelData.compositeKey) ? Color.mError : Color.mPrimary
+              color: PluginService.hasPluginError(modelData.compositeKey) ? Commons.Color.mError : Commons.Color.mPrimary
             }
 
             NText {
               text: modelData.name
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
               elide: Text.ElideRight
             }
 
             // Official badge (Noctalia Team maintained)
             Rectangle {
               visible: modelData.official === true
-              color: Color.mSecondary
+              color: Commons.Color.mSecondary
               radius: Style.radiusXS
               implicitWidth: officialBadgeRow.implicitWidth + Style.margin2S
               implicitHeight: officialBadgeRow.implicitHeight + Style.margin2XS
@@ -197,14 +198,14 @@ ColumnLayout {
                 NIcon {
                   icon: "official-plugin"
                   pointSize: Style.fontSizeXXS
-                  color: Color.mOnSecondary
+                  color: Commons.Color.mOnSecondary
                 }
 
                 NText {
                   text: I18n.tr("common.official")
                   font.pointSize: Style.fontSizeXXS
                   font.weight: Style.fontWeightMedium
-                  color: Color.mOnSecondary
+                  color: Commons.Color.mOnSecondary
                 }
               }
             }
@@ -264,8 +265,8 @@ ColumnLayout {
               icon: isUpdating ? "" : "download"
               visible: modelData.updateInfo !== undefined
               enabled: !isUpdating
-              backgroundColor: Color.mPrimary
-              textColor: Color.mOnPrimary
+              backgroundColor: Commons.Color.mPrimary
+              textColor: Commons.Color.mOnPrimary
               fontSize: Style.fontSizeXXS
               fontWeight: Style.fontWeightMedium
               onClicked: {
@@ -315,7 +316,7 @@ ColumnLayout {
             visible: modelData.description
             text: modelData.description || ""
             font.pointSize: Style.fontSizeXS
-            color: Color.mOnSurface
+            color: Commons.Color.mOnSurface
             wrapMode: Text.WordWrap
             maximumLineCount: 2
             elide: Text.ElideRight
@@ -344,20 +345,20 @@ ColumnLayout {
                 return "v" + modelData.version;
               }
               font.pointSize: Style.fontSizeXS
-              color: modelData.updateInfo ? Color.mPrimary : (modelData.pendingUpdateInfo ? Color.mTertiary : Color.mOnSurfaceVariant)
+              color: modelData.updateInfo ? Commons.Color.mPrimary : (modelData.pendingUpdateInfo ? Commons.Color.mTertiary : Commons.Color.mOnSurfaceVariant)
               font.weight: (modelData.updateInfo || modelData.pendingUpdateInfo) ? Style.fontWeightMedium : Style.fontWeightRegular
             }
 
             NText {
               text: "•"
               font.pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
             }
 
             NText {
               text: stripAuthorEmail(modelData.author)
               font.pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
             }
 
             // Source indicator for plugins from non-official repos
@@ -365,28 +366,28 @@ ColumnLayout {
               visible: !modelData.isFromOfficialRepo
               text: "•"
               font.pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
             }
 
             NText {
               visible: !modelData.isFromOfficialRepo
               text: modelData.sourceName || I18n.tr("panels.plugins.source-custom")
               font.pointSize: Style.fontSizeXS
-              color: Color.mTertiary
+              color: Commons.Color.mTertiary
             }
 
             NText {
               visible: !!modelData.lastUpdated
               text: "•"
               font.pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
             }
 
             NText {
               visible: !!modelData.lastUpdated
               text: modelData.lastUpdated ? Time.formatRelativeTime(new Date(modelData.lastUpdated)) : ""
               font.pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
             }
 
             Item {
@@ -402,14 +403,14 @@ ColumnLayout {
             NIcon {
               icon: "alert-triangle"
               pointSize: Style.fontSizeS
-              color: Color.mError
+              color: Commons.Color.mError
             }
 
             NText {
               property var errorInfo: PluginService.getPluginError(modelData.compositeKey)
               text: errorInfo ? errorInfo.error : ""
               font.pointSize: Style.fontSizeXXS
-              color: Color.mError
+              color: Commons.Color.mError
               wrapMode: Text.WordWrap
               Layout.fillWidth: true
               elide: Text.ElideRight
@@ -441,9 +442,9 @@ ColumnLayout {
     property var pluginToUninstall: null
 
     background: Rectangle {
-      color: Color.mSurface
+      color: Commons.Color.mSurface
       radius: Style.radiusS
-      border.color: Color.mPrimary
+      border.color: Commons.Color.mPrimary
       border.width: Style.borderM
     }
 
@@ -473,8 +474,8 @@ ColumnLayout {
 
         NButton {
           text: I18n.tr("common.uninstall")
-          backgroundColor: Color.mPrimary
-          textColor: Color.mOnPrimary
+          backgroundColor: Commons.Color.mPrimary
+          textColor: Commons.Color.mOnPrimary
           onClicked: {
             if (uninstallDialog.pluginToUninstall) {
               root.uninstallPlugin(uninstallDialog.pluginToUninstall.compositeKey);

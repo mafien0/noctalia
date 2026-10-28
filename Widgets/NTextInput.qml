@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 ColumnLayout {
@@ -11,8 +12,8 @@ ColumnLayout {
   property string description: ""
   property string inputIconName: ""
   property bool readOnly: false
-  property color labelColor: Color.mOnSurface
-  property color descriptionColor: Color.mOnSurfaceVariant
+  property color labelColor: Commons.Color.mOnSurface
+  property color descriptionColor: Commons.Color.mOnSurfaceVariant
   property string fontFamily: Settings.data.ui.fontDefault
   property real fontSize: Style.fontSizeS
   property int fontWeight: Style.fontWeightRegular
@@ -67,8 +68,8 @@ ColumnLayout {
       id: frame
 
       radius: root.radius
-      color: Color.mSurface
-      border.color: input.activeFocus ? Color.mSecondary : Color.mOutline
+      color: Commons.Color.mSurface
+      border.color: input.activeFocus ? Commons.Color.mSecondary : Commons.Color.mOutline
       border.width: Style.borderS
 
       Behavior on border.color {
@@ -151,8 +152,8 @@ ColumnLayout {
 
             echoMode: TextInput.Normal
             readOnly: root.readOnly
-            placeholderTextColor: Qt.alpha(Color.mOnSurfaceVariant, 0.6)
-            color: enabled ? Color.mOnSurface : Qt.alpha(Color.mOnSurface, 0.4)
+            placeholderTextColor: Qt.alpha(Commons.Color.mOnSurfaceVariant, 0.6)
+            color: enabled ? Commons.Color.mOnSurface : Qt.alpha(Commons.Color.mOnSurface, 0.4)
 
             selectByMouse: true
 
@@ -220,8 +221,8 @@ ColumnLayout {
 
             colorBg: "transparent"
             colorBgHover: "transparent"
-            colorFg: Color.mOnSurface
-            colorFgHover: Color.mError
+            colorFg: Commons.Color.mOnSurface
+            colorFgHover: Commons.Color.mError
 
             visible: root.showClearButton && input.text.length > 0 && !root.readOnly
             enabled: input.text.length > 0 && !root.readOnly && root.enabled

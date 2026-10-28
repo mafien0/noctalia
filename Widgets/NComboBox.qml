@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.UI
 import qs.Widgets
 
@@ -195,8 +196,8 @@ RowLayout {
     background: Rectangle {
       implicitWidth: Math.round(Style.baseWidgetSize * 3.75 * Style.uiScaleRatio)
       implicitHeight: Math.round(root.preferredHeight * Style.uiScaleRatio)
-      color: Color.mSurface
-      border.color: combo.activeFocus ? Color.mSecondary : Color.mOutline
+      color: Commons.Color.mSurface
+      border.color: combo.activeFocus ? Commons.Color.mSecondary : Commons.Color.mOutline
       border.width: Style.borderS
       radius: Style.iRadiusM
 
@@ -229,7 +230,7 @@ RowLayout {
       pointSize: Style.fontSizeM
       verticalAlignment: Text.AlignVCenter
       elide: Text.ElideRight
-      color: combo.currentIndex >= 0 ? Color.mOnSurface : Color.mOnSurfaceVariant
+      color: combo.currentIndex >= 0 ? Commons.Color.mOnSurface : Commons.Color.mOnSurfaceVariant
       text: {
         if (combo.currentIndex >= 0 && combo.currentIndex < root.itemCount()) {
           var item = root.getItem(combo.currentIndex);
@@ -272,7 +273,7 @@ RowLayout {
           width: listView.availableWidth
           height: delegateText.implicitHeight + Style.margin2S
           radius: Style.iRadiusS
-          color: isHighlighted ? Color.mHover : "transparent"
+          color: isHighlighted ? Commons.Color.mHover : "transparent"
 
           NText {
             id: delegateText
@@ -282,7 +283,7 @@ RowLayout {
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
             pointSize: Style.fontSizeM
-            color: delegateRect.isHighlighted ? Color.mOnHover : Color.mOnSurface
+            color: delegateRect.isHighlighted ? Commons.Color.mOnHover : Commons.Color.mOnSurface
             text: {
               var item = root.getItem(delegateRect.index);
               return item && item.name ? item.name : "";
@@ -310,8 +311,8 @@ RowLayout {
       }
 
       background: Rectangle {
-        color: Color.mSurfaceVariant
-        border.color: Color.mOutline
+        color: Commons.Color.mSurfaceVariant
+        border.color: Commons.Color.mOutline
         border.width: Style.borderS
         radius: Style.iRadiusM
       }

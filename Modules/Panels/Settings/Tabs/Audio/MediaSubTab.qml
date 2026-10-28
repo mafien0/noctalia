@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Media
 import qs.Widgets
 
@@ -59,8 +60,8 @@ ColumnLayout {
         delegate: Rectangle {
           required property string modelData
           property real pad: Style.marginS
-          color: Qt.alpha(Color.mOnSurface, 0.125)
-          border.color: Qt.alpha(Color.mOnSurface, Style.opacityLight)
+          color: Qt.alpha(Commons.Color.mOnSurface, 0.125)
+          border.color: Qt.alpha(Commons.Color.mOnSurface, Style.opacityLight)
           border.width: Style.borderS
 
           RowLayout {
@@ -71,7 +72,7 @@ ColumnLayout {
 
             NText {
               text: modelData
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
               pointSize: Style.fontSizeS
               Layout.alignment: Qt.AlignVCenter
               Layout.leftMargin: Style.marginS

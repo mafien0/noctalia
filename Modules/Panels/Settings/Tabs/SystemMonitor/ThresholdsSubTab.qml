@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.System
 import qs.Widgets
 
@@ -32,7 +33,7 @@ ColumnLayout {
       horizontalAlignment: Text.AlignHCenter
       text: I18n.tr("panels.system-monitor.threshold-warning")
       pointSize: Style.fontSizeS
-      color: Color.mOnSurfaceVariant
+      color: Commons.Color.mOnSurfaceVariant
     }
 
     NText {
@@ -40,7 +41,7 @@ ColumnLayout {
       horizontalAlignment: Text.AlignHCenter
       text: I18n.tr("panels.system-monitor.threshold-critical")
       pointSize: Style.fontSizeS
-      color: Color.mOnSurfaceVariant
+      color: Commons.Color.mOnSurfaceVariant
     }
 
     // CPU Usage

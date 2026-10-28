@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Compositor
 import qs.Services.UI
 import qs.Widgets
@@ -135,8 +136,8 @@ ColumnLayout {
       visible: Settings.data.wallpaper.enableMultiMonitorDirectories
       Layout.fillWidth: true
       radius: Style.radiusM
-      color: Color.mSurface
-      border.color: Color.mOutline
+      color: Commons.Color.mSurface
+      border.color: Commons.Color.mOutline
       border.width: Style.borderS
       implicitHeight: contentCol.implicitHeight + Style.margin2L
       clip: true
@@ -154,7 +155,7 @@ ColumnLayout {
 
             NText {
               text: (modelData.name || "Unknown")
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
               font.weight: Style.fontWeightBold
               pointSize: Style.fontSizeM
             }

@@ -4,6 +4,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import "../Helpers/ColorList.js" as ColorList
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.UI
 import qs.Widgets
 
@@ -56,9 +57,9 @@ Popup {
   }
 
   background: Rectangle {
-    color: Color.mSurface
+    color: Commons.Color.mSurface
     radius: Style.iRadiusS
-    border.color: Color.mPrimary
+    border.color: Commons.Color.mPrimary
     border.width: Style.borderM
   }
 
@@ -76,14 +77,14 @@ Popup {
         NIcon {
           icon: "color-picker"
           pointSize: Style.fontSizeXXL
-          color: Color.mPrimary
+          color: Commons.Color.mPrimary
         }
 
         NText {
           text: I18n.tr("widgets.color-picker.title")
           pointSize: Style.fontSizeXL
           font.weight: Style.fontWeightBold
-          color: Color.mPrimary
+          color: Commons.Color.mPrimary
         }
       }
 
@@ -103,7 +104,7 @@ Popup {
       Layout.preferredHeight: 80
       radius: Style.iRadiusS
       color: root.selectedColor
-      border.color: Color.mOutline
+      border.color: Commons.Color.mOutline
       border.width: Style.borderS
 
       ColumnLayout {
@@ -477,7 +478,7 @@ Popup {
               Layout.alignment: Qt.AlignTop
 
               radius: 0
-              border.color: Color.mOutline
+              border.color: Commons.Color.mOutline
               border.width: Style.borderS
               clip: true
 
@@ -600,7 +601,7 @@ Popup {
               Rectangle {
                 anchors.fill: parent
                 color: "transparent"
-                border.color: Color.mOutline
+                border.color: Commons.Color.mOutline
                 border.width: Style.borderS
                 antialiasing: false
               }
@@ -637,31 +638,31 @@ Popup {
               model: [
                 {
                   name: "mPrimary",
-                  color: Color.mPrimary
+                  color: Commons.Color.mPrimary
                 },
                 {
                   name: "mSecondary",
-                  color: Color.mSecondary
+                  color: Commons.Color.mSecondary
                 },
                 {
                   name: "mTertiary",
-                  color: Color.mTertiary
+                  color: Commons.Color.mTertiary
                 },
                 {
                   name: "mError",
-                  color: Color.mError
+                  color: Commons.Color.mError
                 },
                 {
                   name: "mSurface",
-                  color: Color.mSurface
+                  color: Commons.Color.mSurface
                 },
                 {
                   name: "mSurfaceVariant",
-                  color: Color.mSurfaceVariant
+                  color: Commons.Color.mSurfaceVariant
                 },
                 {
                   name: "mOutline",
-                  color: Color.mOutline
+                  color: Commons.Color.mOutline
                 }
               ]
 
@@ -670,7 +671,7 @@ Popup {
                 height: 24
                 radius: Style.iRadiusXXS
                 color: modelData.color
-                border.color: root.selectedColor.toString() === modelData.color.toString() ? Color.mPrimary : Color.mOutline
+                border.color: root.selectedColor.toString() === modelData.color.toString() ? Commons.Color.mPrimary : Commons.Color.mOutline
                 border.width: Math.max(1, root.selectedColor.toString() === modelData.color.toString() ? Style.borderM : Style.borderS)
 
                 MouseArea {
@@ -713,7 +714,7 @@ Popup {
                 height: 24
                 radius: Math.min(Style.iRadiusXS, width / 2)
                 color: modelData.color
-                border.color: root.selectedColor.toString() === modelData.color.toString() ? Color.mPrimary : Color.mOutline
+                border.color: root.selectedColor.toString() === modelData.color.toString() ? Commons.Color.mPrimary : Commons.Color.mOutline
                 border.width: root.selectedColor.toString() === modelData.color.toString() ? 2 : 1
 
                 MouseArea {

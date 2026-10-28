@@ -3,15 +3,16 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
 
+import qs.Commons as Commons
 Item {
   id: root
 
   // Public API
   property var model: []
   property var disabledIds: []
-  property color activeColor: Color.mPrimary
-  property color activeOnColor: Color.mOnPrimary
-  property color dragHandleColor: Color.mOutline
+  property color activeColor: Commons.Color.mPrimary
+  property color activeOnColor: Commons.Color.mOnPrimary
+  property color dragHandleColor: Commons.Color.mOutline
   property int baseSize: Style.baseWidgetSize * 0.7
   property int spacing: Style.marginM
 
@@ -101,7 +102,7 @@ Item {
             Layout.preferredWidth: root.baseSize
             Layout.preferredHeight: root.baseSize
             radius: Style.iRadiusXS
-            color: dragHandleMouseArea.containsMouse ? Color.mSurfaceVariant : "transparent"
+            color: dragHandleMouseArea.containsMouse ? Commons.Color.mSurfaceVariant : "transparent"
 
             Behavior on color {
               ColorAnimation {
@@ -202,8 +203,8 @@ Item {
             Layout.preferredWidth: root.baseSize
             Layout.preferredHeight: root.baseSize
             radius: Style.iRadiusXS
-            color: delegateItem.itemEnabled ? root.activeColor : Color.mSurface
-            border.color: delegateItem.required ? root.activeColor : Color.mOutline
+            color: delegateItem.itemEnabled ? root.activeColor : Commons.Color.mSurface
+            border.color: delegateItem.required ? root.activeColor : Commons.Color.mOutline
             border.width: Style.borderS
             opacity: delegateItem.required ? 0.7 : 1.0
 
@@ -245,7 +246,7 @@ Item {
           NText {
             Layout.fillWidth: true
             text: delegateItem.text
-            color: Color.mOnSurface
+            color: Commons.Color.mOnSurface
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
           }
@@ -254,7 +255,7 @@ Item {
           NText {
             visible: delegateItem.required
             text: I18n.tr("common.required")
-            color: Color.mOnSurfaceVariant
+            color: Commons.Color.mOnSurfaceVariant
             verticalAlignment: Text.AlignVCenter
           }
         }

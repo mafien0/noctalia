@@ -4,6 +4,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Power
 import qs.Services.Theming
 import qs.Services.UI
@@ -94,7 +95,7 @@ Singleton {
     favoriteSchemeDebounceTimer.pendingPath = path;
     favoriteSchemeDebounceTimer.pendingSlot = slot;
     favoriteSchemeDebounceTimer.restart();
-    if (Color.isTransitioning) {
+    if (Commons.Color.isTransitioning) {
       root.pendingFavoriteSchemeRefresh = {
         "path": path,
         "slot": slot
@@ -1380,7 +1381,7 @@ Singleton {
                   ,
       "useWallpaperColors": Settings.data.colorSchemes.useWallpaperColors,
       "generationMethod": Settings.data.colorSchemes.generationMethod,
-      "paletteColors": [Color.mPrimary.toString(), Color.mSecondary.toString(), Color.mTertiary.toString(), Color.mError.toString()]
+      "paletteColors": [Commons.Color.mPrimary.toString(), Commons.Color.mSecondary.toString(), Commons.Color.mTertiary.toString(), Commons.Color.mError.toString()]
     };
   }
 
@@ -1581,9 +1582,9 @@ Singleton {
 
   // Auto-update favorite palette colors when theme colors finish transitioning
   Connections {
-    target: Color
+    target: Commons.Color
     function onIsTransitioningChanged() {
-      if (!Color.isTransitioning) {
+      if (!Commons.Color.isTransitioning) {
         _updateCurrentWallpaperFavorites();
       }
     }

@@ -2,13 +2,14 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Shapes
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.UI
 
 Slider {
   id: root
 
   property color fillColor: "transparent"
-  property var cutoutColor: Color.mSurface
+  property var cutoutColor: Commons.Color.mSurface
   property bool snapAlways: true
   property real widthRatio: 0.7
   property var tooltipText
@@ -99,7 +100,7 @@ Slider {
 
       ShapePath {
         id: trackPath
-        strokeColor: Qt.alpha(Color.mOutline, 0.5)
+        strokeColor: Qt.alpha(Commons.Color.mOutline, 0.5)
         strokeWidth: Style.borderS
         fillGradient: root.rainbowMode ? rainbowLinearGradient : standardLinearGradient
 
@@ -159,7 +160,7 @@ Slider {
       implicitWidth: root.knobDiameter + root.cutoutExtra
       implicitHeight: root.knobDiameter + root.cutoutExtra
       radius: Math.min(Style.iRadiusL, width / 2)
-      color: root.cutoutColor !== undefined ? root.cutoutColor : Color.mSurface
+      color: root.cutoutColor !== undefined ? root.cutoutColor : Commons.Color.mSurface
       y: root.visualPosition * (root.availableHeight - root.knobDiameter) - root.cutoutExtra / 2
       anchors.horizontalCenter: parent.horizontalCenter
     }
@@ -191,7 +192,7 @@ Slider {
         }
       }
 
-      border.color: root.pressed ? Color.mHover : Color.mPrimary
+      border.color: root.pressed ? Commons.Color.mHover : Commons.Color.mPrimary
       border.width: Style.borderL
       anchors.centerIn: parent
 

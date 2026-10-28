@@ -7,6 +7,7 @@ import "Helpers/LauncherNavigation.js" as LauncherNav
 
 import "Providers"
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Keyboard
 import qs.Services.UI
 import qs.Widgets
@@ -730,7 +731,7 @@ Rectangle {
         horizontalPolicy: ScrollBar.AlwaysOff
         verticalPolicy: ScrollBar.AlwaysOff
         reserveScrollbarSpace: false
-        gradientColor: Settings.data.ui.panelBackgroundOpacity < 1 ? "transparent" : Color.mSurface
+        gradientColor: Settings.data.ui.panelBackgroundOpacity < 1 ? "transparent" : Commons.Color.mSurface
         wheelScrollMultiplier: 4.0
 
         width: parent.width
@@ -765,7 +766,7 @@ Rectangle {
 
         NBox {
           anchors.fill: parent
-          color: Color.mSurfaceVariant
+          color: Commons.Color.mSurfaceVariant
           forceOpaque: true
           Layout.fillWidth: true
           Layout.fillHeight: true
@@ -782,7 +783,7 @@ Rectangle {
                 text: root.results.length > 0 ? root.results[0].name : ""
                 pointSize: Style.fontSizeL
                 font.weight: Font.Bold
-                color: Color.mPrimary
+                color: Commons.Color.mPrimary
               }
             }
 
@@ -800,7 +801,7 @@ Rectangle {
                 text: root.results.length > 0 ? root.results[0].description : ""
                 pointSize: Style.fontSizeM
                 font.weight: Font.Bold
-                color: Color.mOnSurface
+                color: Commons.Color.mOnSurface
                 horizontalAlignment: Text.AlignHLeft
                 verticalAlignment: Text.AlignTop
                 wrapMode: Text.Wrap
@@ -822,7 +823,7 @@ Rectangle {
         horizontalPolicy: ScrollBar.AlwaysOff
         verticalPolicy: ScrollBar.AlwaysOff
         reserveScrollbarSpace: false
-        gradientColor: Settings.data.ui.panelBackgroundOpacity < 1 ? "transparent" : Color.mSurface
+        gradientColor: Settings.data.ui.panelBackgroundOpacity < 1 ? "transparent" : Commons.Color.mSurface
         wheelScrollMultiplier: 4.0
         trackedSelectionIndex: root.selectedIndex
 
@@ -901,7 +902,7 @@ Rectangle {
           return prefix + I18n.trp("common.result-count", root.results.length);
         }
         pointSize: Style.fontSizeXS
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
         horizontalAlignment: Text.AlignCenter
       }
     }

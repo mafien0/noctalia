@@ -2,17 +2,18 @@ import QtQuick
 import Quickshell
 import qs.Commons
 
+import qs.Commons as Commons
 Item {
   id: root
   clip: true
 
   // Primary line
   property var values: []
-  property color color: Color.mPrimary
+  property color color: Commons.Color.mPrimary
 
   // Optional secondary line
   property var values2: []
-  property color color2: Color.mError
+  property color color2: Commons.Color.mError
 
   // Range settings for primary line
   property real minValue: 0

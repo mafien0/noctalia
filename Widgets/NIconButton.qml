@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Widgets
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.UI
 
 Item {
@@ -17,12 +18,12 @@ Item {
   property bool handleWheel: false
   property bool hovering: false
 
-  property color colorBg: Color.smartAlpha(Color.mSurfaceVariant)
-  property color colorFg: Color.mPrimary
-  property color colorBgHover: Color.mHover
-  property color colorFgHover: Color.mOnHover
-  property color colorBorder: Color.mOutline
-  property color colorBorderHover: Color.mOutline
+  property color colorBg: Commons.Color.smartAlpha(Commons.Color.mSurfaceVariant)
+  property color colorFg: Commons.Color.mPrimary
+  property color colorBgHover: Commons.Color.mHover
+  property color colorFgHover: Commons.Color.mOnHover
+  property color colorBorder: Commons.Color.mOutline
+  property color colorBorderHover: Commons.Color.mOutline
   property real customRadius: -1 // -1 means use default (iRadiusL), otherwise use this value
 
   // Expose border properties for backwards compatibility (aliases to visualButton)
@@ -60,7 +61,7 @@ Item {
     border.width: Style.borderS
 
     Behavior on color {
-      enabled: !Color.isTransitioning
+      enabled: !Commons.Color.isTransitioning
       ColorAnimation {
         duration: Style.animationFast
         easing.type: Easing.InOutQuad
@@ -77,7 +78,7 @@ Item {
       y: Style.pixelAlignCenter(visualButton.height, contentHeight)
 
       Behavior on color {
-        enabled: !Color.isTransitioning
+        enabled: !Commons.Color.isTransitioning
         ColorAnimation {
           duration: Style.animationFast
           easing.type: Easing.InOutQuad

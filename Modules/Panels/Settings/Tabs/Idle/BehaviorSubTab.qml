@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Power
 import qs.Widgets
 
@@ -40,7 +41,7 @@ ColumnLayout {
       text: IdleService.idleSeconds > 0 ? I18n.trp("common.second", IdleService.idleSeconds) : I18n.tr("common.active")
       family: Settings.data.ui.fontFixed
       pointSize: Style.fontSizeM
-      color: IdleService.idleSeconds > 0 ? Color.mPrimary : Color.mOnSurfaceVariant
+      color: IdleService.idleSeconds > 0 ? Commons.Color.mPrimary : Commons.Color.mOnSurfaceVariant
     }
   }
 

@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.System
 import qs.Services.Theming
 import qs.Services.UI
@@ -56,16 +57,16 @@ ColumnLayout {
     }
 
     if (colorKey === "mSurface")
-      return Color.mSurfaceVariant;
+      return Commons.Color.mSurfaceVariant;
     if (colorKey === "mPrimary")
-      return Color.mPrimary;
+      return Commons.Color.mPrimary;
     if (colorKey === "mSecondary")
-      return Color.mSecondary;
+      return Commons.Color.mSecondary;
     if (colorKey === "mTertiary")
-      return Color.mTertiary;
+      return Commons.Color.mTertiary;
     if (colorKey === "mError")
-      return Color.mError;
-    return Color.mOnSurfaceVariant;
+      return Commons.Color.mError;
+    return Commons.Color.mOnSurfaceVariant;
   }
 
   function schemeLoaded(schemeName, jsonData) {
@@ -174,7 +175,7 @@ ColumnLayout {
       NText {
         text: I18n.tr("panels.display.night-light-manual-schedule-sunrise")
         pointSize: Style.fontSizeM
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
       }
 
       NComboBox {
@@ -192,7 +193,7 @@ ColumnLayout {
       NText {
         text: I18n.tr("panels.display.night-light-manual-schedule-sunset")
         pointSize: Style.fontSizeM
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
       }
 
       NComboBox {
@@ -271,7 +272,7 @@ ColumnLayout {
     visible: Settings.data.colorSchemes.useWallpaperColors
     Layout.fillWidth: true
     implicitHeight: descriptionColumn.implicitHeight + Style.margin2L
-    color: Color.mSurface
+    color: Commons.Color.mSurface
 
     Column {
       id: descriptionColumn
@@ -286,7 +287,7 @@ ColumnLayout {
         wrapMode: Text.WordWrap
         text: I18n.tr("panels.color-scheme.method-description." + Settings.data.colorSchemes.generationMethod)
         pointSize: Style.fontSizeS
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
       }
 
       Row {
@@ -296,7 +297,7 @@ ColumnLayout {
         property int diameter: 16 * Style.uiScaleRatio
 
         Repeater {
-          model: [Color.mPrimary, Color.mSecondary, Color.mTertiary, Color.mError]
+          model: [Commons.Color.mPrimary, Commons.Color.mSecondary, Commons.Color.mTertiary, Commons.Color.mError]
 
           Rectangle {
             width: colorPreviewRow.diameter
@@ -348,12 +349,12 @@ ColumnLayout {
           border.width: Style.borderL
           border.color: {
             if ((Settings.data.colorSchemes.predefinedScheme === schemeName) && schemeItem.enabled) {
-              return Color.mSecondary;
+              return Commons.Color.mSecondary;
             }
             if (itemMouseArea.containsMouse) {
-              return Color.mHover;
+              return Commons.Color.mHover;
             }
-            return Color.mOutline;
+            return Commons.Color.mOutline;
           }
 
           RowLayout {
@@ -365,7 +366,7 @@ ColumnLayout {
             NText {
               text: schemeItem.schemeName
               pointSize: Style.fontSizeS
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
               Layout.fillWidth: true
               elide: Text.ElideRight
               verticalAlignment: Text.AlignVCenter
@@ -428,14 +429,14 @@ ColumnLayout {
             width: 20
             height: 20
             radius: Math.min(Style.radiusL, width / 2)
-            color: Color.mSecondary
+            color: Commons.Color.mSecondary
             border.width: Style.borderS
-            border.color: Color.mOnSecondary
+            border.color: Commons.Color.mOnSecondary
 
             NIcon {
               icon: "check"
               pointSize: Style.fontSizeXS
-              color: Color.mOnSecondary
+              color: Commons.Color.mOnSecondary
               anchors.centerIn: parent
             }
           }

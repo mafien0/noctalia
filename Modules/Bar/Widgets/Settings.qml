@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.UI
 import qs.Widgets
 
@@ -31,7 +32,7 @@ NIconButton {
 
   readonly property string valueIconColor: widgetSettings.iconColor !== undefined ? widgetSettings.iconColor : widgetMetadata.iconColor
 
-  readonly property color iconColor: Color.resolveColorKey(valueIconColor)
+  readonly property color iconColor: Commons.Color.resolveColorKey(valueIconColor)
 
   icon: "settings"
   tooltipText: {
@@ -47,8 +48,8 @@ NIconButton {
   customRadius: Style.radiusL
   colorBg: Style.capsuleColor
   colorFg: iconColor
-  colorBgHover: Color.mHover
-  colorFgHover: Color.mOnHover
+  colorBgHover: Commons.Color.mHover
+  colorFgHover: Commons.Color.mOnHover
   colorBorder: Style.capsuleBorderColor
   colorBorderHover: Style.capsuleBorderColor
 

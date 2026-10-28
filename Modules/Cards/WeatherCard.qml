@@ -3,6 +3,7 @@ import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Location
 import qs.Widgets
 
@@ -120,7 +121,7 @@ NBox {
             anchors.centerIn: parent
             icon: weatherReady ? LocationService.weatherSymbolFromCode(LocationService.data.weather.current_weather.weathercode) : ""
             pointSize: Style.fontSizeXXXL * 1.75
-            color: Color.mPrimary
+            color: Commons.Color.mPrimary
           }
           Loader {
             active: LocationService.taliaWeatherMascotActive
@@ -173,7 +174,7 @@ NBox {
             NText {
               text: weatherReady ? `(${LocationService.data.weather.timezone_abbreviation})` : ""
               pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
               visible: LocationService.data.weather && showLocation && !Settings.data.location.hideWeatherTimezone
             }
           }
@@ -206,7 +207,7 @@ NBox {
               var weatherDate = new Date(LocationService.data.weather.daily.time[index].replace(/-/g, "/"));
               return I18n.locale.toString(weatherDate, "ddd");
             }
-            color: Color.mOnSurface
+            color: Commons.Color.mOnSurface
           }
           Item {
             Layout.preferredWidth: forecastWeatherIconSide
@@ -219,7 +220,7 @@ NBox {
               anchors.centerIn: parent
               icon: LocationService.weatherSymbolFromCode(LocationService.data.weather.daily.weathercode[index])
               pointSize: Style.fontSizeXXL * 1.6
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
             }
             Loader {
               active: LocationService.taliaWeatherMascotActive
@@ -251,7 +252,7 @@ NBox {
               return `${max}°/${min}°`;
             }
             pointSize: Style.fontSizeXS
-            color: Color.mOnSurfaceVariant
+            color: Commons.Color.mOnSurfaceVariant
           }
         }
       }
@@ -272,7 +273,7 @@ NBox {
         Layout.alignment: Qt.AlignCenter
         text: I18n.tr("common.weather-no-location")
         pointSize: Style.fontSizeS
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
       }
     }
   }

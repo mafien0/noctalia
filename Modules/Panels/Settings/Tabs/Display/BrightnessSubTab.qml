@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Compositor
 import qs.Services.Hardware
 import qs.Widgets
@@ -20,7 +21,7 @@ ColumnLayout {
       delegate: NBox {
         Layout.fillWidth: true
         implicitHeight: Math.round(contentCol.implicitHeight + Style.margin2L)
-        color: Color.mSurface
+        color: Commons.Color.mSurface
 
         property var brightnessMonitor: BrightnessService.getMonitorForScreen(modelData)
         property real localBrightness: 0.5
@@ -120,7 +121,7 @@ ColumnLayout {
                         });
               }
               pointSize: Style.fontSizeS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
               wrapMode: Text.WordWrap
               horizontalAlignment: Text.AlignRight
               Layout.alignment: Qt.AlignBottom
@@ -194,7 +195,7 @@ ColumnLayout {
               visible: brightnessMonitor && !brightnessMonitor.brightnessControlAvailable && !(brightnessMonitor.method === "internal" && brightnessMonitor.initInProgress)
               text: !Settings.data.brightness.enableDdcSupport ? I18n.tr("panels.display.monitors-brightness-unavailable-ddc-disabled") : I18n.tr("panels.display.monitors-brightness-unavailable-generic")
               pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
               Layout.fillWidth: true
               wrapMode: Text.WordWrap
             }

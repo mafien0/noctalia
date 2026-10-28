@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Widgets
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.Panels.Settings
 import qs.Services.System
 import qs.Services.UI
@@ -30,7 +31,7 @@ NBox {
       radius: Layout.preferredWidth / 2
       imagePath: Settings.preprocessPath(Settings.data.general.avatarImage)
       fallbackIcon: "person"
-      borderColor: Color.mPrimary
+      borderColor: Commons.Color.mPrimary
       borderWidth: Style.borderS * 1.5
     }
 
@@ -51,7 +52,7 @@ NBox {
                         "uptime": uptimeText
                       })
         pointSize: Style.fontSizeS
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
       }
     }
 

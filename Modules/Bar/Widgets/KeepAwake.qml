@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.Bar.Extras
 import qs.Services.Power
 import qs.Services.UI
@@ -66,8 +67,8 @@ Item {
     screen: root.screen
     text: IdleInhibitorService.timeout == null ? "" : Time.formatVagueHumanReadableDuration(IdleInhibitorService.timeout)
     oppositeDirection: BarService.getPillDirection(root)
-    customIconColor: Color.resolveColorKeyOptional(root.iconColorKey)
-    customTextColor: Color.resolveColorKeyOptional(root.textColorKey)
+    customIconColor: Commons.Color.resolveColorKeyOptional(root.iconColorKey)
+    customTextColor: Commons.Color.resolveColorKeyOptional(root.textColorKey)
     icon: IdleInhibitorService.isInhibited ? "keep-awake-on" : "keep-awake-off"
     tooltipText: IdleInhibitorService.isInhibited ? I18n.tr("tooltips.keep-awake") : I18n.tr("tooltips.keep-awake")
     onClicked: IdleInhibitorService.manualToggle()

@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Widgets
 import qs.Commons
 
+import qs.Commons as Commons
 Rectangle {
   property bool vertical: false
 
@@ -16,11 +17,11 @@ Rectangle {
     }
     GradientStop {
       position: 0.1
-      color: Color.mOutline
+      color: Commons.Color.mOutline
     }
     GradientStop {
       position: 0.9
-      color: Color.mOutline
+      color: Commons.Color.mOutline
     }
     GradientStop {
       position: 1.0

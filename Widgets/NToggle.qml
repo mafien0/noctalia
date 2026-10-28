@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 RowLayout {
@@ -33,7 +34,7 @@ RowLayout {
     label: root.label
     description: root.description
     icon: root.icon
-    iconColor: root.checked ? Color.mPrimary : Color.mOnSurface
+    iconColor: root.checked ? Commons.Color.mPrimary : Commons.Color.mOnSurface
     visible: root.label !== "" || root.description !== ""
     showIndicator: root.isValueChanged
     indicatorTooltip: root.indicatorTooltip
@@ -48,8 +49,8 @@ RowLayout {
     implicitWidth: Math.round(root.baseSize * .85) * 2
     implicitHeight: Math.round(root.baseSize * .5) * 2
     radius: Math.min(Style.iRadiusL, height / 2)
-    color: root.checked ? Color.mPrimary : Color.mSurface
-    border.color: Color.mOutline
+    color: root.checked ? Commons.Color.mPrimary : Commons.Color.mSurface
+    border.color: Commons.Color.mOutline
     border.width: Style.borderS
 
     Behavior on color {
@@ -68,8 +69,8 @@ RowLayout {
       implicitWidth: Math.round(root.baseSize * 0.4) * 2
       implicitHeight: Math.round(root.baseSize * 0.4) * 2
       radius: Math.min(Style.iRadiusL, height / 2)
-      color: root.checked ? Color.mOnPrimary : Color.mPrimary
-      border.color: root.checked ? Color.mSurface : Color.mSurface
+      color: root.checked ? Commons.Color.mOnPrimary : Commons.Color.mPrimary
+      border.color: root.checked ? Commons.Color.mSurface : Commons.Color.mSurface
       border.width: Style.borderM
       anchors.verticalCenter: parent.verticalCenter
       anchors.verticalCenterOffset: 0

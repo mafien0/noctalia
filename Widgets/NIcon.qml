@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 Text {
@@ -24,7 +25,7 @@ Text {
   }
   font.family: Icons.fontFamily
   font.pointSize: Math.max(1, applyUiScale ? root.pointSize * Style.uiScaleRatio : root.pointSize)
-  color: Color.mOnSurface
+  color: Commons.Color.mOnSurface
   verticalAlignment: Text.AlignVCenter
   horizontalAlignment: Text.AlignHCenter
 }

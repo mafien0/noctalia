@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Power
 import qs.Widgets
 
@@ -135,7 +136,7 @@ ColumnLayout {
         Layout.fillWidth: true
         label: entryDelegate.name || I18n.tr("panels.idle.custom-entry-unnamed")
         description: I18n.trp("common.second", entryDelegate.timeout)
-        labelColor: (entryDelegate.command || entryDelegate.resumeCommand) ? Color.mPrimary : Color.mOnSurface
+        labelColor: (entryDelegate.command || entryDelegate.resumeCommand) ? Commons.Color.mPrimary : Commons.Color.mOnSurface
       }
 
       NIconButton {

@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Services.Notifications
 import Quickshell.Wayland
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.MainScreen
 import qs.Modules.Panels.Settings
 import qs.Services.System
@@ -395,14 +396,14 @@ SmartPanel {
             NIcon {
               icon: "bell"
               pointSize: Style.fontSizeXXL
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
             }
 
             NText {
               text: I18n.tr("common.notifications")
               pointSize: Style.fontSizeL
               font.weight: Style.fontWeightBold
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
               Layout.fillWidth: true
             }
 
@@ -498,7 +499,7 @@ SmartPanel {
           horizontalPolicy: ScrollBar.AlwaysOff
           verticalPolicy: ScrollBar.AsNeeded
           reserveScrollbarSpace: false
-          gradientColor: Color.mSurface
+          gradientColor: Commons.Color.mSurface
 
           // Track which notification is expanded
           property string expandedId: ""
@@ -526,14 +527,14 @@ SmartPanel {
                 NIcon {
                   icon: "bell-off"
                   pointSize: (NotificationService.historyModel.count === 0) ? 48 : Style.baseWidgetSize
-                  color: Color.mOnSurfaceVariant
+                  color: Commons.Color.mOnSurfaceVariant
                   Layout.alignment: Qt.AlignHCenter
                 }
 
                 NText {
                   text: I18n.tr("notifications.panel.no-notifications")
                   pointSize: (NotificationService.historyModel.count === 0) ? Style.fontSizeL : Style.fontSizeM
-                  color: Color.mOnSurfaceVariant
+                  color: Commons.Color.mOnSurfaceVariant
                   Layout.alignment: Qt.AlignHCenter
                 }
 
@@ -541,7 +542,7 @@ SmartPanel {
                   visible: NotificationService.historyModel.count === 0
                   text: I18n.tr("notifications.panel.description")
                   pointSize: Style.fontSizeS
-                  color: Color.mOnSurfaceVariant
+                  color: Commons.Color.mOnSurfaceVariant
                   horizontalAlignment: Text.AlignHCenter
                   Layout.fillWidth: true
                   wrapMode: Text.WordWrap
@@ -700,12 +701,12 @@ SmartPanel {
                     Rectangle {
                       anchors.fill: parent
                       radius: Style.radiusM
-                      color: Color.mSurfaceVariant
+                      color: Commons.Color.mSurfaceVariant
                       border.color: {
                         if (notificationDelegate.isFocused)
-                          return Color.mPrimary;
+                          return Commons.Color.mPrimary;
                         if (Settings.data.ui.boxBorderEnabled)
-                          return Qt.alpha(Color.mOutline, Style.opacityHeavy);
+                          return Qt.alpha(Commons.Color.mOutline, Style.opacityHeavy);
                         return "transparent";
                       }
                       border.width: notificationDelegate.isFocused ? Style.borderM : Style.borderS
@@ -879,9 +880,9 @@ SmartPanel {
                               visible: model.urgency !== 1
                               color: {
                                 if (model.urgency === 2)
-                                  return Color.mError;
+                                  return Commons.Color.mError;
                                 else if (model.urgency === 0)
-                                  return Color.mOnSurfaceVariant;
+                                  return Commons.Color.mOnSurfaceVariant;
                                 else
                                   return "transparent";
                               }
@@ -891,14 +892,14 @@ SmartPanel {
                               text: model.appName || "Unknown App"
                               pointSize: Style.fontSizeXS
                               font.weight: Style.fontWeightBold
-                              color: Color.mSecondary
+                              color: Commons.Color.mSecondary
                             }
 
                             NText {
                               textFormat: Text.PlainText
                               text: " " + Time.formatRelativeTime(model.timestamp)
                               pointSize: Style.fontSizeXXS
-                              color: Color.mOnSurfaceVariant
+                              color: Commons.Color.mOnSurfaceVariant
                               anchors.bottom: parent.bottom
                             }
                           }
@@ -909,7 +910,7 @@ SmartPanel {
                             width: parent.width
                             text: (Settings.data.notifications.enableMarkdown && notificationDelegate.isExpanded) ? (model.summaryMarkdown || I18n.tr("common.no-summary")) : (model.summary || I18n.tr("common.no-summary"))
                             pointSize: Style.fontSizeM
-                            color: Color.mOnSurface
+                            color: Commons.Color.mOnSurface
                             textFormat: notificationDelegate.notificationTextFormat
                             wrapMode: Text.Wrap
                             maximumLineCount: notificationDelegate.isExpanded ? 999 : 2
@@ -922,7 +923,7 @@ SmartPanel {
                             width: parent.width
                             text: (Settings.data.notifications.enableMarkdown && notificationDelegate.isExpanded) ? (model.bodyMarkdown || "") : (model.body || "")
                             pointSize: Style.fontSizeS
-                            color: Color.mOnSurfaceVariant
+                            color: Commons.Color.mOnSurfaceVariant
                             textFormat: notificationDelegate.notificationTextFormat
                             wrapMode: Text.Wrap
                             maximumLineCount: notificationDelegate.isExpanded ? 999 : 3
@@ -946,8 +947,8 @@ SmartPanel {
                                 readonly property bool actionNavActive: notificationDelegate.isFocused && panelContent.actionIndex !== -1
                                 readonly property bool isSelected: actionNavActive && panelContent.actionIndex === index
 
-                                backgroundColor: isSelected ? Color.mSecondary : Color.mPrimary
-                                textColor: isSelected ? Color.mOnSecondary : Color.mOnPrimary
+                                backgroundColor: isSelected ? Commons.Color.mSecondary : Commons.Color.mPrimary
+                                textColor: isSelected ? Commons.Color.mOnSecondary : Commons.Color.mOnPrimary
 
                                 outlined: false
                                 implicitHeight: 24

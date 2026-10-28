@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Compositor
 import qs.Widgets
 
@@ -204,8 +205,8 @@ ColumnLayout {
     visible: Settings.data.bar.showCapsule
     label: I18n.tr("panels.bar.appearance-capsule-color-label")
     description: I18n.tr("panels.bar.appearance-capsule-color-description")
-    noneColor: Color.mSurfaceVariant
-    noneOnColor: Color.mOnSurfaceVariant
+    noneColor: Commons.Color.mSurfaceVariant
+    noneOnColor: Commons.Color.mOnSurfaceVariant
     currentKey: Settings.data.bar.capsuleColorKey
     onSelected: key => Settings.data.bar.capsuleColorKey = key
   }

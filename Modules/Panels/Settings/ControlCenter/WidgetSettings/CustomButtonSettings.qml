@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 ColumnLayout {
@@ -264,11 +265,11 @@ ColumnLayout {
               icon: "close"
               tooltipText: I18n.tr("panels.control-center.shortcuts-custom-button-state-checks-remove")
               baseSize: Style?.buttonSizeS ?? 24
-              colorBorder: Qt.alpha(Color.mOutline, Style.opacityLight)
-              colorBg: Color.mError
-              colorFg: Color.mOnError
-              colorBgHover: Qt.alpha(Color.mError, Style.opacityMedium)
-              colorFgHover: Color.mOnError
+              colorBorder: Qt.alpha(Commons.Color.mOutline, Style.opacityLight)
+              colorBg: Commons.Color.mError
+              colorFg: Commons.Color.mOnError
+              colorBgHover: Qt.alpha(Commons.Color.mError, Style.opacityMedium)
+              colorFgHover: Commons.Color.mOnError
               onClicked: {
                 removeStateCheck(currentIndex);
               }

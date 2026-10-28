@@ -1,6 +1,7 @@
 import QtQuick
 import qs.Commons
 
+import qs.Commons as Commons
 // Rounded group container using the variant surface color.
 // To be used in side panels and settings panes to group fields or buttons.
 // Opacity is based on panelBackgroundOpacity but clamped to a minimum to avoid full transparency.
@@ -8,7 +9,7 @@ import qs.Commons
 Item {
   id: root
 
-  property color color: Color.mSurfaceVariant
+  property color color: Commons.Color.mSurfaceVariant
   property bool forceOpaque: false
   property alias radius: bg.radius
   property alias border: bg.border
@@ -24,7 +25,7 @@ Item {
         return root.color;
       }
 
-      return Color.smartAlpha(root.color);
+      return Commons.Color.smartAlpha(root.color);
     }
   }
 }

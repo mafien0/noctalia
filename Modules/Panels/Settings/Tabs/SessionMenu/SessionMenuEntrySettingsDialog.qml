@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 // Session Menu Entry Settings Dialog Component
@@ -58,9 +59,9 @@ Popup {
   background: Rectangle {
     id: bgRect
 
-    color: Color.mSurface
+    color: Commons.Color.mSurface
     radius: Style.radiusL
-    border.color: Color.mPrimary
+    border.color: Commons.Color.mPrimary
     border.width: Style.borderM
   }
 
@@ -83,7 +84,7 @@ Popup {
                         })
           pointSize: Style.fontSizeL
           font.weight: Style.fontWeightBold
-          color: Color.mPrimary
+          color: Commons.Color.mPrimary
           Layout.fillWidth: true
         }
 
@@ -101,7 +102,7 @@ Popup {
       Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: 1
-        color: Color.mOutline
+        color: Commons.Color.mOutline
       }
 
       // Command input
@@ -130,8 +131,8 @@ Popup {
           Layout.fillWidth: true
           Layout.preferredHeight: defaultCommandText.implicitHeight + Style.margin2M
           radius: Style.radiusM
-          color: Color.mSurfaceVariant
-          border.color: Color.mOutline
+          color: Commons.Color.mSurfaceVariant
+          border.color: Commons.Color.mOutline
           border.width: Style.borderS
 
           RowLayout {
@@ -141,7 +142,7 @@ Popup {
 
             NIcon {
               icon: "info"
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
               pointSize: Style.fontSizeM
             }
 
@@ -149,7 +150,7 @@ Popup {
               id: defaultCommandText
               Layout.fillWidth: true
               text: root.defaultCommand
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
               font.family: "monospace"
               font.pointSize: Style.fontSizeS
               wrapMode: Text.Wrap

@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Shapes
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.MainScreen.Backgrounds
 
 /**
@@ -26,7 +27,7 @@ ShapePath {
   required property var shapeContainer
 
   // Default background color (used if panel doesn't specify one)
-  property color defaultBackgroundColor: Color.mSurface
+  property color defaultBackgroundColor: Commons.Color.mSurface
 
   // Corner radius (from Style)
   readonly property real radius: Style.radiusL

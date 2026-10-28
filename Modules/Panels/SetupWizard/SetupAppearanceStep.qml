@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Io
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.System
 import qs.Services.Theming
 import qs.Widgets
@@ -27,7 +28,7 @@ ColumnLayout {
       if (data && data[mode] && data[mode][key])
         return data[mode][key];
     } catch (e) {}
-    return Color.mSurfaceVariant;
+    return Commons.Color.mSurfaceVariant;
   }
 
   // Match ColorSchemeTab helpers
@@ -41,7 +42,7 @@ ColumnLayout {
   Connections {
     target: ColorSchemeService
     function onSchemesChanged() {
-      Logger.i("SetupAppearanceStep", `Color schemes changed: ${ColorSchemeService.schemes.length}`);
+      Logger.i("SetupAppearanceStep", `Commons.Color schemes changed: ${ColorSchemeService.schemes.length}`);
       schemeColorsCache = {};
       cacheVersion++;
     }
@@ -57,13 +58,13 @@ ColumnLayout {
       width: 40
       height: 40
       radius: Style.radiusL
-      color: Color.mSurfaceVariant
+      color: Commons.Color.mSurfaceVariant
       opacity: 0.6
 
       NIcon {
         icon: "palette"
         pointSize: Style.fontSizeL
-        color: Color.mPrimary
+        color: Commons.Color.mPrimary
         anchors.centerIn: parent
       }
     }
@@ -76,13 +77,13 @@ ColumnLayout {
         text: I18n.tr("common.appearance")
         pointSize: Style.fontSizeXL
         font.weight: Style.fontWeightBold
-        color: Color.mPrimary
+        color: Commons.Color.mPrimary
       }
 
       NText {
         text: I18n.tr("setup.appearance.subheader")
         pointSize: Style.fontSizeM
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
       }
     }
   }
@@ -107,12 +108,12 @@ ColumnLayout {
           width: 28
           height: 28
           radius: Style.radiusM
-          color: Color.mSurface
+          color: Commons.Color.mSurface
 
           NIcon {
             icon: "moon"
             pointSize: Style.fontSizeL
-            color: Color.mPrimary
+            color: Commons.Color.mPrimary
             anchors.centerIn: parent
           }
         }
@@ -125,13 +126,13 @@ ColumnLayout {
             text: I18n.tr("tooltips.switch-to-dark-mode")
             pointSize: Style.fontSizeL
             font.weight: Style.fontWeightBold
-            color: Color.mOnSurface
+            color: Commons.Color.mOnSurface
           }
 
           NText {
             text: I18n.tr("panels.color-scheme.dark-mode-switch-description")
             pointSize: Style.fontSizeS
-            color: Color.mOnSurfaceVariant
+            color: Commons.Color.mOnSurfaceVariant
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
           }
@@ -147,7 +148,7 @@ ColumnLayout {
       Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: 1
-        color: Color.mOutline
+        color: Commons.Color.mOutline
         opacity: 0.2
         Layout.topMargin: Style.marginS
         Layout.bottomMargin: Style.marginS
@@ -162,12 +163,12 @@ ColumnLayout {
           width: 28
           height: 28
           radius: Style.radiusM
-          color: Color.mSurface
+          color: Commons.Color.mSurface
 
           NIcon {
             icon: "color-picker"
             pointSize: Style.fontSizeL
-            color: Color.mPrimary
+            color: Commons.Color.mPrimary
             anchors.centerIn: parent
           }
         }
@@ -180,13 +181,13 @@ ColumnLayout {
             text: I18n.tr("panels.color-scheme.color-source-use-wallpaper-colors-label")
             pointSize: Style.fontSizeL
             font.weight: Style.fontWeightBold
-            color: Color.mOnSurface
+            color: Commons.Color.mOnSurface
           }
 
           NText {
             text: I18n.tr("panels.color-scheme.color-source-use-wallpaper-colors-description")
             pointSize: Style.fontSizeS
-            color: Color.mOnSurfaceVariant
+            color: Commons.Color.mOnSurfaceVariant
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
           }
@@ -212,7 +213,7 @@ ColumnLayout {
       Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: 1
-        color: Color.mOutline
+        color: Commons.Color.mOutline
         opacity: 0.2
         Layout.topMargin: Style.marginS
         Layout.bottomMargin: Style.marginS
@@ -233,12 +234,12 @@ ColumnLayout {
             width: 28
             height: 28
             radius: Style.radiusM
-            color: Color.mSurface
+            color: Commons.Color.mSurface
 
             NIcon {
               icon: "palette"
               pointSize: Style.fontSizeL
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
               anchors.centerIn: parent
             }
           }
@@ -251,13 +252,13 @@ ColumnLayout {
               text: I18n.tr("panels.color-scheme.predefined-title")
               pointSize: Style.fontSizeL
               font.weight: Style.fontWeightBold
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
             }
 
             NText {
               text: I18n.tr("panels.color-scheme.predefined-desc")
               pointSize: Style.fontSizeS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
             }
           }
         }
@@ -285,7 +286,7 @@ ColumnLayout {
               radius: Style.radiusS
               color: root.cacheVersion >= 0 ? root.getSchemeColor(schemeName, "mSurface") : root.getSchemeColor(schemeName, "mSurface")
               border.width: Style.borderL
-              border.color: itemMouseArea.containsMouse ? Color.mHover : (Settings.data.colorSchemes.predefinedScheme === schemeName ? Color.mSecondary : Color.mOutline)
+              border.color: itemMouseArea.containsMouse ? Commons.Color.mHover : (Settings.data.colorSchemes.predefinedScheme === schemeName ? Commons.Color.mSecondary : Commons.Color.mOutline)
 
               RowLayout {
                 anchors.fill: parent
@@ -296,7 +297,7 @@ ColumnLayout {
                   text: schemeItem.schemeName
                   pointSize: Style.fontSizeS
                   font.weight: Style.fontWeightMedium
-                  color: Color.mOnSurface
+                  color: Commons.Color.mOnSurface
                   Layout.fillWidth: true
                   elide: Text.ElideRight
                   verticalAlignment: Text.AlignVCenter
@@ -312,7 +313,7 @@ ColumnLayout {
                     var mode = Settings.data.colorSchemes.darkMode ? "dark" : "light";
                     var cached = root.schemeColorsCache[schemeItem.schemeName];
                     return (cached && cached[mode] && cached[mode].mPrimary) || root.getSchemeColor(schemeItem.schemeName, "mPrimary");
-                  })() : Color.mPrimary
+                  })() : Commons.Color.mPrimary
                 }
                 Rectangle {
                   width: 14
@@ -322,7 +323,7 @@ ColumnLayout {
                     var mode = Settings.data.colorSchemes.darkMode ? "dark" : "light";
                     var cached = root.schemeColorsCache[schemeItem.schemeName];
                     return (cached && cached[mode] && cached[mode].mSecondary) || root.getSchemeColor(schemeItem.schemeName, "mSecondary");
-                  })() : Color.mSecondary
+                  })() : Commons.Color.mSecondary
                 }
                 Rectangle {
                   width: 14
@@ -332,7 +333,7 @@ ColumnLayout {
                     var mode = Settings.data.colorSchemes.darkMode ? "dark" : "light";
                     var cached = root.schemeColorsCache[schemeItem.schemeName];
                     return (cached && cached[mode] && cached[mode].mTertiary) || root.getSchemeColor(schemeItem.schemeName, "mTertiary");
-                  })() : Color.mTertiary
+                  })() : Commons.Color.mTertiary
                 }
                 Rectangle {
                   width: 14
@@ -342,7 +343,7 @@ ColumnLayout {
                     var mode = Settings.data.colorSchemes.darkMode ? "dark" : "light";
                     var cached = root.schemeColorsCache[schemeItem.schemeName];
                     return (cached && cached[mode] && cached[mode].mError) || root.getSchemeColor(schemeItem.schemeName, "mError");
-                  })() : Color.mError
+                  })() : Commons.Color.mError
                 }
               }
 

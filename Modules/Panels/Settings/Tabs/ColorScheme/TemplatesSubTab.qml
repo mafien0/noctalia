@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.System
 import qs.Services.Theming
 import qs.Services.UI
@@ -218,8 +219,8 @@ ColumnLayout {
       icon: "filter"
       tooltipText: root.showOnlyActive ? I18n.tr("actions.show-all") : I18n.tr("actions.show-active-only")
 
-      colorBg: root.showOnlyActive ? Color.mPrimary : Color.mSurface
-      colorFg: root.showOnlyActive ? Color.mOnPrimary : Color.mOnSurface
+      colorBg: root.showOnlyActive ? Commons.Color.mPrimary : Commons.Color.mSurface
+      colorFg: root.showOnlyActive ? Commons.Color.mOnPrimary : Commons.Color.mOnSurface
 
       onClicked: root.showOnlyActive = !root.showOnlyActive
     }
@@ -240,8 +241,8 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.preferredHeight: Math.round(Style.baseWidgetSize * 0.9)
         radius: Style.iRadiusM
-        color: chipMouse.containsMouse ? Color.mHover : (isActive ? Color.mPrimary : Color.mSurface)
-        border.color: isActive ? Color.mPrimary : Color.mOutline
+        color: chipMouse.containsMouse ? Commons.Color.mHover : (isActive ? Commons.Color.mPrimary : Commons.Color.mSurface)
+        border.color: isActive ? Commons.Color.mPrimary : Commons.Color.mOutline
         border.width: Style.borderS
 
         required property int index
@@ -260,7 +261,7 @@ ColumnLayout {
           width: parent.width - Style.margin2L
           text: chip.modelData.name
           pointSize: Style.fontSizeS
-          color: chipMouse.containsMouse ? Color.mOnHover : (isActive ? Color.mOnPrimary : Color.mOnSurface)
+          color: chipMouse.containsMouse ? Commons.Color.mOnHover : (isActive ? Commons.Color.mOnPrimary : Commons.Color.mOnSurface)
           horizontalAlignment: Text.AlignHCenter
           elide: Text.ElideRight
 
@@ -294,7 +295,7 @@ ColumnLayout {
   NText {
     visible: filteredTemplates.length === 0 && searchText.trim() !== ""
     text: I18n.tr("common.no-results")
-    color: Color.mOnSurfaceVariant
+    color: Commons.Color.mOnSurfaceVariant
   }
 
   NDivider {

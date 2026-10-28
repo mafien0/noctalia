@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 ColumnLayout {
@@ -133,7 +134,7 @@ ColumnLayout {
     Layout.fillWidth: true
     Layout.preferredHeight: 150
     Layout.topMargin: Style.marginL // Increased top margin
-    gradientColor: Color.mSurface
+    gradientColor: Commons.Color.mSurface
 
     model: blacklistModel
     delegate: Item {
@@ -145,7 +146,7 @@ ColumnLayout {
         anchors.fill: parent
         anchors.margins: Style.marginXS
         color: "transparent" // Make background transparent
-        border.color: Color.mOutline
+        border.color: Commons.Color.mOutline
         border.width: Style.borderS
         radius: Style.radiusS
         visible: model.rule !== undefined && model.rule !== "" // Only visible if rule exists
@@ -167,10 +168,10 @@ ColumnLayout {
           anchors.verticalCenter: parent.verticalCenter
           icon: "close"
           baseSize: 12 * Style.uiScaleRatio
-          colorBg: Color.mSurfaceVariant
-          colorFg: Color.mOnSurfaceVariant
-          colorBgHover: Color.mError
-          colorFgHover: Color.mOnError
+          colorBg: Commons.Color.mSurfaceVariant
+          colorFg: Commons.Color.mOnSurfaceVariant
+          colorBgHover: Commons.Color.mError
+          colorFgHover: Commons.Color.mOnError
           onClicked: {
             blacklistModel.remove(index);
             saveSettings();

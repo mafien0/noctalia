@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 ColumnLayout {
@@ -9,9 +10,9 @@ ColumnLayout {
   property string label: ""
   property string description: ""
   property string icon: ""
-  property color labelColor: Color.mOnSurface
-  property color descriptionColor: Color.mOnSurfaceVariant
-  property color iconColor: Color.mOnSurface
+  property color labelColor: Commons.Color.mOnSurface
+  property color descriptionColor: Commons.Color.mOnSurfaceVariant
+  property color iconColor: Commons.Color.mOnSurface
   property bool showIndicator: false
   property string indicatorTooltip: ""
   property real labelSize: Style.fontSizeL

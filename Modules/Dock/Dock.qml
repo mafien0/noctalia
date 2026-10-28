@@ -6,6 +6,7 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Widgets
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Compositor
 import qs.Services.System
 import qs.Services.UI
@@ -797,7 +798,7 @@ Loader {
             id: indicatorRect
             anchors.fill: parent
             radius: indicatorThickness
-            color: Qt.alpha(Color.resolveColorKey(indicatorColorKey), indicatorOpacity)
+            color: Qt.alpha(Commons.Color.resolveColorKey(indicatorColorKey), indicatorOpacity)
             opacity: indicatorVisible ? 1 : 0
 
             Behavior on opacity {

@@ -2,12 +2,13 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.Dock
 import qs.Modules.MainScreen
 
 SmartPanel {
   id: root
-  panelBackgroundColor: Qt.alpha(Color.mSurface, Settings.data.dock.backgroundOpacity)
+  panelBackgroundColor: Qt.alpha(Commons.Color.mSurface, Settings.data.dock.backgroundOpacity)
 
   readonly property string dockPosition: Settings.data.dock.position
   readonly property bool isVertical: dockPosition === "left" || dockPosition === "right"

@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Noctalia
 import qs.Services.UI
 import qs.Widgets
@@ -24,9 +25,9 @@ Popup {
   property bool showToastOnSave: false
 
   background: Rectangle {
-    color: Color.mSurface
+    color: Commons.Color.mSurface
     radius: Style.radiusL
-    border.color: Color.mPrimary
+    border.color: Commons.Color.mPrimary
     border.width: Style.borderM
   }
 
@@ -48,7 +49,7 @@ Popup {
                         })
           pointSize: Style.fontSizeL
           font.weight: Style.fontWeightBold
-          color: Color.mPrimary
+          color: Commons.Color.mPrimary
           Layout.fillWidth: true
         }
 
@@ -63,7 +64,7 @@ Popup {
       Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: 1
-        color: Color.mOutline
+        color: Commons.Color.mOutline
       }
 
       // Settings loader - pluginApi is passed via setSource() in openPluginSettings()
@@ -73,7 +74,7 @@ Popup {
         Layout.fillHeight: true
         Layout.minimumHeight: 100
         horizontalPolicy: ScrollBar.AlwaysOff
-        gradientColor: Color.mSurface
+        gradientColor: Commons.Color.mSurface
 
         Loader {
           id: settingsLoader

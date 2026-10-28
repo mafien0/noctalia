@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.UPower
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Power
 import qs.Services.UI
 import qs.Widgets
@@ -41,8 +42,8 @@ NIconButton {
                          "profile": PowerProfileService.getName()
                        })
   tooltipDirection: BarService.getTooltipDirection(screen?.name)
-  colorBg: (PowerProfileService.profile === PowerProfile.Balanced) ? Style.capsuleColor : Color.mPrimary
-  colorFg: (PowerProfileService.profile === PowerProfile.Balanced) ? Color.resolveColorKey(iconColorKey) : Color.mOnPrimary
+  colorBg: (PowerProfileService.profile === PowerProfile.Balanced) ? Style.capsuleColor : Commons.Color.mPrimary
+  colorFg: (PowerProfileService.profile === PowerProfile.Balanced) ? Commons.Color.resolveColorKey(iconColorKey) : Commons.Color.mOnPrimary
   border.color: Style.capsuleBorderColor
   border.width: Style.capsuleBorderWidth
   onClicked: PowerProfileService.cycleProfile()

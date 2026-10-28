@@ -4,6 +4,7 @@ import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Noctalia
 import qs.Services.UI
 import qs.Widgets
@@ -42,9 +43,9 @@ Popup {
 
   background: Rectangle {
     id: bgRect
-    color: Color.mSurface
+    color: Commons.Color.mSurface
     radius: Style.radiusL
-    border.color: Color.mPrimary
+    border.color: Commons.Color.mPrimary
     border.width: Style.borderM
   }
 
@@ -68,7 +69,7 @@ Popup {
                         })
           pointSize: Style.fontSizeL
           font.weight: Style.fontWeightBold
-          color: Color.mPrimary
+          color: Commons.Color.mPrimary
           Layout.fillWidth: true
         }
 
@@ -83,7 +84,7 @@ Popup {
         id: separator
         Layout.fillWidth: true
         Layout.preferredHeight: 1
-        color: Color.mOutline
+        color: Commons.Color.mOutline
       }
 
       // Scrollable settings area
@@ -92,7 +93,7 @@ Popup {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.minimumHeight: 100
-        gradientColor: Color.mSurface
+        gradientColor: Commons.Color.mSurface
 
         ColumnLayout {
           width: scrollView.availableWidth

@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.MainScreen
 import qs.Services.System
 import qs.Services.UI
@@ -50,14 +51,14 @@ SmartPanel {
           NIcon {
             icon: "device-analytics"
             pointSize: Style.fontSizeXXL
-            color: Color.mPrimary
+            color: Commons.Color.mPrimary
           }
 
           NText {
             text: I18n.tr("system-monitor.title")
             pointSize: Style.fontSizeL
             font.weight: Style.fontWeightBold
-            color: Color.mOnSurface
+            color: Commons.Color.mOnSurface
             Layout.fillWidth: true
           }
 
@@ -90,26 +91,26 @@ SmartPanel {
             NIcon {
               icon: "cpu-usage"
               pointSize: Style.fontSizeXS
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
             }
 
             NText {
               text: `${Math.round(SystemStatService.cpuUsage)}% (${SystemStatService.cpuFreq.replace(/[^0-9.]/g, "")} GHz)`
               pointSize: Style.fontSizeXS
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
               font.family: Settings.data.ui.fontFixed
             }
 
             NIcon {
               icon: "cpu-temperature"
               pointSize: Style.fontSizeXS
-              color: Color.mSecondary
+              color: Commons.Color.mSecondary
             }
 
             NText {
               text: `${Math.round(SystemStatService.cpuTemp)}°C`
               pointSize: Style.fontSizeXS
-              color: Color.mSecondary
+              color: Commons.Color.mSecondary
               font.family: Settings.data.ui.fontFixed
               Layout.rightMargin: Style.marginS
             }
@@ -121,7 +122,7 @@ SmartPanel {
             NText {
               text: I18n.tr("system-monitor.cpu-usage")
               pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
             }
           }
 
@@ -134,8 +135,8 @@ SmartPanel {
             maxValue: 100
             minValue2: Math.max(SystemStatService.cpuTempHistoryMin - 5, 0)
             maxValue2: Math.max(SystemStatService.cpuTempHistoryMax + 5, 1)
-            color: Color.mPrimary
-            color2: Color.mSecondary
+            color: Commons.Color.mPrimary
+            color2: Commons.Color.mSecondary
             strokeWidth: Math.max(1, Style.uiScaleRatio)
             fill: true
             fillOpacity: 0.15
@@ -162,13 +163,13 @@ SmartPanel {
             NIcon {
               icon: "memory"
               pointSize: Style.fontSizeXS
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
             }
 
             NText {
               text: `${Math.round(SystemStatService.memPercent)}% (${(SystemStatService.memGb).toFixed(1)} GiB)`
               pointSize: Style.fontSizeXS
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
               font.family: Settings.data.ui.fontFixed
             }
 
@@ -179,7 +180,7 @@ SmartPanel {
             NText {
               text: I18n.tr("common.memory")
               pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
             }
           }
 
@@ -189,7 +190,7 @@ SmartPanel {
             values: SystemStatService.memHistory
             minValue: 0
             maxValue: 100
-            color: Color.mPrimary
+            color: Commons.Color.mPrimary
             strokeWidth: Math.max(1, Style.uiScaleRatio)
             fill: true
             fillOpacity: 0.15
@@ -216,13 +217,13 @@ SmartPanel {
             NIcon {
               icon: "download-speed"
               pointSize: Style.fontSizeXS
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
             }
 
             NText {
               text: SystemStatService.formatSpeed(SystemStatService.rxSpeed).replace(/([0-9.]+)([A-Za-z]+)/, "$1 $2") + "/s"
               pointSize: Style.fontSizeXS
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
               font.family: Settings.data.ui.fontFixed
               Layout.rightMargin: Style.marginS
             }
@@ -230,13 +231,13 @@ SmartPanel {
             NIcon {
               icon: "upload-speed"
               pointSize: Style.fontSizeXS
-              color: Color.mSecondary
+              color: Commons.Color.mSecondary
             }
 
             NText {
               text: SystemStatService.formatSpeed(SystemStatService.txSpeed).replace(/([0-9.]+)([A-Za-z]+)/, "$1 $2") + "/s"
               pointSize: Style.fontSizeXS
-              color: Color.mSecondary
+              color: Commons.Color.mSecondary
               font.family: Settings.data.ui.fontFixed
             }
 
@@ -247,7 +248,7 @@ SmartPanel {
             NText {
               text: I18n.tr("common.network")
               pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
             }
           }
 
@@ -260,8 +261,8 @@ SmartPanel {
             maxValue: SystemStatService.rxMaxSpeed
             minValue2: 0
             maxValue2: SystemStatService.txMaxSpeed
-            color: Color.mPrimary
-            color2: Color.mSecondary
+            color: Commons.Color.mPrimary
+            color2: Commons.Color.mSecondary
             strokeWidth: Math.max(1, Style.uiScaleRatio)
             fill: true
             fillOpacity: 0.15
@@ -293,19 +294,19 @@ SmartPanel {
             NIcon {
               icon: "cpu-usage"
               pointSize: Style.fontSizeM
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
             }
 
             NText {
               text: I18n.tr("system-monitor.load-average") + ":"
               pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
             }
 
             NText {
               text: `${SystemStatService.loadAvg1.toFixed(2)} • ${SystemStatService.loadAvg5.toFixed(2)} • ${SystemStatService.loadAvg15.toFixed(2)}`
               pointSize: Style.fontSizeXS
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
               Layout.fillWidth: true
               horizontalAlignment: Text.AlignRight
             }
@@ -320,19 +321,19 @@ SmartPanel {
             NIcon {
               icon: "gpu-temperature"
               pointSize: Style.fontSizeM
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
             }
 
             NText {
               text: I18n.tr("system-monitor.gpu-temp") + ":"
               pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
             }
 
             NText {
               text: `${Math.round(SystemStatService.gpuTemp)}°C`
               pointSize: Style.fontSizeXS
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
               Layout.fillWidth: true
               horizontalAlignment: Text.AlignRight
             }
@@ -346,13 +347,13 @@ SmartPanel {
             NIcon {
               icon: "storage"
               pointSize: Style.fontSizeM
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
             }
 
             NText {
               text: I18n.tr("system-monitor.disk") + ":"
               pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
             }
 
             NText {
@@ -363,7 +364,7 @@ SmartPanel {
                 return `${percent}% (${usedGb.toFixed(1)} / ${sizeGb.toFixed(1)} GB)`;
               }
               pointSize: Style.fontSizeXS
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
               Layout.fillWidth: true
               horizontalAlignment: Text.AlignRight
               elide: Text.ElideMiddle
@@ -379,19 +380,19 @@ SmartPanel {
             NIcon {
               icon: "exchange"
               pointSize: Style.fontSizeM
-              color: Color.mPrimary
+              color: Commons.Color.mPrimary
             }
 
             NText {
               text: I18n.tr("bar.system-monitor.swap-usage-label") + ":"
               pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
             }
 
             NText {
               text: `${(SystemStatService.swapGb).toFixed(1)} / ${(SystemStatService.swapTotalGb).toFixed(1)} GiB`
               pointSize: Style.fontSizeXS
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
               Layout.fillWidth: true
               horizontalAlignment: Text.AlignRight
             }

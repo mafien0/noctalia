@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Keyboard
 import qs.Widgets
 
@@ -145,7 +146,7 @@ Item {
           return `${format} • ${previewImage.implicitWidth}×${previewImage.implicitHeight}`;
         }
         pointSize: Style.fontSizeS
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
       }
     }
 
@@ -169,7 +170,7 @@ Item {
           textFormat: Text.PlainText
           font.pointSize: Style.fontSizeM
           font.family: Settings.data.ui.fontFixed
-          color: Color.mOnSurface
+          color: Commons.Color.mOnSurface
         }
       }
 
@@ -188,7 +189,7 @@ Item {
           return `${chars} chars, ${words} words, ${lines} lines`;
         }
         pointSize: Style.fontSizeS
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
       }
     }
   }

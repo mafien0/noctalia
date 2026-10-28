@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Effects
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Noctalia
 import qs.Services.UI
 import qs.Widgets
@@ -286,8 +287,8 @@ Item {
     id: decorationRect
     anchors.fill: parent
     anchors.margins: -outlineMargin
-    color: DesktopWidgetRegistry.editMode ? Qt.rgba(Color.mPrimary.r, Color.mPrimary.g, Color.mPrimary.b, 0.1) : "transparent"
-    border.color: (DesktopWidgetRegistry.editMode || internal.isDragging) ? (internal.isDragging ? Color.mOutline : Color.mPrimary) : "transparent"
+    color: DesktopWidgetRegistry.editMode ? Qt.rgba(Commons.Color.mPrimary.r, Commons.Color.mPrimary.g, Commons.Color.mPrimary.b, 0.1) : "transparent"
+    border.color: (DesktopWidgetRegistry.editMode || internal.isDragging) ? (internal.isDragging ? Commons.Color.mOutline : Commons.Color.mPrimary) : "transparent"
     border.width: DesktopWidgetRegistry.editMode ? 3 : 0
     radius: Math.min(Math.round(Style.radiusL * root.widgetScale), Style.radiusL, width / 2, height / 2)
     z: -1
@@ -297,10 +298,10 @@ Item {
     id: container
     anchors.fill: parent
     radius: root.roundedCorners ? Math.min(Math.round(Style.radiusL * root.widgetScale), Style.radiusL, width / 2, height / 2) : 0
-    color: Qt.alpha(Color.mSurface, Settings.data.ui.panelBackgroundOpacity)
+    color: Qt.alpha(Commons.Color.mSurface, Settings.data.ui.panelBackgroundOpacity)
     border {
       width: 1
-      color: Qt.alpha(Color.mOutline, 0.12)
+      color: Qt.alpha(Commons.Color.mOutline, 0.12)
     }
     clip: true
     visible: root.showBackground
@@ -481,7 +482,7 @@ Item {
   // Corner handles for scaling - using Repeater to avoid code duplication
   readonly property real cornerHandleSize: 8 * widgetScale
   readonly property real outlineMargin: Style.marginS * widgetScale
-  readonly property color colorHandle: Color.mSecondary
+  readonly property color colorHandle: Commons.Color.mSecondary
 
   // Corner handle model: defines position, direction, cursor, and triangle points for each corner
   // xMult/yMult: multipliers for position (0 = left/top edge, 1 = right/bottom edge)

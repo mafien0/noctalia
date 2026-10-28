@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 Rectangle {
@@ -17,8 +18,8 @@ Rectangle {
   implicitHeight: Math.round(Style.baseWidgetSize * 1.1)
 
   radius: Style.iRadiusM
-  color: Color.mSurface
-  border.color: Color.mOutline
+  color: Commons.Color.mSurface
+  border.color: Commons.Color.mOutline
   border.width: Style.borderS
 
   // Minimized Look
@@ -54,7 +55,7 @@ Rectangle {
         Layout.preferredHeight: root.height * 0.6
         radius: Math.min(Style.iRadiusL, Layout.preferredWidth / 2)
         color: root.selectedColor
-        border.color: Color.mOutline
+        border.color: Commons.Color.mOutline
         border.width: Style.borderS
       }
 
@@ -67,7 +68,7 @@ Rectangle {
 
       NIcon {
         icon: "color-picker"
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignVCenter
       }

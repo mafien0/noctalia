@@ -1,10 +1,11 @@
 import QtQuick
 import qs.Commons
 
+import qs.Commons as Commons
 Item {
   id: root
-  property color fillColor: Color.mPrimary
-  property color strokeColor: Color.mOnSurface
+  property color fillColor: Commons.Color.mPrimary
+  property color strokeColor: Commons.Color.mOnSurface
   property int strokeWidth: 0
   property var values: []
   property bool vertical: false

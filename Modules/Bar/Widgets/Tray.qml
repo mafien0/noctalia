@@ -6,6 +6,7 @@ import Quickshell
 import Quickshell.Services.SystemTray
 import Quickshell.Widgets
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.Bar.Extras
 import qs.Services.UI
 import qs.Widgets
@@ -67,7 +68,7 @@ Item {
   property bool drawerEnabled: widgetSettings.drawerEnabled !== undefined ? widgetSettings.drawerEnabled : (widgetMetadata.drawerEnabled !== undefined ? widgetMetadata.drawerEnabled : true) // Enable drawer panel
   property bool hidePassive: widgetSettings.hidePassive !== undefined ? widgetSettings.hidePassive : true // Hide passive status items
   readonly property string chevronColorKey: widgetSettings.chevronColor !== undefined ? widgetSettings.chevronColor : widgetMetadata.chevronColor
-  readonly property color chevronColor: Color.resolveColorKey(chevronColorKey)
+  readonly property color chevronColor: Commons.Color.resolveColorKey(chevronColorKey)
   property var filteredItems: [] // Items to show inline (pinned)
   property var dropdownItems: [] // Items to show in drawer (unpinned)
   property int hoveredItemIndex: -1 // Track hovered item for dot indicator
@@ -433,7 +434,7 @@ Item {
 
           layer.enabled: widgetSettings.colorizeIcons !== false
           layer.effect: ShaderEffect {
-            property color targetColor: Settings.data.colorSchemes.darkMode ? Color.mOnSurface : Color.mSurfaceVariant
+            property color targetColor: Settings.data.colorSchemes.darkMode ? Commons.Color.mOnSurface : Commons.Color.mSurfaceVariant
             property real colorizeMode: 1.0
 
             fragmentShader: Qt.resolvedUrl(Quickshell.shellDir + "/Shaders/qsb/appicon_colorize.frag.qsb")
@@ -447,7 +448,7 @@ Item {
           anchors.horizontalCenter: trayIcon.horizontalCenter
           width: Style.toOdd(iconSize * 0.25)
           height: 4
-          color: trayDelegate.isHovered ? Color.mHover : "transparent"
+          color: trayDelegate.isHovered ? Commons.Color.mHover : "transparent"
           radius: Math.min(Style.radiusXXS, width / 2)
 
           Behavior on color {

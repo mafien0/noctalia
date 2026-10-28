@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.MainScreen
 import qs.Services.Noctalia
 import qs.Services.UI
@@ -32,7 +33,7 @@ SmartPanel {
   panelAnchorRight: pluginInstance?.panelAnchorRight ?? false
 
   // Panel background color
-  panelBackgroundColor: pluginInstance?.panelBackgroundColor ?? Color.mSurface
+  panelBackgroundColor: pluginInstance?.panelBackgroundColor ?? Commons.Color.mSurface
 
   // Panel content is dynamically loaded
   panelContent: Component {

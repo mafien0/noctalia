@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Shapes
 import qs.Commons
 
+import qs.Commons as Commons
 /**
 * ScreenCorners - Shape component for rendering screen corners
 *
@@ -33,7 +34,7 @@ Item {
         id: cornersPath
 
         // Corner configuration
-        readonly property color cornerColor: Settings.data.general.forceBlackScreenCorners ? "black" : Color.mSurface
+        readonly property color cornerColor: Settings.data.general.forceBlackScreenCorners ? "black" : Commons.Color.mSurface
         readonly property real cornerRadius: Style.screenRadius
         readonly property real cornerSize: Style.screenRadius
 
@@ -56,7 +57,7 @@ Item {
 
         // Smooth color animation (disabled during theme transitions to sync with Color.qml)
         Behavior on fillColor {
-          enabled: !Color.isTransitioning
+          enabled: !Commons.Color.isTransitioning
           ColorAnimation {
             duration: Style.animationFast
           }

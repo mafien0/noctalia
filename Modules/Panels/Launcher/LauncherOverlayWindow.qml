@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Wayland
 
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.MainScreen.Backgrounds
 import qs.Services.UI
 import qs.Widgets
@@ -99,7 +100,7 @@ Variants {
       // Dimmer background (click to close)
       Rectangle {
         anchors.fill: parent
-        color: Qt.alpha(Color.mSurface, Settings.data.general.dimmerOpacity)
+        color: Qt.alpha(Commons.Color.mSurface, Settings.data.general.dimmerOpacity)
 
         MouseArea {
           anchors.fill: parent
@@ -255,7 +256,7 @@ Variants {
 
           ShapePath {
             strokeWidth: -1
-            fillColor: Qt.alpha(Color.mSurface, Color.adaptiveOpacity(Settings.data.ui.panelBackgroundOpacity))
+            fillColor: Qt.alpha(Commons.Color.mSurface, Commons.Color.adaptiveOpacity(Settings.data.ui.panelBackgroundOpacity))
 
             // Offset by radius to account for Shape's extended bounds
             startX: panelShape.radius + panelShape.radius * panelShape.tlMultX

@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Effects
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.DesktopWidgets
 import qs.Services.Media
 import qs.Services.UI
@@ -21,7 +22,7 @@ DraggableDesktopWidget {
   readonly property bool hideWhenIdle: (widgetData && widgetData.hideWhenIdle !== undefined) ? widgetData.hideWhenIdle : (widgetMetadata?.hideWhenIdle ?? false)
   readonly property string colorName: (widgetData && widgetData.colorName !== undefined) ? widgetData.colorName : (widgetMetadata?.colorName ?? "primary")
 
-  readonly property color fillColor: Color.resolveColorKey(colorName)
+  readonly property color fillColor: Commons.Color.resolveColorKey(colorName)
 
   readonly property bool shouldShow: visualizerType !== "" && visualizerType !== "none" && (!hideWhenIdle || MediaService.isPlaying) && SpectrumService.available
   readonly property bool isHidden: !shouldShow

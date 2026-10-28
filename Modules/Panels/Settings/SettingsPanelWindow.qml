@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.UI
 import qs.Widgets
 
@@ -118,7 +119,7 @@ FloatingWindow {
   // Main content
   Rectangle {
     anchors.fill: parent
-    color: Qt.alpha(Color.mSurface, Settings.data.ui.panelBackgroundOpacity)
+    color: Qt.alpha(Commons.Color.mSurface, Settings.data.ui.panelBackgroundOpacity)
     radius: Style.radiusL
 
     SettingsContent {

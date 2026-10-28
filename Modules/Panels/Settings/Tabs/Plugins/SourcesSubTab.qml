@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Noctalia
 import qs.Services.UI
 import qs.Widgets
@@ -23,7 +24,7 @@ ColumnLayout {
       delegate: NBox {
         Layout.fillWidth: true
         implicitHeight: sourceRow.implicitHeight + Style.margin2L
-        color: Color.mSurface
+        color: Commons.Color.mSurface
 
         RowLayout {
           id: sourceRow
@@ -42,14 +43,14 @@ ColumnLayout {
 
             NText {
               text: modelData.name
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
               Layout.fillWidth: true
             }
 
             NText {
               text: modelData.url
               font.pointSize: Style.fontSizeXS
-              color: Color.mOnSurfaceVariant
+              color: Commons.Color.mOnSurfaceVariant
               Layout.fillWidth: true
               elide: Text.ElideRight
             }
@@ -101,9 +102,9 @@ ColumnLayout {
     padding: Style.marginL
 
     background: Rectangle {
-      color: Color.mSurface
+      color: Commons.Color.mSurface
       radius: Style.radiusS
-      border.color: Color.mPrimary
+      border.color: Commons.Color.mPrimary
       border.width: Style.borderM
     }
 
@@ -145,8 +146,8 @@ ColumnLayout {
 
         NButton {
           text: I18n.tr("common.add")
-          backgroundColor: Color.mPrimary
-          textColor: Color.mOnPrimary
+          backgroundColor: Commons.Color.mPrimary
+          textColor: Commons.Color.mOnPrimary
           enabled: sourceNameInput.text.length > 0 && sourceUrlInput.text.length > 0
           onClicked: {
             if (PluginRegistry.addPluginSource(sourceNameInput.text, sourceUrlInput.text)) {

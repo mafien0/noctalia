@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.UI
 import qs.Widgets
 
@@ -79,9 +80,9 @@ Popup {
 
   background: Rectangle {
     id: backgroundRect
-    color: Color.mSurface
+    color: Commons.Color.mSurface
     radius: Style.radiusL
-    border.color: Color.mOutline
+    border.color: Commons.Color.mOutline
     border.width: Style.borderM
 
     NDropShadow {
@@ -101,14 +102,14 @@ Popup {
       NIcon {
         icon: "settings"
         pointSize: Style.fontSizeL
-        color: Color.mPrimary
+        color: Commons.Color.mPrimary
       }
 
       NText {
         text: I18n.tr("wallpaper.panel.wallhaven-settings-title")
         pointSize: Style.fontSizeL
         font.weight: Style.fontWeightBold
-        color: Color.mOnSurface
+        color: Commons.Color.mOnSurface
         Layout.fillWidth: true
       }
 
@@ -131,7 +132,7 @@ Popup {
 
       NText {
         text: I18n.tr("wallpaper.panel.apikey-label")
-        color: Color.mOnSurface
+        color: Commons.Color.mOnSurface
         pointSize: Style.fontSizeM
       }
 
@@ -158,7 +159,7 @@ Popup {
 
       NText {
         text: I18n.tr("wallpaper.panel.apikey-help")
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
         pointSize: Style.fontSizeS
         wrapMode: Text.WordWrap
         Layout.fillWidth: true
@@ -176,7 +177,7 @@ Popup {
 
       NText {
         text: I18n.tr("wallpaper.panel.sorting-label")
-        color: Color.mOnSurface
+        color: Commons.Color.mOnSurface
         pointSize: Style.fontSizeM
         Layout.preferredWidth: implicitWidth
       }
@@ -230,7 +231,7 @@ Popup {
 
       NText {
         text: I18n.tr("wallpaper.panel.order-label")
-        color: Color.mOnSurface
+        color: Commons.Color.mOnSurface
         pointSize: Style.fontSizeM
         Layout.preferredWidth: implicitWidth
       }
@@ -267,7 +268,7 @@ Popup {
 
       NText {
         text: I18n.tr("wallpaper.panel.purity-label")
-        color: Color.mOnSurface
+        color: Commons.Color.mOnSurface
         pointSize: Style.fontSizeM
         Layout.preferredWidth: implicitWidth
       }
@@ -331,7 +332,7 @@ Popup {
 
             NText {
               text: I18n.tr("wallpaper.panel.purity-sfw")
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
               pointSize: Style.fontSizeM
             }
 
@@ -340,8 +341,8 @@ Popup {
               implicitWidth: Math.round(Style.baseWidgetSize * 0.7)
               implicitHeight: Math.round(Style.baseWidgetSize * 0.7)
               radius: Style.radiusXS
-              color: sfwToggle.checked ? Color.mPrimary : Color.mSurface
-              border.color: Color.mOutline
+              color: sfwToggle.checked ? Commons.Color.mPrimary : Commons.Color.mSurface
+              border.color: Commons.Color.mOutline
               border.width: Style.borderS
 
               Behavior on color {
@@ -355,7 +356,7 @@ Popup {
                 anchors.centerIn: parent
                 anchors.horizontalCenterOffset: -1
                 icon: "check"
-                color: Color.mOnPrimary
+                color: Commons.Color.mOnPrimary
                 pointSize: Math.max(Style.fontSizeXS, sfwBox.width * 0.5)
               }
 
@@ -380,7 +381,7 @@ Popup {
 
             NText {
               text: I18n.tr("wallpaper.panel.purity-sketchy")
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
               pointSize: Style.fontSizeM
             }
 
@@ -389,8 +390,8 @@ Popup {
               implicitWidth: Math.round(Style.baseWidgetSize * 0.7)
               implicitHeight: Math.round(Style.baseWidgetSize * 0.7)
               radius: Style.radiusXS
-              color: sketchyToggle.checked ? Color.mPrimary : Color.mSurface
-              border.color: Color.mOutline
+              color: sketchyToggle.checked ? Commons.Color.mPrimary : Commons.Color.mSurface
+              border.color: Commons.Color.mOutline
               border.width: Style.borderS
 
               Behavior on color {
@@ -404,7 +405,7 @@ Popup {
                 anchors.centerIn: parent
                 anchors.horizontalCenterOffset: -1
                 icon: "check"
-                color: Color.mOnPrimary
+                color: Commons.Color.mOnPrimary
                 pointSize: Math.max(Style.fontSizeXS, sketchyBox.width * 0.5)
               }
 
@@ -430,7 +431,7 @@ Popup {
 
             NText {
               text: I18n.tr("wallpaper.panel.purity-nsfw")
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
               pointSize: Style.fontSizeM
             }
 
@@ -439,8 +440,8 @@ Popup {
               implicitWidth: Math.round(Style.baseWidgetSize * 0.7)
               implicitHeight: Math.round(Style.baseWidgetSize * 0.7)
               radius: Style.radiusXS
-              color: nsfwToggle.checked ? Color.mPrimary : Color.mSurface
-              border.color: Color.mOutline
+              color: nsfwToggle.checked ? Commons.Color.mPrimary : Commons.Color.mSurface
+              border.color: Commons.Color.mOutline
               border.width: Style.borderS
 
               Behavior on color {
@@ -454,7 +455,7 @@ Popup {
                 anchors.centerIn: parent
                 anchors.horizontalCenterOffset: -1
                 icon: "check"
-                color: Color.mOnPrimary
+                color: Commons.Color.mOnPrimary
                 pointSize: Math.max(Style.fontSizeXS, nsfwBox.width * 0.5)
               }
 
@@ -504,7 +505,7 @@ Popup {
 
       NText {
         text: I18n.tr("wallpaper.panel.ratios-label")
-        color: Color.mOnSurface
+        color: Commons.Color.mOnSurface
         pointSize: Style.fontSizeM
         Layout.preferredWidth: implicitWidth
       }
@@ -593,7 +594,7 @@ Popup {
 
       NText {
         text: I18n.tr("wallpaper.panel.categories-label")
-        color: Color.mOnSurface
+        color: Commons.Color.mOnSurface
         pointSize: Style.fontSizeM
         Layout.preferredWidth: implicitWidth
       }
@@ -651,7 +652,7 @@ Popup {
 
             NText {
               text: I18n.tr("common.general")
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
               pointSize: Style.fontSizeM
             }
 
@@ -660,8 +661,8 @@ Popup {
               implicitWidth: Math.round(Style.baseWidgetSize * 0.7)
               implicitHeight: Math.round(Style.baseWidgetSize * 0.7)
               radius: Style.radiusXS
-              color: generalToggle.checked ? Color.mPrimary : Color.mSurface
-              border.color: Color.mOutline
+              color: generalToggle.checked ? Commons.Color.mPrimary : Commons.Color.mSurface
+              border.color: Commons.Color.mOutline
               border.width: Style.borderS
 
               Behavior on color {
@@ -675,7 +676,7 @@ Popup {
                 anchors.centerIn: parent
                 anchors.horizontalCenterOffset: -1
                 icon: "check"
-                color: Color.mOnPrimary
+                color: Commons.Color.mOnPrimary
                 pointSize: Math.max(Style.fontSizeXS, generalBox.width * 0.5)
               }
 
@@ -700,7 +701,7 @@ Popup {
 
             NText {
               text: I18n.tr("wallpaper.panel.categories-anime")
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
               pointSize: Style.fontSizeM
             }
 
@@ -709,8 +710,8 @@ Popup {
               implicitWidth: Math.round(Style.baseWidgetSize * 0.7)
               implicitHeight: Math.round(Style.baseWidgetSize * 0.7)
               radius: Style.radiusXS
-              color: animeToggle.checked ? Color.mPrimary : Color.mSurface
-              border.color: Color.mOutline
+              color: animeToggle.checked ? Commons.Color.mPrimary : Commons.Color.mSurface
+              border.color: Commons.Color.mOutline
               border.width: Style.borderS
 
               Behavior on color {
@@ -724,7 +725,7 @@ Popup {
                 anchors.centerIn: parent
                 anchors.horizontalCenterOffset: -1
                 icon: "check"
-                color: Color.mOnPrimary
+                color: Commons.Color.mOnPrimary
                 pointSize: Math.max(Style.fontSizeXS, animeBox.width * 0.5)
               }
 
@@ -749,7 +750,7 @@ Popup {
 
             NText {
               text: I18n.tr("wallpaper.panel.categories-people")
-              color: Color.mOnSurface
+              color: Commons.Color.mOnSurface
               pointSize: Style.fontSizeM
             }
 
@@ -758,8 +759,8 @@ Popup {
               implicitWidth: Math.round(Style.baseWidgetSize * 0.7)
               implicitHeight: Math.round(Style.baseWidgetSize * 0.7)
               radius: Style.radiusXS
-              color: peopleToggle.checked ? Color.mPrimary : Color.mSurface
-              border.color: Color.mOutline
+              color: peopleToggle.checked ? Commons.Color.mPrimary : Commons.Color.mSurface
+              border.color: Commons.Color.mOutline
               border.width: Style.borderS
 
               Behavior on color {
@@ -773,7 +774,7 @@ Popup {
                 anchors.centerIn: parent
                 anchors.horizontalCenterOffset: -1
                 icon: "check"
-                color: Color.mOnPrimary
+                color: Commons.Color.mOnPrimary
                 pointSize: Math.max(Style.fontSizeXS, peopleBox.width * 0.5)
               }
 
@@ -823,7 +824,7 @@ Popup {
 
       NText {
         text: I18n.tr("wallpaper.panel.resolution-label")
-        color: Color.mOnSurface
+        color: Commons.Color.mOnSurface
         pointSize: Style.fontSizeM
       }
 
@@ -833,7 +834,7 @@ Popup {
 
         NText {
           text: I18n.tr("wallpaper.panel.resolution-mode-label")
-          color: Color.mOnSurface
+          color: Commons.Color.mOnSurface
           pointSize: Style.fontSizeM
           Layout.preferredWidth: implicitWidth
         }
@@ -913,7 +914,7 @@ Popup {
 
         NText {
           text: "×"
-          color: Color.mOnSurface
+          color: Commons.Color.mOnSurface
           pointSize: Style.fontSizeM
           Layout.preferredWidth: implicitWidth
         }

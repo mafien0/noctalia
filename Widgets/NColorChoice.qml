@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.UI
 
 RowLayout {
@@ -36,10 +37,10 @@ RowLayout {
     id: colourRow
 
     opacity: enabled ? 1.0 : 0.6
-    Layout.minimumWidth: root.diameter * Color.colorKeyModel.length
+    Layout.minimumWidth: root.diameter * Commons.Color.colorKeyModel.length
 
     Repeater {
-      model: Color.colorKeyModel
+      model: Commons.Color.colorKeyModel
 
       Rectangle {
         id: colorCircle
@@ -51,8 +52,8 @@ RowLayout {
         implicitWidth: root.diameter
         implicitHeight: root.diameter
         radius: root.diameter * 0.5
-        color: (modelData.key === "none" && root.noneColor !== undefined) ? root.noneColor : Color.resolveColorKey(modelData.key)
-        border.color: (isSelected || isHovered) ? Color.mOnSurface : Color.mOutline
+        color: (modelData.key === "none" && root.noneColor !== undefined) ? root.noneColor : Commons.Color.resolveColorKey(modelData.key)
+        border.color: (isSelected || isHovered) ? Commons.Color.mOnSurface : Commons.Color.mOutline
         border.width: Style.borderM
 
         MouseArea {
@@ -73,7 +74,7 @@ RowLayout {
           anchors.centerIn: parent
           icon: "check"
           pointSize: Math.max(Style.fontSizeXS, colorCircle.width * 0.4)
-          color: (modelData.key === "none" && root.noneOnColor !== undefined) ? root.noneOnColor : Color.resolveOnColorKey(modelData.key)
+          color: (modelData.key === "none" && root.noneOnColor !== undefined) ? root.noneOnColor : Commons.Color.resolveOnColorKey(modelData.key)
           font.weight: Style.fontWeightBold
           visible: colorCircle.isSelected
         }

@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.Bar.Extras
 import qs.Services.Compositor
 import qs.Services.Keyboard
@@ -75,8 +76,8 @@ Item {
     anchors.verticalCenter: parent.verticalCenter
     screen: root.screen
     oppositeDirection: BarService.getPillDirection(root)
-    customIconColor: Color.resolveColorKeyOptional(root.iconColorKey)
-    customTextColor: Color.resolveColorKeyOptional(root.textColorKey)
+    customIconColor: Commons.Color.resolveColorKeyOptional(root.iconColorKey)
+    customTextColor: Commons.Color.resolveColorKeyOptional(root.textColorKey)
     icon: root.showIcon ? "keyboard" : ""
     autoHide: false // Important to be false so we can hover as long as we want
     text: isBarVertical ? currentLayout.substring(0, 3).toUpperCase() : currentLayout

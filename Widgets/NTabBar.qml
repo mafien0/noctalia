@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 Rectangle {
@@ -69,7 +70,7 @@ Rectangle {
   Layout.margins: Style.borderS
   implicitWidth: tabRow.implicitWidth + (margins * 2)
   implicitHeight: tabHeight + (margins * 2)
-  color: Color.smartAlpha(Color.mSurfaceVariant)
+  color: Commons.Color.smartAlpha(Commons.Color.mSurfaceVariant)
   radius: Style.iRadiusM
 
   RowLayout {

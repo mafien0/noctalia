@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 NCollapsible {
@@ -35,8 +36,8 @@ NCollapsible {
 
       delegate: NButton {
         text: root.formatTag(modelData)
-        backgroundColor: root.selectedTag === modelData ? Color.mPrimary : Color.mSurfaceVariant
-        textColor: root.selectedTag === modelData ? Color.mOnPrimary : Color.mOnSurfaceVariant
+        backgroundColor: root.selectedTag === modelData ? Commons.Color.mPrimary : Commons.Color.mSurfaceVariant
+        textColor: root.selectedTag === modelData ? Commons.Color.mOnPrimary : Commons.Color.mOnSurfaceVariant
         onClicked: root.selectedTag = modelData
         fontSize: Style.fontSizeS
         iconSize: Style.fontSizeS

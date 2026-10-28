@@ -1,5 +1,6 @@
 import QtQuick
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Compositor
 import qs.Widgets
 
@@ -84,14 +85,14 @@ Item {
 
     color: {
       if (pillMouseArea.containsMouse)
-        return Color.mHover;
+        return Commons.Color.mHover;
       if (workspace.isFocused)
-        return Color.resolveColorKey(focusedColor);
+        return Commons.Color.resolveColorKey(focusedColor);
       if (workspace.isUrgent)
-        return Color.mError;
+        return Commons.Color.mError;
       if (workspace.isOccupied)
-        return Color.resolveColorKey(occupiedColor);
-      return Qt.alpha(Color.resolveColorKey(emptyColor), 0.3);
+        return Commons.Color.resolveColorKey(occupiedColor);
+      return Qt.alpha(Commons.Color.resolveColorKey(emptyColor), 0.3);
     }
 
     Loader {
@@ -126,18 +127,18 @@ Item {
           wrapMode: Text.Wrap
           color: {
             if (pillMouseArea.containsMouse)
-              return Color.mOnHover;
+              return Commons.Color.mOnHover;
             if (workspace.isFocused)
-              return Color.resolveOnColorKey(focusedColor);
+              return Commons.Color.resolveOnColorKey(focusedColor);
             if (workspace.isUrgent)
-              return Color.mOnError;
+              return Commons.Color.mOnError;
             if (workspace.isOccupied)
-              return Color.resolveOnColorKey(occupiedColor);
-            return Color.resolveOnColorKey(emptyColor);
+              return Commons.Color.resolveOnColorKey(occupiedColor);
+            return Commons.Color.resolveOnColorKey(emptyColor);
           }
 
           Behavior on color {
-            enabled: !Color.isTransitioning
+            enabled: !Commons.Color.isTransitioning
             ColorAnimation {
               duration: Style.animationFast
               easing.type: Easing.InOutQuad
@@ -155,7 +156,7 @@ Item {
       }
     }
     Behavior on color {
-      enabled: !Color.isTransitioning
+      enabled: !Commons.Color.isTransitioning
       ColorAnimation {
         duration: Style.animationFast
         easing.type: Easing.InOutQuad

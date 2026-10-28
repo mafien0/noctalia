@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.Bar.Extras
 import qs.Modules.Panels.Settings // For SettingsPanel
 import qs.Services.Networking
@@ -81,8 +82,8 @@ Item {
     id: pill
     screen: root.screen
     oppositeDirection: BarService.getPillDirection(root)
-    customIconColor: Color.resolveColorKeyOptional(root.iconColorKey)
-    customTextColor: Color.resolveColorKeyOptional(root.textColorKey)
+    customIconColor: Commons.Color.resolveColorKeyOptional(root.iconColorKey)
+    customTextColor: Commons.Color.resolveColorKeyOptional(root.textColorKey)
     icon: NetworkService.getIcon()
     text: NetworkService.getStatusText(false)
     autoHide: false

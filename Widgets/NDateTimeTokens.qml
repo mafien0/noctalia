@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
 
+import qs.Commons as Commons
 Rectangle {
   id: root
 
@@ -11,8 +12,8 @@ Rectangle {
   signal tokenClicked(string token)
 
   Layout.margins: Style.borderS
-  color: Color.mSurface
-  border.color: Color.mOutline
+  color: Commons.Color.mSurface
+  border.color: Commons.Color.mOutline
   border.width: Style.borderS
   radius: Style.iRadiusM
 
@@ -214,9 +215,9 @@ Rectangle {
             radius: Style.iRadiusS
             color: {
               if (tokenMouseArea.containsMouse) {
-                return Qt.alpha(Color.mPrimary, 0.1);
+                return Qt.alpha(Commons.Color.mPrimary, 0.1);
               }
-              return index % 2 === 0 ? Color.mSurfaceVariant : Qt.alpha(Color.mSurfaceVariant, 0.6);
+              return index % 2 === 0 ? Commons.Color.mSurfaceVariant : Qt.alpha(Commons.Color.mSurfaceVariant, 0.6);
             }
 
             // Mouse area for the entire delegate
@@ -238,13 +239,13 @@ Rectangle {
               PropertyAnimation {
                 target: tokenDelegate
                 property: "color"
-                to: Qt.alpha(Color.mPrimary, 0.3)
+                to: Qt.alpha(Commons.Color.mPrimary, 0.3)
                 duration: 100
               }
               PropertyAnimation {
                 target: tokenDelegate
                 property: "color"
-                to: tokenMouseArea.containsMouse ? Qt.alpha(Color.mPrimary, 0.1) : (index % 2 === 0 ? Color.mSurface : Color.mSurfaceVariant)
+                to: tokenMouseArea.containsMouse ? Qt.alpha(Commons.Color.mPrimary, 0.1) : (index % 2 === 0 ? Commons.Color.mSurface : Commons.Color.mSurfaceVariant)
                 duration: 200
               }
             }
@@ -284,7 +285,7 @@ Rectangle {
                 Layout.alignment: Qt.AlignVCenter // Added this line
                 width: 100
                 height: 22
-                color: tokenMouseArea.containsMouse ? Color.mPrimary : Color.mOnSurface
+                color: tokenMouseArea.containsMouse ? Commons.Color.mPrimary : Commons.Color.mOnSurface
                 radius: Style.iRadiusS
 
                 Behavior on color {
@@ -296,7 +297,7 @@ Rectangle {
                 NText {
                   anchors.centerIn: parent
                   text: modelData.token
-                  color: tokenMouseArea.containsMouse ? Color.mOnPrimary : Color.mSurface
+                  color: tokenMouseArea.containsMouse ? Commons.Color.mOnPrimary : Commons.Color.mSurface
                   pointSize: Style.fontSizeS
                   font.weight: Style.fontWeightBold
 
@@ -313,7 +314,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter // Added this line
                 text: modelData.description
-                color: tokenMouseArea.containsMouse ? Color.mOnSurface : Color.mOnSurfaceVariant
+                color: tokenMouseArea.containsMouse ? Commons.Color.mOnSurface : Commons.Color.mOnSurfaceVariant
                 pointSize: Style.fontSizeS
                 wrapMode: Text.WordWrap
 
@@ -329,9 +330,9 @@ Rectangle {
                 Layout.alignment: Qt.AlignVCenter // Added this line
                 width: 90
                 height: 22
-                color: tokenMouseArea.containsMouse ? Color.mPrimary : Color.mOnSurfaceVariant
+                color: tokenMouseArea.containsMouse ? Commons.Color.mPrimary : Commons.Color.mOnSurfaceVariant
                 radius: Style.iRadiusS
-                border.color: tokenMouseArea.containsMouse ? Color.mPrimary : Color.mOutline
+                border.color: tokenMouseArea.containsMouse ? Commons.Color.mPrimary : Commons.Color.mOutline
                 border.width: Style.borderS
 
                 Behavior on color {
@@ -349,7 +350,7 @@ Rectangle {
                 NText {
                   anchors.centerIn: parent
                   text: I18n.locale.toString(root.sampleDate, modelData.token)
-                  color: tokenMouseArea.containsMouse ? Color.mOnPrimary : Color.mSurfaceVariant
+                  color: tokenMouseArea.containsMouse ? Commons.Color.mOnPrimary : Commons.Color.mSurfaceVariant
                   pointSize: Style.fontSizeS
 
                   Behavior on color {
@@ -369,25 +370,25 @@ Rectangle {
   function getCategoryColor(category) {
     switch (category) {
     case "Year":
-      return [Color.mPrimary, Color.mOnPrimary];
+      return [Commons.Color.mPrimary, Commons.Color.mOnPrimary];
     case "Month":
-      return [Color.mSecondary, Color.mOnSecondary];
+      return [Commons.Color.mSecondary, Commons.Color.mOnSecondary];
     case "Day":
-      return [Color.mTertiary, Color.mOnTertiary];
+      return [Commons.Color.mTertiary, Commons.Color.mOnTertiary];
     case "Hour":
-      return [Color.mPrimary, Color.mOnPrimary];
+      return [Commons.Color.mPrimary, Commons.Color.mOnPrimary];
     case "Minute":
-      return [Color.mSecondary, Color.mOnSecondary];
+      return [Commons.Color.mSecondary, Commons.Color.mOnSecondary];
     case "Second":
-      return [Color.mTertiary, Color.mOnTertiary];
+      return [Commons.Color.mTertiary, Commons.Color.mOnTertiary];
     case "AM/PM":
-      return [Color.mError, Color.mOnError];
+      return [Commons.Color.mError, Commons.Color.mOnError];
     case "Timezone":
-      return [Color.mOnSurface, Color.mSurface];
+      return [Commons.Color.mOnSurface, Commons.Color.mSurface];
     case "Common":
-      return [Color.mError, Color.mOnError];
+      return [Commons.Color.mError, Commons.Color.mOnError];
     default:
-      return [Color.mOnSurfaceVariant, Color.mSurfaceVariant];
+      return [Commons.Color.mOnSurfaceVariant, Commons.Color.mSurfaceVariant];
     }
   }
 }

@@ -4,6 +4,7 @@ import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.MainScreen
 import qs.Services.Media
 import qs.Services.UI
@@ -108,20 +109,20 @@ SmartPanel {
           NIcon {
             icon: "music"
             pointSize: Style.fontSizeL
-            color: Color.mPrimary
+            color: Commons.Color.mPrimary
           }
 
           NText {
             text: I18n.tr("common.media-player")
             font.weight: Style.fontWeightBold
             pointSize: Style.fontSizeL
-            color: Color.mOnSurface
+            color: Commons.Color.mOnSurface
             Layout.fillWidth: true
           }
 
           Rectangle {
             radius: Style.radiusS
-            color: playerSelectorMouse.containsMouse ? Color.mPrimary : "transparent"
+            color: playerSelectorMouse.containsMouse ? Commons.Color.mPrimary : "transparent"
             implicitWidth: playerRow.implicitWidth + Style.marginM
             implicitHeight: Style.baseWidgetSize * 0.8
             visible: MediaService.getAvailablePlayers().length > 1
@@ -134,12 +135,12 @@ SmartPanel {
               NText {
                 text: MediaService.currentPlayer ? MediaService.currentPlayer.identity : "Select Player"
                 pointSize: Style.fontSizeXS
-                color: playerSelectorMouse.containsMouse ? Color.mOnPrimary : Color.mOnSurfaceVariant
+                color: playerSelectorMouse.containsMouse ? Commons.Color.mOnPrimary : Commons.Color.mOnSurfaceVariant
               }
               NIcon {
                 icon: "chevron-down"
                 pointSize: Style.fontSizeXS
-                color: playerSelectorMouse.containsMouse ? Color.mOnPrimary : Color.mOnSurfaceVariant
+                color: playerSelectorMouse.containsMouse ? Commons.Color.mOnPrimary : Commons.Color.mOnSurfaceVariant
               }
             }
 
@@ -159,8 +160,8 @@ SmartPanel {
               padding: Style.marginS
 
               background: Rectangle {
-                color: Color.mSurfaceVariant
-                border.color: Color.mOutline
+                color: Commons.Color.mSurfaceVariant
+                border.color: Commons.Color.mOutline
                 border.width: Style.borderS
                 radius: Style.iRadiusM
               }
@@ -176,7 +177,7 @@ SmartPanel {
 
                     Rectangle {
                       anchors.fill: parent
-                      color: itemMouse.containsMouse ? Color.mPrimary : "transparent"
+                      color: itemMouse.containsMouse ? Commons.Color.mPrimary : "transparent"
                       radius: Style.iRadiusS
                     }
 
@@ -188,14 +189,14 @@ SmartPanel {
                       NIcon {
                         visible: MediaService.currentPlayer && MediaService.currentPlayer.identity === modelData.identity
                         icon: "check"
-                        color: itemMouse.containsMouse ? Color.mOnPrimary : Color.mPrimary
+                        color: itemMouse.containsMouse ? Commons.Color.mOnPrimary : Commons.Color.mPrimary
                         pointSize: Style.fontSizeS
                       }
 
                       NText {
                         text: modelData.identity
                         pointSize: Style.fontSizeS
-                        color: itemMouse.containsMouse ? Color.mOnPrimary : Color.mOnSurface
+                        color: itemMouse.containsMouse ? Commons.Color.mOnPrimary : Commons.Color.mOnSurface
                         Layout.fillWidth: true
                         elide: Text.ElideRight
                       }
@@ -336,7 +337,7 @@ SmartPanel {
                 delegate: NText {
                   pointSize: root.compactMode ? Style.fontSizeL : Style.fontSizeXL
                   font.weight: Style.fontWeightBold
-                  color: Color.mOnSurface
+                  color: Commons.Color.mOnSurface
                   horizontalAlignment: root.isSideBySide ? Text.AlignLeft : Text.AlignHCenter
                   elide: Text.ElideNone
                   wrapMode: Text.NoWrap
@@ -366,7 +367,7 @@ SmartPanel {
 
                 delegate: NText {
                   pointSize: root.compactMode ? Style.fontSizeS : Style.fontSizeM
-                  color: Color.mOnSurfaceVariant
+                  color: Commons.Color.mOnSurfaceVariant
                   horizontalAlignment: root.isSideBySide ? Text.AlignLeft : Text.AlignHCenter
                   elide: Text.ElideNone
                   wrapMode: Text.NoWrap
@@ -458,7 +459,7 @@ SmartPanel {
                   NText {
                     text: MediaService.positionString || "0:00"
                     pointSize: Style.fontSizeXS
-                    color: Color.mOnSurfaceVariant
+                    color: Commons.Color.mOnSurfaceVariant
                     visible: progressWrapper.visible
                   }
 
@@ -470,7 +471,7 @@ SmartPanel {
                   NText {
                     text: MediaService.lengthString || "0:00"
                     pointSize: Style.fontSizeXS
-                    color: Color.mOnSurfaceVariant
+                    color: Commons.Color.mOnSurfaceVariant
                     horizontalAlignment: Text.AlignRight
                     visible: progressWrapper.visible
                   }
@@ -496,20 +497,20 @@ SmartPanel {
                 implicitWidth: root.compactMode ? (Style.baseWidgetSize * 1.3) : (Style.baseWidgetSize * 1.8)
                 implicitHeight: root.compactMode ? (Style.baseWidgetSize * 1.3) : (Style.baseWidgetSize * 1.8)
                 radius: root.compactMode ? Style.iRadiusM : Style.iRadiusL
-                color: Color.mPrimary
+                color: Commons.Color.mPrimary
 
                 NIcon {
                   anchors.centerIn: parent
                   icon: MediaService.isPlaying ? "media-pause" : "media-play"
                   pointSize: root.compactMode ? Style.fontSizeL : Style.fontSizeXXL
-                  color: Color.mOnPrimary
+                  color: Commons.Color.mOnPrimary
                 }
 
                 MouseArea {
                   anchors.fill: parent
                   cursorShape: Qt.PointingHandCursor
                   hoverEnabled: true
-                  onEntered: parent.color = Color.mPrimary
+                  onEntered: parent.color = Commons.Color.mPrimary
                   onClicked: MediaService.playPause()
                 }
               }
@@ -533,7 +534,7 @@ SmartPanel {
       width: parent.width - Style.marginS
       height: 20
       values: SpectrumService.values
-      fillColor: Color.mPrimary
+      fillColor: Commons.Color.mPrimary
       opacity: 0.4
       barPosition: Settings.getBarPositionForScreen(root.screen?.name)
       mirrored: Settings.data.audio.spectrumMirrored
@@ -546,7 +547,7 @@ SmartPanel {
       width: parent.width - Style.marginS
       height: parent.height - Style.marginS
       values: SpectrumService.values
-      fillColor: Color.mPrimary
+      fillColor: Commons.Color.mPrimary
       opacity: 0.4
       mirrored: Settings.data.audio.spectrumMirrored
     }
@@ -558,7 +559,7 @@ SmartPanel {
       width: parent.width - Style.marginS
       height: parent.height - Style.marginS
       values: SpectrumService.values
-      fillColor: Color.mPrimary
+      fillColor: Commons.Color.mPrimary
       opacity: 0.4
       mirrored: Settings.data.audio.spectrumMirrored
     }

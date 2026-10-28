@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 Popup {
@@ -38,9 +39,9 @@ Popup {
   }
 
   background: Rectangle {
-    color: Color.mSurface
+    color: Commons.Color.mSurface
     radius: Style.iRadiusL
-    border.color: Color.mPrimary
+    border.color: Commons.Color.mPrimary
     border.width: Style.borderM
   }
 
@@ -55,7 +56,7 @@ Popup {
         text: I18n.tr("widgets.icon-picker.title")
         pointSize: Style.fontSizeL
         font.weight: Style.fontWeightBold
-        color: Color.mPrimary
+        color: Commons.Color.mPrimary
         Layout.fillWidth: true
       }
       NIconButton {
@@ -92,15 +93,15 @@ Popup {
       cellHeight: root.cellH
       model: root.filteredIcons
       reserveScrollbarSpace: false
-      gradientColor: Color.mSurface
+      gradientColor: Commons.Color.mSurface
 
       delegate: Rectangle {
         width: grid.cellWidth
         height: grid.cellHeight
         radius: Style.iRadiusS
 
-        color: (root.selectedIcon === modelData) ? Qt.alpha(Color.mPrimary, 0.15) : "transparent"
-        border.color: (root.selectedIcon === modelData) ? Color.mPrimary : "transparent"
+        color: (root.selectedIcon === modelData) ? Qt.alpha(Commons.Color.mPrimary, 0.15) : "transparent"
+        border.color: (root.selectedIcon === modelData) ? Commons.Color.mPrimary : "transparent"
         border.width: (root.selectedIcon === modelData) ? Style.borderS : 0
 
         MouseArea {
@@ -134,7 +135,7 @@ Popup {
             wrapMode: Text.NoWrap
             maximumLineCount: 1
             horizontalAlignment: Text.AlignHCenter
-            color: Color.mOnSurfaceVariant
+            color: Commons.Color.mOnSurfaceVariant
             pointSize: Style.fontSizeXS
             text: modelData
           }

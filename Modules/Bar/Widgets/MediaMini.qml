@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.Bar.Extras
 import qs.Services.Media
 import qs.Services.UI
@@ -50,7 +51,7 @@ Item {
   readonly property bool useFixedWidth: widgetSettings.useFixedWidth !== undefined ? widgetSettings.useFixedWidth : widgetMetadata.useFixedWidth
   readonly property real maxWidth: widgetSettings.maxWidth !== undefined ? widgetSettings.maxWidth : Math.max(widgetMetadata.maxWidth, screen ? screen.width * 0.06 : 0)
   readonly property string textColorKey: widgetSettings.textColor !== undefined ? widgetSettings.textColor : widgetMetadata.textColor
-  readonly property color textColor: Color.resolveColorKey(textColorKey)
+  readonly property color textColor: Commons.Color.resolveColorKey(textColorKey)
 
   // Dimensions
   readonly property int artSize: Style.toOdd(capsuleHeight * 0.75)
@@ -338,7 +339,7 @@ Item {
           fadeCornerRadius: Style.radiusM
 
           NText {
-            color: hasPlayer ? root.textColor : Color.mOnSurfaceVariant
+            color: hasPlayer ? root.textColor : Commons.Color.mOnSurfaceVariant
             pointSize: barFontSize
             elide: Text.ElideNone
           }
@@ -429,7 +430,7 @@ Item {
       width: parent.width - Style.marginS
       height: 20
       values: SpectrumService.values
-      fillColor: Color.mPrimary
+      fillColor: Commons.Color.mPrimary
       opacity: 0.4
       barPosition: root.barPosition
       mirrored: Settings.data.audio.spectrumMirrored
@@ -442,7 +443,7 @@ Item {
       width: parent.width - Style.marginS
       height: parent.height - Style.marginS
       values: SpectrumService.values
-      fillColor: Color.mPrimary
+      fillColor: Commons.Color.mPrimary
       opacity: 0.4
       mirrored: Settings.data.audio.spectrumMirrored
     }
@@ -454,7 +455,7 @@ Item {
       width: parent.width - Style.marginS
       height: parent.height - Style.marginS
       values: SpectrumService.values
-      fillColor: Color.mPrimary
+      fillColor: Commons.Color.mPrimary
       opacity: 0.4
       mirrored: Settings.data.audio.spectrumMirrored
     }
@@ -474,7 +475,7 @@ Item {
     Component.onCompleted: repaint()
 
     Connections {
-      target: Color
+      target: Commons.Color
       function onMPrimaryChanged() {
         repaint();
       }
@@ -495,14 +496,14 @@ Item {
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
       ctx.lineWidth = lineWidth;
-      ctx.strokeStyle = Qt.alpha(Color.mOnSurface, 0.4);
+      ctx.strokeStyle = Qt.alpha(Commons.Color.mOnSurface, 0.4);
       ctx.stroke();
 
       // Progress
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + progress * 2 * Math.PI);
       ctx.lineWidth = lineWidth;
-      ctx.strokeStyle = Color.mPrimary;
+      ctx.strokeStyle = Commons.Color.mPrimary;
       ctx.lineCap = "round";
       ctx.stroke();
     }

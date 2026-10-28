@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Effects
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.UI
 
 Rectangle {
@@ -22,16 +23,16 @@ Rectangle {
   property bool pressed: false
 
   // Color properties
-  property color colorBg: Color.smartAlpha(Color.mSurfaceVariant)
-  property color colorFg: Color.mPrimary
-  property color colorBgHover: Color.mHover
-  property color colorFgHover: Color.mOnHover
-  property color colorBorder: Color.mOutline
-  property color colorBorderHover: Color.mOutline
+  property color colorBg: Commons.Color.smartAlpha(Commons.Color.mSurfaceVariant)
+  property color colorFg: Commons.Color.mPrimary
+  property color colorBgHover: Commons.Color.mHover
+  property color colorFgHover: Commons.Color.mOnHover
+  property color colorBorder: Commons.Color.mOutline
+  property color colorBorderHover: Commons.Color.mOutline
 
   // Hot state colors
-  property color colorBgHot: Color.mPrimary
-  property color colorFgHot: Color.mOnPrimary
+  property color colorBgHot: Commons.Color.mPrimary
+  property color colorFgHot: Commons.Color.mOnPrimary
 
   // Signals
   signal entered
@@ -61,7 +62,7 @@ Rectangle {
   border.width: Style.borderS
 
   Behavior on color {
-    enabled: !Color.isTransitioning
+    enabled: !Commons.Color.isTransitioning
     ColorAnimation {
       duration: Style.animationFast
       easing.type: Easing.InOutQuad
@@ -88,7 +89,7 @@ Rectangle {
     y: (root.height - height) / 2 + (height - contentHeight) / 2
 
     Behavior on color {
-      enabled: !Color.isTransitioning
+      enabled: !Commons.Color.isTransitioning
       ColorAnimation {
         duration: Style.animationFast
         easing.type: Easing.InOutQuad

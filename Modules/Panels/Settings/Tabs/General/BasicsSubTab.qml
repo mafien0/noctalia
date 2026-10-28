@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import "../../../../../Helpers/QtObj2JS.js" as QtObj2JS
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.System
 import qs.Services.UI
 import qs.Widgets
@@ -23,7 +24,7 @@ ColumnLayout {
       radius: width / 2
       imagePath: Settings.preprocessPath(Settings.data.general.avatarImage)
       fallbackIcon: "person"
-      borderColor: Color.mPrimary
+      borderColor: Commons.Color.mPrimary
       borderWidth: Style.borderM
       Layout.alignment: Qt.AlignTop
     }
@@ -32,7 +33,7 @@ ColumnLayout {
       NText {
         text: HostService.displayName
         pointSize: Style.fontSizeM
-        color: Color.mPrimary
+        color: Commons.Color.mPrimary
       }
 
       NTextInputButton {

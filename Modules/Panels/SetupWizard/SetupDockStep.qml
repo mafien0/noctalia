@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Compositor
 import qs.Widgets
 
@@ -21,13 +22,13 @@ ColumnLayout {
       width: 40
       height: 40
       radius: Style.radiusL
-      color: Color.mSurfaceVariant
+      color: Commons.Color.mSurfaceVariant
       opacity: 0.6
 
       NIcon {
         icon: "device-desktop"
         pointSize: Style.fontSizeL
-        color: Color.mPrimary
+        color: Commons.Color.mPrimary
         anchors.centerIn: parent
       }
     }
@@ -40,13 +41,13 @@ ColumnLayout {
         text: I18n.tr("panels.dock.title") || "Dock"
         pointSize: Style.fontSizeXL
         font.weight: Style.fontWeightBold
-        color: Color.mPrimary
+        color: Commons.Color.mPrimary
       }
 
       NText {
         text: I18n.tr("panels.dock.monitors-desc")
         pointSize: Style.fontSizeM
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
       }
     }
   }

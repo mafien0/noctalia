@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 Text {
@@ -25,7 +26,7 @@ Text {
   font.weight: Style.fontWeightMedium
   font.pointSize: Math.max(1, root.pointSize * fontScale)
   font.features: root.features
-  color: Color.mOnSurface
+  color: Commons.Color.mOnSurface
   elide: Text.ElideRight
   wrapMode: Text.NoWrap
   verticalAlignment: Text.AlignVCenter

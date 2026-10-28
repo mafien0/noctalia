@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.MainScreen
 import qs.Services.Compositor
 import qs.Services.Hardware
@@ -116,14 +117,14 @@ SmartPanel {
           NIcon {
             icon: "settings-display"
             pointSize: Style.fontSizeXXL
-            color: Color.mPrimary
+            color: Commons.Color.mPrimary
           }
 
           NText {
             text: I18n.tr("panels.display.title")
             pointSize: Style.fontSizeL
             font.weight: Style.fontWeightBold
-            color: Color.mOnSurface
+            color: Commons.Color.mOnSurface
             Layout.fillWidth: true
           }
 
@@ -146,7 +147,7 @@ SmartPanel {
         verticalPolicy: ScrollBar.AsNeeded
         contentWidth: availableWidth
         reserveScrollbarSpace: false
-        gradientColor: Color.mSurface
+        gradientColor: Commons.Color.mSurface
 
         // AudioService Devices
         ColumnLayout {
@@ -178,7 +179,7 @@ SmartPanel {
                 NIcon {
                   icon: panelContent.getIcon(panelContent.globalBrightness)
                   pointSize: Style.fontSizeXL
-                  color: Color.mOnSurface
+                  color: Commons.Color.mOnSurface
                 }
 
                 NValueSlider {
@@ -233,7 +234,7 @@ SmartPanel {
 
                 NLabel {
                   label: modelData.name || "Unknown"
-                  labelColor: Color.mPrimary
+                  labelColor: Commons.Color.mPrimary
                   description: {
                     I18n.tr("system.monitor-description", {
                               "model": modelData.model,
@@ -251,7 +252,7 @@ SmartPanel {
                   NIcon {
                     icon: getIcon(brightnessMonitor ? brightnessMonitor.brightness : 0)
                     pointSize: Style.fontSizeXL
-                    color: Color.mOnSurface
+                    color: Commons.Color.mOnSurface
                   }
 
                   NValueSlider {

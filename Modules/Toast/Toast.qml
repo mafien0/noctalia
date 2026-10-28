@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.System
 import qs.Widgets
 
@@ -96,7 +97,7 @@ Item {
     anchors.fill: parent
     anchors.margins: shadowPadding
     radius: Style.radiusL
-    color: Qt.alpha(Color.mSurface, Color.adaptiveOpacity(Settings.data.notifications.backgroundOpacity) || 1.0)
+    color: Qt.alpha(Commons.Color.mSurface, Commons.Color.adaptiveOpacity(Settings.data.notifications.backgroundOpacity) || 1.0)
 
     // Colored border based on type
     border.width: Style.borderS
@@ -104,13 +105,13 @@ Item {
       var baseColor;
       switch (root.type) {
       case "error":
-        baseColor = Color.mError;
+        baseColor = Commons.Color.mError;
         break;
       default:
-        baseColor = Color.mOutline;
+        baseColor = Commons.Color.mOutline;
         break;
       }
-      return Qt.alpha(baseColor, Color.adaptiveOpacity(Settings.data.notifications.backgroundOpacity) || 1.0);
+      return Qt.alpha(baseColor, Commons.Color.adaptiveOpacity(Settings.data.notifications.backgroundOpacity) || 1.0);
     }
 
     // Progress bar
@@ -133,16 +134,16 @@ Item {
           var baseColor;
           switch (root.type) {
           case "warning":
-            baseColor = Color.mPrimary;
+            baseColor = Commons.Color.mPrimary;
             break;
           case "error":
-            baseColor = Color.mError;
+            baseColor = Commons.Color.mError;
             break;
           default:
-            baseColor = Color.mPrimary; // Match standard notification color
+            baseColor = Commons.Color.mPrimary; // Match standard notification color
             break;
           }
-          return Qt.alpha(baseColor, Color.adaptiveOpacity(Settings.data.notifications.backgroundOpacity) || 1.0);
+          return Qt.alpha(baseColor, Commons.Color.adaptiveOpacity(Settings.data.notifications.backgroundOpacity) || 1.0);
         }
       }
     }
@@ -303,11 +304,11 @@ Item {
       color: {
         switch (type) {
         case "warning":
-          return Color.mPrimary;
+          return Commons.Color.mPrimary;
         case "error":
-          return Color.mError;
+          return Commons.Color.mError;
         default:
-          return Color.mOnSurface;
+          return Commons.Color.mOnSurface;
         }
       }
       pointSize: isCompact ? Style.fontSizeXL : Style.fontSizeXXL * 1.5
@@ -323,7 +324,7 @@ Item {
       NText {
         Layout.fillWidth: true
         text: root.title
-        color: Color.mOnSurface
+        color: Commons.Color.mOnSurface
         pointSize: isCompact ? Style.fontSizeM : Style.fontSizeL
         font.weight: Style.fontWeightBold
         wrapMode: Text.WordWrap
@@ -333,7 +334,7 @@ Item {
       NText {
         Layout.fillWidth: true
         text: root.description
-        color: Color.mOnSurface
+        color: Commons.Color.mOnSurface
         pointSize: isCompact ? Style.fontSizeS : Style.fontSizeM
         wrapMode: Text.WordWrap
         maximumLineCount: isCompact ? 2 : 20
@@ -347,9 +348,9 @@ Item {
         visible: root.actionLabel.length > 0 && root.actionCallback !== null
         Layout.topMargin: Style.marginXS
         fontSize: Style.fontSizeS
-        backgroundColor: Color.mPrimary
-        textColor: hovered ? Color.mOnHover : Color.mOnPrimary
-        hoverColor: Color.mHover
+        backgroundColor: Commons.Color.mPrimary
+        textColor: hovered ? Commons.Color.mOnHover : Commons.Color.mOnPrimary
+        hoverColor: Commons.Color.mHover
         outlined: false
         implicitHeight: 24
 

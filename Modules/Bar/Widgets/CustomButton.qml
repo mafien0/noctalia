@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.Bar.Extras
 import qs.Modules.Panels.Settings
 import qs.Services.Control
@@ -180,13 +181,13 @@ Item {
     const baseColor = (function () {
       switch (colorName) {
       case "primary":
-        return Color.mPrimary;
+        return Commons.Color.mPrimary;
       case "secondary":
-        return Color.mSecondary;
+        return Commons.Color.mSecondary;
       case "tertiary":
-        return Color.mTertiary;
+        return Commons.Color.mTertiary;
       case "error":
-        return Color.mError;
+        return Commons.Color.mError;
       default:
         return null;
       }
@@ -198,7 +199,7 @@ Item {
   function _resolveIconColor(dynamicColorName, staticColorName, isHover) {
     if (dynamicColorName && dynamicColorName !== "") {
       if (dynamicColorName === "none") {
-        return isHover ? Color.mOnHover : Color.mOnSurface;
+        return isHover ? Commons.Color.mOnHover : Commons.Color.mOnSurface;
       }
       const color = _getColorValue(dynamicColorName, isHover);
       if (color !== null)
@@ -211,7 +212,7 @@ Item {
         return color;
     }
 
-    return isHover ? Color.mOnHover : Color.mOnSurface;
+    return isHover ? Commons.Color.mOnHover : Commons.Color.mOnSurface;
   }
 
   readonly property color iconColor: _resolveIconColor(_dynamicIconColor || _dynamicColor, colorizeSystemIcon, false)

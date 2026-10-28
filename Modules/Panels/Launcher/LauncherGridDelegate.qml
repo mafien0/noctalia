@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell.Widgets
 
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 Item {
@@ -30,7 +31,7 @@ Item {
     id: gridEntry
     anchors.fill: parent
     anchors.margins: Style.marginXXS
-    color: gridEntryContainer.isSelected ? Color.mHover : Color.mSurfaceVariant
+    color: gridEntryContainer.isSelected ? Commons.Color.mHover : Commons.Color.mSurfaceVariant
     forceOpaque: gridEntryContainer.isSelected
 
     Behavior on color {
@@ -57,7 +58,7 @@ Item {
         Rectangle {
           anchors.fill: parent
           radius: Style.radiusM
-          color: Color.mSurface
+          color: Commons.Color.mSurface
           visible: Settings.data.appLauncher.showIconBackground && !modelData.isImage
         }
 
@@ -84,7 +85,7 @@ Item {
           Rectangle {
             anchors.fill: parent
             visible: parent.status === Image.Loading
-            color: Color.mSurfaceVariant
+            color: Commons.Color.mSurfaceVariant
 
             BusyIndicator {
               anchors.centerIn: parent
@@ -118,7 +119,7 @@ Item {
               icon: modelData.icon
               pointSize: Style.fontSizeXXXL
               visible: modelData.icon && !modelData.displayString
-              color: (gridEntryContainer.isSelected && !Settings.data.appLauncher.showIconBackground) ? Color.mOnHover : Color.mOnSurface
+              color: (gridEntryContainer.isSelected && !Settings.data.appLauncher.showIconBackground) ? Commons.Color.mOnHover : Commons.Color.mOnSurface
             }
           }
 
@@ -160,7 +161,7 @@ Item {
             return Math.min(Math.max(cellBasedSize, baseSize), maxSize);
           }
           font.weight: Style.fontWeightBold
-          color: modelData.displayString ? Color.mOnSurface : Color.mOnPrimary
+          color: modelData.displayString ? Commons.Color.mOnSurface : Commons.Color.mOnPrimary
         }
 
         // Badge icon overlay (generic indicator for any provider)
@@ -171,13 +172,13 @@ Item {
           anchors.margins: 2
           width: height
           height: Style.fontSizeM + Style.marginXS
-          color: Color.mSurfaceVariant
+          color: Commons.Color.mSurfaceVariant
           radius: Style.radiusXXS
           NIcon {
             anchors.centerIn: parent
             icon: modelData.badgeIcon || ""
             pointSize: Style.fontSizeS
-            color: Color.mOnSurfaceVariant
+            color: Commons.Color.mOnSurfaceVariant
           }
         }
       }
@@ -197,7 +198,7 @@ Item {
           return Math.min(Math.max(cellBasedSize, baseSize), maxSize);
         }
         font.weight: Style.fontWeightSemiBold
-        color: gridEntryContainer.isSelected ? Color.mOnHover : Color.mOnSurface
+        color: gridEntryContainer.isSelected ? Commons.Color.mOnHover : Commons.Color.mOnSurface
         elide: Text.ElideRight
         Layout.fillWidth: true
         Layout.maximumWidth: gridEntry.width - 8

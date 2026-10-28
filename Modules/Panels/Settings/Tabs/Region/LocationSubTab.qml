@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Location
 import qs.Widgets
 
@@ -96,7 +97,7 @@ ColumnLayout {
                                                          "coordinates": LocationService.displayCoordinates
                                                        }) : ""
       pointSize: Style.fontSizeS
-      color: Color.mOnSurfaceVariant
+      color: Commons.Color.mOnSurfaceVariant
       font.italic: true
     }
   }

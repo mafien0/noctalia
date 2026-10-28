@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 RowLayout {
@@ -11,7 +12,7 @@ RowLayout {
   property real to: 1
   property real value: 0
   property real stepSize: 0.01
-  property var cutoutColor: Color.mSurface
+  property var cutoutColor: Commons.Color.mSurface
   property bool snapAlways: true
   property real heightRatio: 0.7
   property string text: ""

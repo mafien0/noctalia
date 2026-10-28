@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.MainScreen
 import qs.Services.System
 import qs.Services.UI
@@ -154,7 +155,7 @@ SmartPanel {
                   width: 120
                   height: 120
                   radius: width / 2
-                  color: Color.mPrimary
+                  color: Commons.Color.mPrimary
                   opacity: 0.08
                   scale: 1.3
                 }
@@ -169,16 +170,16 @@ SmartPanel {
 
                   Rectangle {
                     anchors.fill: parent
-                    color: Color.mSurfaceVariant
+                    color: Commons.Color.mSurfaceVariant
                     radius: width / 2
-                    border.color: Color.mOutline
+                    border.color: Commons.Color.mOutline
                     border.width: Style.borderM
                     visible: parent.status === Image.Error
 
                     NIcon {
                       icon: "sparkles"
                       pointSize: Style.fontSizeXXL * 1.5
-                      color: Color.mPrimary
+                      color: Commons.Color.mPrimary
                       anchors.centerIn: parent
                     }
                   }
@@ -213,7 +214,7 @@ SmartPanel {
                   text: I18n.tr("setup.welcome-title")
                   pointSize: Style.fontSizeXXL * 1.4
                   font.weight: Style.fontWeightBold
-                  color: Color.mOnSurface
+                  color: Commons.Color.mOnSurface
                   Layout.fillWidth: true
                   horizontalAlignment: Text.AlignHCenter
                 }
@@ -221,7 +222,7 @@ SmartPanel {
                 NText {
                   text: I18n.tr("setup.welcome-subtitle")
                   pointSize: Style.fontSizeL
-                  color: Color.mOnSurfaceVariant
+                  color: Commons.Color.mOnSurfaceVariant
                   Layout.fillWidth: true
                   horizontalAlignment: Text.AlignHCenter
                   wrapMode: Text.WordWrap
@@ -232,7 +233,7 @@ SmartPanel {
                   Layout.fillWidth: true
                   Layout.topMargin: Style.marginL
                   Layout.preferredHeight: childrenRect.height + Style.margin2M
-                  color: Color.mSurfaceVariant
+                  color: Commons.Color.mSurfaceVariant
                   radius: Style.radiusL
 
                   NText {
@@ -240,7 +241,7 @@ SmartPanel {
                     width: parent.width - Style.margin2L
                     text: I18n.tr("setup.welcome-note")
                     pointSize: Style.fontSizeM
-                    color: Color.mOnSurfaceVariant
+                    color: Commons.Color.mOnSurfaceVariant
                     horizontalAlignment: Text.AlignHCenter
                     wrapMode: Text.WordWrap
                   }
@@ -295,7 +296,7 @@ SmartPanel {
       Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: 1
-        color: Color.mOutline
+        color: Commons.Color.mOutline
         opacity: 0.2
       }
 
@@ -338,14 +339,14 @@ SmartPanel {
                 width: 24
                 height: 24
                 radius: width / 2
-                color: index <= currentStep ? Color.mPrimary : Color.mSurfaceVariant
-                border.color: index === currentStep ? Color.mPrimary : "transparent"
+                color: index <= currentStep ? Commons.Color.mPrimary : Commons.Color.mSurfaceVariant
+                border.color: index === currentStep ? Commons.Color.mPrimary : "transparent"
                 border.width: index === currentStep ? 2 : 0
 
                 NIcon {
                   icon: modelData.icon
                   pointSize: Style.fontSizeS
-                  color: index <= currentStep ? Color.mOnPrimary : Color.mOnSurfaceVariant
+                  color: index <= currentStep ? Commons.Color.mOnPrimary : Commons.Color.mOnSurfaceVariant
                   anchors.centerIn: parent
                 }
 
@@ -359,7 +360,7 @@ SmartPanel {
               NText {
                 text: modelData.label
                 pointSize: Style.fontSizeS
-                color: index <= currentStep ? Color.mPrimary : Color.mOnSurfaceVariant
+                color: index <= currentStep ? Commons.Color.mPrimary : Commons.Color.mOnSurfaceVariant
                 font.weight: index === currentStep ? Style.fontWeightBold : Style.fontWeightRegular
 
                 Behavior on color {
@@ -374,7 +375,7 @@ SmartPanel {
                 width: 40
                 height: 2
                 radius: 1
-                color: index < currentStep ? Color.mPrimary : Color.mSurfaceVariant
+                color: index < currentStep ? Commons.Color.mPrimary : Commons.Color.mSurfaceVariant
                 visible: index < totalSteps - 1
 
                 Behavior on color {

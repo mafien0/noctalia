@@ -7,6 +7,7 @@ import "Backgrounds" as Backgrounds
 
 import qs.Commons
 
+import qs.Commons as Commons
 // All panels
 import qs.Modules.Bar
 import qs.Modules.Bar.Extras
@@ -80,7 +81,7 @@ PanelWindow {
 
   color: {
     if (dimmerOpacity > 0 && isPanelOpen && !isPanelClosing) {
-      return Qt.alpha(Color.mShadow, dimmerOpacity);
+      return Qt.alpha(Commons.Color.mShadow, dimmerOpacity);
     }
     return "transparent";
   }

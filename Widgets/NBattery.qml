@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 // Battery widget with Android 16 style rendering (horizontal or vertical)
@@ -19,10 +20,10 @@ Item {
   property real baseSize: Style.fontSizeM
 
   // Styling - no hardcoded colors, only theme colors
-  property color baseColor: Color.mOnSurface
-  property color lowColor: Color.mError
-  property color chargingColor: Color.mPrimary
-  property color textColor: Color.mSurface
+  property color baseColor: Commons.Color.mOnSurface
+  property color lowColor: Commons.Color.mError
+  property color chargingColor: Commons.Color.mPrimary
+  property color textColor: Commons.Color.mSurface
 
   // Display options
   property bool showPercentageText: true

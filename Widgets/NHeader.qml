@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import qs.Commons
 
+import qs.Commons as Commons
 ColumnLayout {
   id: root
 
@@ -18,14 +19,14 @@ ColumnLayout {
     text: root.label
     pointSize: Style.fontSizeXL
     font.weight: Style.fontWeightSemiBold
-    color: Color.mPrimary
+    color: Commons.Color.mPrimary
     visible: root.label !== ""
   }
 
   NText {
     text: root.description
     pointSize: Style.fontSizeM
-    color: Color.mOnSurfaceVariant
+    color: Commons.Color.mOnSurfaceVariant
     wrapMode: Text.WordWrap
     Layout.fillWidth: true
     visible: root.description !== ""

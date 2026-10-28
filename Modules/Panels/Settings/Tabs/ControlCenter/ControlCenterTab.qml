@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Noctalia
 import qs.Services.System
 import qs.Services.UI
@@ -70,7 +71,7 @@ ColumnLayout {
                               }
                               badges.push({
                                             "icon": "plugin",
-                                            "color": Color.mSecondary
+                                            "color": Commons.Color.mSecondary
                                           });
                             }
                             availableWidgets.append({

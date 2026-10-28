@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import qs.Commons
 
+import qs.Commons as Commons
 // Simple context menu PopupWindow (similar to TrayMenu)
 // Designed to be rendered inside a PopupMenuWindow for click-outside-to-close
 // Automatically positions itself to respect screen boundaries
@@ -208,8 +209,8 @@ PopupWindow {
   Rectangle {
     id: menuBackground
     anchors.fill: parent
-    color: Color.mSurface
-    border.color: Color.mOutline
+    color: Commons.Color.mSurface
+    border.color: Commons.Color.mOutline
     border.width: Style.borderS
     radius: Style.radiusM
     opacity: root.visible ? 1.0 : 0.0
@@ -258,7 +259,7 @@ PopupWindow {
           Rectangle {
             id: innerRect
             anchors.fill: parent
-            color: mouseArea.containsMouse ? Color.mHover : "transparent"
+            color: mouseArea.containsMouse ? Commons.Color.mHover : "transparent"
             radius: Style.radiusS
             opacity: modelData.enabled !== false ? 1.0 : 0.5
 
@@ -279,7 +280,7 @@ PopupWindow {
                 icon: modelData.icon || ""
                 pointSize: Style.fontSizeS
                 applyUiScale: false
-                color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+                color: mouseArea.containsMouse ? Commons.Color.mOnHover : Commons.Color.mOnSurface
                 verticalAlignment: Text.AlignVCenter
 
                 Behavior on color {
@@ -292,7 +293,7 @@ PopupWindow {
               NText {
                 text: modelData.label || modelData.text || ""
                 pointSize: Style.fontSizeS
-                color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+                color: mouseArea.containsMouse ? Commons.Color.mOnHover : Commons.Color.mOnSurface
                 verticalAlignment: Text.AlignVCenter
                 Layout.fillWidth: true
 

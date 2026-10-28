@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Location
 import qs.Widgets
 
@@ -14,7 +15,7 @@ Rectangle {
   Layout.preferredHeight: (60 * Style.uiScaleRatio) + Style.margin2M
   implicitHeight: (60 * Style.uiScaleRatio) + Style.margin2M
   radius: Style.radiusL
-  color: Color.mPrimary
+  color: Commons.Color.mPrimary
 
   // Internal state
   readonly property var now: Time.now
@@ -51,7 +52,7 @@ Rectangle {
         text: root.now.getDate()
         pointSize: Style.fontSizeXXXL * 1.5
         font.weight: Style.fontWeightBold
-        color: Color.mOnPrimary
+        color: Commons.Color.mOnPrimary
       }
 
       // Month, year, location
@@ -69,7 +70,7 @@ Rectangle {
             text: I18n.locale.monthName(root.currentMonth, Locale.LongFormat).toUpperCase()
             pointSize: Style.fontSizeXL * 1.1
             font.weight: Style.fontWeightBold
-            color: Color.mOnPrimary
+            color: Commons.Color.mOnPrimary
             Layout.alignment: Qt.AlignBaseline
             elide: Text.ElideRight
           }
@@ -78,7 +79,7 @@ Rectangle {
             text: `${root.currentYear}`
             pointSize: Style.fontSizeM
             font.weight: Style.fontWeightBold
-            color: Qt.alpha(Color.mOnPrimary, 0.7)
+            color: Qt.alpha(Commons.Color.mOnPrimary, 0.7)
             Layout.alignment: Qt.AlignBaseline
           }
         }
@@ -100,7 +101,7 @@ Rectangle {
               return chunks[0];
             }
             pointSize: Style.fontSizeM
-            color: Color.mOnPrimary
+            color: Commons.Color.mOnPrimary
             Layout.maximumWidth: 150
             elide: Text.ElideRight
           }
@@ -108,7 +109,7 @@ Rectangle {
           NText {
             text: root.weatherReady && !Settings.data.location.hideWeatherTimezone ? `${Settings.data.location.hideWeatherCityName ? "" : " "}(${LocationService.data.weather.timezone_abbreviation})` : ""
             pointSize: Style.fontSizeXS
-            color: Qt.alpha(Color.mOnPrimary, 0.7)
+            color: Qt.alpha(Commons.Color.mOnPrimary, 0.7)
           }
         }
       }
@@ -127,7 +128,7 @@ Rectangle {
     anchors.rightMargin: Style.marginXL
     anchors.verticalCenter: parent.verticalCenter
     clockStyle: Settings.data.location.analogClockInCalendar ? "analog" : "digital"
-    progressColor: Color.mOnPrimary
+    progressColor: Commons.Color.mOnPrimary
     Layout.alignment: Qt.AlignVCenter
     now: root.now
   }

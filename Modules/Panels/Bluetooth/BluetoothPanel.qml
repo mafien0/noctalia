@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Bluetooth
 import "../Settings/Tabs/Connections" as BluetoothPrefs
 import qs.Commons
+import qs.Commons as Commons
 import qs.Modules.MainScreen
 import qs.Modules.Panels.Settings
 import qs.Services.Hardware
@@ -43,7 +44,7 @@ SmartPanel {
           NIcon {
             icon: BluetoothService.enabled ? "bluetooth" : "bluetooth-off"
             pointSize: Style.fontSizeXXL
-            color: BluetoothService.enabled ? Color.mPrimary : Color.mOnSurfaceVariant
+            color: BluetoothService.enabled ? Commons.Color.mPrimary : Commons.Color.mOnSurfaceVariant
           }
 
           NLabel {
@@ -62,7 +63,7 @@ SmartPanel {
           NIconButton {
             icon: Settings.data.network.bluetoothAutoConnect ? "bluetooth-connected" : "bluetooth"
             tooltipText: Settings.data.network.bluetoothAutoConnect ? I18n.tr("tooltips.bluetooth-auto-connect-on") : I18n.tr("tooltips.bluetooth-auto-connect-off")
-            colorFg: Settings.data.network.bluetoothAutoConnect ? Color.mPrimary : Color.mOnSurfaceVariant
+            colorFg: Settings.data.network.bluetoothAutoConnect ? Commons.Color.mPrimary : Commons.Color.mOnSurfaceVariant
             baseSize: Style.baseWidgetSize * 0.8
             onClicked: Settings.data.network.bluetoothAutoConnect = !Settings.data.network.bluetoothAutoConnect
           }
@@ -92,7 +93,7 @@ SmartPanel {
         horizontalPolicy: ScrollBar.AlwaysOff
         verticalPolicy: ScrollBar.AsNeeded
         reserveScrollbarSpace: false
-        gradientColor: Color.mSurface
+        gradientColor: Commons.Color.mSurface
 
         ColumnLayout {
           id: devicesList
@@ -119,21 +120,21 @@ SmartPanel {
               NIcon {
                 icon: "bluetooth-off"
                 pointSize: 48
-                color: Color.mOnSurfaceVariant
+                color: Commons.Color.mOnSurfaceVariant
                 Layout.alignment: Qt.AlignHCenter
               }
 
               NText {
                 text: I18n.tr("bluetooth.panel.disabled")
                 pointSize: Style.fontSizeL
-                color: Color.mOnSurfaceVariant
+                color: Commons.Color.mOnSurfaceVariant
                 Layout.alignment: Qt.AlignHCenter
               }
 
               NText {
                 text: I18n.tr("bluetooth.panel.enable-message")
                 pointSize: Style.fontSizeS
-                color: Color.mOnSurfaceVariant
+                color: Commons.Color.mOnSurfaceVariant
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
@@ -170,14 +171,14 @@ SmartPanel {
               NIcon {
                 icon: "bluetooth"
                 pointSize: 48
-                color: Color.mOnSurfaceVariant
+                color: Commons.Color.mOnSurfaceVariant
                 Layout.alignment: Qt.AlignHCenter
               }
 
               NText {
                 text: I18n.tr("bluetooth.panel.no-devices")
                 pointSize: Style.fontSizeL
-                color: Color.mOnSurfaceVariant
+                color: Commons.Color.mOnSurfaceVariant
                 Layout.alignment: Qt.AlignHCenter
               }
 

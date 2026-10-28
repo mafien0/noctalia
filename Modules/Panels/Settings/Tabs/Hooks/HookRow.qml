@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 RowLayout {
@@ -17,7 +18,7 @@ RowLayout {
   NLabel {
     label: root.label
     description: root.description
-    labelColor: root.value ? Color.mPrimary : Color.mOnSurface
+    labelColor: root.value ? Commons.Color.mPrimary : Commons.Color.mOnSurface
   }
 
   NIconButton {

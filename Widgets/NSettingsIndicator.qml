@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.UI
 
 Rectangle {
@@ -14,7 +15,7 @@ Rectangle {
   width: root.show ? 6 * Style.uiScaleRatio : 0
   height: root.show ? 6 * Style.uiScaleRatio : 0
   radius: width / 2
-  color: Color.mOnSurfaceVariant
+  color: Commons.Color.mOnSurfaceVariant
   opacity: 0.6
 
   visible: root.show

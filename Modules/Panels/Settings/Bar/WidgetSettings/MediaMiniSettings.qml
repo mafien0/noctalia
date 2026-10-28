@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 ColumnLayout {
@@ -221,7 +222,7 @@ ColumnLayout {
   NLabel {
     label: I18n.tr("bar.media-mini.panel-section-label")
     description: I18n.tr("bar.media-mini.panel-section-description")
-    labelColor: Color.mPrimary
+    labelColor: Commons.Color.mPrimary
   }
 
   NToggle {

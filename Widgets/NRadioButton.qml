@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 RadioButton {
@@ -17,7 +18,7 @@ RadioButton {
     implicitHeight: Style.baseWidgetSize * 0.625 * pointSize / Style.fontSizeM
     radius: Math.min(Style.iRadiusL, width / 2)
     color: "transparent"
-    border.color: root.checked ? Color.mPrimary : Color.mOnSurface
+    border.color: root.checked ? Commons.Color.mPrimary : Commons.Color.mOnSurface
     border.width: Style.borderM
     anchors.verticalCenter: parent.verticalCenter
 
@@ -26,7 +27,7 @@ RadioButton {
       anchors.margins: parent.width * 0.3
 
       radius: Math.min(Style.iRadiusL, width / 2)
-      color: Qt.alpha(Color.mPrimary, root.checked ? 1 : 0)
+      color: Qt.alpha(Commons.Color.mPrimary, root.checked ? 1 : 0)
 
       Behavior on color {
         ColorAnimation {

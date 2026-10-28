@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.System
 import qs.Widgets
 
@@ -25,7 +26,7 @@ ColumnLayout {
   property string valueFormatVertical: widgetData.formatVertical !== undefined ? widgetData.formatVertical : widgetMetadata.formatVertical
   property string valueTooltipFormat: widgetData.tooltipFormat !== undefined ? widgetData.tooltipFormat : widgetMetadata.tooltipFormat
 
-  readonly property color textColor: Color.resolveColorKey(valueClockColor)
+  readonly property color textColor: Commons.Color.resolveColorKey(valueClockColor)
 
   // Track the currently focused input field
   property var focusedInput: null
@@ -223,9 +224,9 @@ ColumnLayout {
         Layout.preferredWidth: 320
         Layout.preferredHeight: 160 // Fixed height instead of fillHeight
 
-        color: Color.mSurfaceVariant
+        color: Commons.Color.mSurfaceVariant
         radius: Style.radiusM
-        border.color: Color.mSecondary
+        border.color: Commons.Color.mSecondary
         border.width: Style.borderS
 
         Behavior on border.color {

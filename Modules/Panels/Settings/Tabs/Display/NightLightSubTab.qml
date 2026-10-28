@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.Location
 import qs.Services.UI
 import qs.Widgets
@@ -84,7 +85,7 @@ ColumnLayout {
       NText {
         text: nightSlider.value + "K"
         pointSize: Style.fontSizeM
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
         Layout.alignment: Qt.AlignVCenter
       }
     }
@@ -137,7 +138,7 @@ ColumnLayout {
       NText {
         text: daySlider.value + "K"
         pointSize: Style.fontSizeM
-        color: Color.mOnSurfaceVariant
+        color: Commons.Color.mOnSurfaceVariant
         Layout.alignment: Qt.AlignVCenter
       }
     }
@@ -168,7 +169,7 @@ ColumnLayout {
         NText {
           text: I18n.tr("panels.display.night-light-manual-schedule-sunrise")
           pointSize: Style.fontSizeM
-          color: Color.mOnSurfaceVariant
+          color: Commons.Color.mOnSurfaceVariant
           Layout.alignment: Qt.AlignVCenter
         }
 
@@ -188,7 +189,7 @@ ColumnLayout {
         NText {
           text: I18n.tr("panels.display.night-light-manual-schedule-sunset")
           pointSize: Style.fontSizeM
-          color: Color.mOnSurfaceVariant
+          color: Commons.Color.mOnSurfaceVariant
           Layout.alignment: Qt.AlignVCenter
         }
 

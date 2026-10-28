@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.UI
 
 Item {
@@ -11,10 +12,10 @@ Item {
   property string text: ""
   property string icon: ""
   property var tooltipText
-  property color backgroundColor: Color.mPrimary
-  property color textColor: Color.mOnPrimary
-  property color hoverColor: Color.mHover
-  property color textHoverColor: Color.mOnHover
+  property color backgroundColor: Commons.Color.mPrimary
+  property color textColor: Commons.Color.mOnPrimary
+  property color hoverColor: Commons.Color.mHover
+  property color textHoverColor: Commons.Color.mOnHover
   property real fontSize: Style.fontSizeM
   property int fontWeight: Style.fontWeightSemiBold
   property real iconSize: Style.fontSizeL
@@ -33,7 +34,7 @@ Item {
   property bool hovered: false
   readonly property color contentColor: {
     if (!root.enabled) {
-      return Color.mOnSurfaceVariant;
+      return Commons.Color.mOnSurfaceVariant;
     }
     if (root.hovered) {
       return root.textHoverColor;
@@ -61,7 +62,7 @@ Item {
     radius: root.buttonRadius
     color: {
       if (!root.enabled)
-        return root.outlined ? "transparent" : Qt.lighter(Color.mSurfaceVariant, 1.2);
+        return root.outlined ? "transparent" : Qt.lighter(Commons.Color.mSurfaceVariant, 1.2);
       if (root.hovered)
         return root.hoverColor;
       return root.outlined ? "transparent" : root.backgroundColor;
@@ -70,14 +71,14 @@ Item {
     border.width: root.outlined ? Style.borderS : 0
     border.color: {
       if (!root.enabled)
-        return Color.mOutline;
+        return Commons.Color.mOutline;
       if (root.hovered)
         return root.hoverColor;
       return root.outlined ? root.backgroundColor : "transparent";
     }
 
     Behavior on color {
-      enabled: !Color.isTransitioning
+      enabled: !Commons.Color.isTransitioning
       ColorAnimation {
         duration: Style.animationFast
         easing.type: Easing.OutCubic
@@ -85,7 +86,7 @@ Item {
     }
 
     Behavior on border.color {
-      enabled: !Color.isTransitioning
+      enabled: !Commons.Color.isTransitioning
       ColorAnimation {
         duration: Style.animationFast
         easing.type: Easing.OutCubic
@@ -110,7 +111,7 @@ Item {
         color: root.contentColor
 
         Behavior on color {
-          enabled: !Color.isTransitioning
+          enabled: !Commons.Color.isTransitioning
           ColorAnimation {
             duration: Style.animationFast
             easing.type: Easing.OutCubic
@@ -128,7 +129,7 @@ Item {
         color: root.contentColor
 
         Behavior on color {
-          enabled: !Color.isTransitioning
+          enabled: !Commons.Color.isTransitioning
           ColorAnimation {
             duration: Style.animationFast
             easing.type: Easing.OutCubic

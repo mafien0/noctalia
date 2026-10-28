@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Widgets
 
 // Input and button row
@@ -40,9 +41,9 @@ RowLayout {
 
     text: root.actionButtonText
     icon: root.actionButtonIcon
-    backgroundColor: Color.mSecondary
-    textColor: Color.mOnSecondary
-    hoverColor: Color.mHover
+    backgroundColor: Commons.Color.mSecondary
+    textColor: Commons.Color.mOnSecondary
+    hoverColor: Commons.Color.mHover
     enabled: root.actionButtonEnabled
 
     onClicked: {

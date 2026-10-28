@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import qs.Commons
+import qs.Commons as Commons
 import qs.Services.System
 import qs.Widgets
 
@@ -88,7 +89,7 @@ ColumnLayout {
         Layout.fillWidth: true
         label: (entryDelegate.isRegex ? "regex: " : "") + entryDelegate.pattern
         description: entryDelegate.action === "block" ? I18n.tr("panels.notifications.rules-action-block") : (entryDelegate.action === "mute" ? I18n.tr("panels.notifications.rules-action-mute") : I18n.tr("panels.notifications.rules-action-hide"))
-        labelColor: entryDelegate.pattern ? Color.mPrimary : Color.mOnSurface
+        labelColor: entryDelegate.pattern ? Commons.Color.mPrimary : Commons.Color.mOnSurface
       }
 
       NIconButton {
