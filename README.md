@@ -68,12 +68,6 @@ https://github.com/user-attachments/assets/bf46f233-8d66-439a-a1ae-ab0446270f2d
 
 ---
 
-## Existing v4 users
-
-Existing v4 installations may continue to work, but compatibility with current compositors, distributions, plugins, and external services is not maintained. New users should [install Noctalia v5](https://docs.noctalia.dev/noctalia/getting-started/installation/) instead.
-
----
-
 ## 🖥️ Wayland Compositors
 
 Noctalia provides native support for **Niri**, **Hyprland**, **Sway**, **Scroll**, **Labwc** and **MangoWC**. Other Wayland compositors may work but could require additional configuration for compositor-specific features like workspaces and window management.
