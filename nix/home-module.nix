@@ -131,13 +131,13 @@ in {
             {
               enabled = true;
               name = "Noctalia Plugins";
-              url = "https://github.com/noctalia-dev/noctalia-plugins";
+              url = "https://github.com/mafien0/noctalia-plugins";
             }
           ];
           states = {
             catwalk = {
               enabled = true;
-              sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
+              sourceUrl = "https://github.com/mafien0/noctalia-plugins";
             };
           };
           version = 2;

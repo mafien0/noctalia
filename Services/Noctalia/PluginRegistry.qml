@@ -14,7 +14,7 @@ Singleton {
 
   readonly property int currentVersion: 2
   // Main source URL - plugins from this source keep plain IDs
-  readonly property string mainSourceUrl: "https://github.com/noctalia-dev/noctalia-plugins"
+  readonly property string mainSourceUrl: "https://github.com/mafien0/noctalia-plugins"
 
   Component.onCompleted: {
     ensurePluginsDirectory();
@@ -120,7 +120,7 @@ Singleton {
         root.pluginSources = [
           {
             "name": "Noctalia Plugins",
-            "url": "https://github.com/noctalia-dev/noctalia-plugins",
+            "url": root.mainSourceUrl,
             "enabled": true
           }
         ];
@@ -141,7 +141,7 @@ Singleton {
       root.pluginSources = [
             {
               "name": "Noctalia Plugins",
-              "url": "https://github.com/noctalia-dev/noctalia-plugins",
+              "url": root.mainSourceUrl,
               "enabled": true
             }
           ];
@@ -258,7 +258,7 @@ Singleton {
       import QtQuick
       import Quickshell.Io
       Process {
-        command: ["sh", "-c", "for d in '${root.pluginsDir}'/*/; do [ -d \\"$d\\" ] || continue; [ -f \\"$d/manifest.json\\" ] || continue; echo \\"@@PLUGIN@@$(basename \\"$d\\")\\" ; cat \\"$d/manifest.json\\" ; done"]
+        command: ["sh", "-c", "prefix='${root.generateSourceHash(root.mainSourceUrl)}:'; dir='${root.pluginsDir}'; for d in \\"$dir\\"/*/; do [ -d \\"$d\\" ] || continue; b=$(basename \\"$d\\"); case \\"$b\\" in \\"$prefix\\"*) id=$(printf '%s' \\"$b\\" | sed \\"s/^$prefix//\\"); [ -e \\"$dir/$id\\" ] || mv \\"$d\\" \\"$dir/$id\\";; esac; done; for d in \\"$dir\\"/*/; do [ -d \\"$d\\" ] || continue; [ -f \\"$d/manifest.json\\" ] || continue; echo \\"@@PLUGIN@@$(basename \\"$d\\")\\" ; cat \\"$d/manifest.json\\" ; done"]
         stdout: StdioCollector {}
         running: true
       }
